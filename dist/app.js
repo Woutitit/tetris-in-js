@@ -98,28 +98,22 @@ module.exports = g;
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_VGameArea_vue__ = __webpack_require__(6);
-// With jslintrc we can configure jslint like which version of JS it should check etc.
-// Also, automate the jslint in some way everytime our .js file changes?
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__agent_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_VGameArea_vue__ = __webpack_require__(6);
 
+
+
+// Import components
 
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
 	el: "#app",
 	components: {
-		"v-game-area": __WEBPACK_IMPORTED_MODULE_1__components_VGameArea_vue__["a" /* default */]
+		"v-game-area": __WEBPACK_IMPORTED_MODULE_2__components_VGameArea_vue__["a" /* default */]
 	},
 	methods: {
-		startSimulation(gameArea) {
-			// Init game and when it's done (in callback) let our bot play it.
-			//Init game and let our bot play it
-			var gameArea = document.getElementById(gameArea);
-			var context = gameArea.getContext("2d");
-
-			this.initGraphs(context);
-		},
-		initGraphs(context) {
-			context.fillRect(0, 0, 20, 20);
+		startSession() {
+			__WEBPACK_IMPORTED_MODULE_1__agent_js__["a" /* default */].train();
 		}
 	}
 });
@@ -11733,6 +11727,20 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-0ff316c5", esExports)
   }
 }
+
+/***/ }),
+/* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var agent = {
+	train() {
+		//Init game and let bot play it in a loop
+		alert("lel");
+	}
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (agent);
 
 /***/ })
 /******/ ]);

@@ -14,7 +14,7 @@
 		<p>Episode: 1</p>
 
 		<div class="button-group">
-			<button v-on:click="initGame('gameArea')">Start</button>
+			<button v-on:click="startSession">Start</button>
 			<button>Reset</button>
 		</div>
 
@@ -24,7 +24,7 @@
 			<button>5x</button>
 			<button>10x</button>
 		</div>
-		
+
 		<v-game-area id="gameArea" size="normal"></v-game-area>
 	</div>
 	<script src="dist/app.js"></script>

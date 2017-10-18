@@ -14,6 +14,7 @@
 </template>
 <script>
 	export default {
+
 		props: {
 			size: {
 				type: String
@@ -25,14 +26,13 @@
 				type: Number
 			}
 		},
+
 		computed: {
 			classes: function() {
 				return {
 					"game-area": true,
 					"game-area--size-normal": this.size == "normal"
-
-				}
-				
+				}	
 			}
 		}
 	}

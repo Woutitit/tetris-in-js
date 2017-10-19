@@ -1,16 +1,20 @@
 <style>
-	.game-area {
-		border: 1px solid #000;
-	}
+.game-area {
+	border: 1px solid #000;
+	width: 100%;
+}
 
-	.game-area--size-normal {
-		width: 200px;
-		height: 200px;
-	}
-	
+.canvas-container {
+	margin: 0 auto;
+	max-width: 320px;
+    position: relative;
+}
+
 </style>
 <template>
-	<canvas :class="classes" :width="width" :height="height"></canvas>
+	<div class="canvas-container">
+		<canvas id="gameArea" :class="classes" :width="width" :height="height"></canvas>
+	</div>
 </template>
 <script>
 	export default {
@@ -31,7 +35,6 @@
 			classes: function() {
 				return {
 					"game-area": true,
-					"game-area--size-normal": this.size == "normal"
 				}	
 			}
 		}

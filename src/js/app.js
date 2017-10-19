@@ -1,5 +1,5 @@
 import Vue from "vue";
-import Agent from "./agent.js"
+import Agent from "./agent.js";
 
 // Import components
 import VGameArea from "./components/VGameArea.vue";

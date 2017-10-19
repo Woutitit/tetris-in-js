@@ -98,8 +98,8 @@ module.exports = g;
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__agent_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_VGameArea_vue__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__agent_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_VGameArea_vue__ = __webpack_require__(9);
 
 
 
@@ -11124,14 +11124,56 @@ process.umask = function() { return 0; };
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_VGameArea_vue__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0ff316c5_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_VGameArea_vue__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__game_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__neural_network_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__neural_network_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__neural_network_js__);
+
+
+
+var agent = {
+	epochs: 100,
+	train() {
+		__WEBPACK_IMPORTED_MODULE_0__game_js__["a" /* default */].init();
+	}
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (agent);
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var game = {
+	init() {
+		var gameArea = document.getElementById('gameArea');
+		var context = gameArea.getContext("2d");
+
+		context.fillRect(20, 20, 20, 20);
+	}
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (game);
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+// The brain of the agent
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_VGameArea_vue__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0ff316c5_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_VGameArea_vue__ = __webpack_require__(17);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(7)
+  __webpack_require__(10)
 }
-var normalizeComponent = __webpack_require__(12)
+var normalizeComponent = __webpack_require__(15)
 /* script */
 
 /* template */
@@ -11175,17 +11217,17 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 7 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(8);
+var content = __webpack_require__(11);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(10)("4d17c732", content, false);
+var update = __webpack_require__(13)("4d17c732", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -11201,21 +11243,21 @@ if(false) {
 }
 
 /***/ }),
-/* 8 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(12)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, "\n.game-area {\n\tborder: 1px solid #000;\n}\n.game-area--size-normal {\n\twidth: 200px;\n\theight: 200px;\n}\n\n", ""]);
+exports.push([module.i, "\n.game-area {\r\n\tborder: 1px solid #000;\r\n\twidth: 100%;\n}\n.canvas-container {\r\n\tmargin: 0 auto;\r\n\tmax-width: 320px;\r\n    position: relative;\n}\r\n\r\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 9 */
+/* 12 */
 /***/ (function(module, exports) {
 
 /*
@@ -11297,7 +11339,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 10 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -11316,7 +11358,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(11)
+var listToStyles = __webpack_require__(14)
 
 /*
 type StyleObject = {
@@ -11518,7 +11560,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 11 */
+/* 14 */
 /***/ (function(module, exports) {
 
 /**
@@ -11551,7 +11593,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 12 */
+/* 15 */
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -11660,10 +11702,14 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 13 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+//
+//
+//
+//
 //
 //
 //
@@ -11696,15 +11742,14 @@ module.exports = function normalizeComponent (
 	computed: {
 		classes: function () {
 			return {
-				"game-area": true,
-				"game-area--size-normal": this.size == "normal"
+				"game-area": true
 			};
 		}
 	}
 });
 
 /***/ }),
-/* 14 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11712,10 +11757,12 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("canvas", {
-    class: _vm.classes,
-    attrs: { width: _vm.width, height: _vm.height }
-  })
+  return _c("div", { staticClass: "canvas-container" }, [
+    _c("canvas", {
+      class: _vm.classes,
+      attrs: { id: "gameArea", width: _vm.width, height: _vm.height }
+    })
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -11727,20 +11774,6 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-0ff316c5", esExports)
   }
 }
-
-/***/ }),
-/* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var agent = {
-	train() {
-		//Init game and let bot play it in a loop
-		alert("lel");
-	}
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (agent);
 
 /***/ })
 /******/ ]);

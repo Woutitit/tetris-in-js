@@ -1,7 +1,10 @@
+import Game from "./game.js";
+import NN from "./neural_network.js";
+
 var agent = {
+	epochs: 100,
 	train() {
-		//Init game and let bot play it in a loop
-		alert("lel");
+		Game.init();
 	}
 }
 

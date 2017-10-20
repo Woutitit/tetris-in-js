@@ -12,12 +12,12 @@ var app = new Vue({
 		"v-game-area": VGameArea
 	},
 	mounted: function() {
-		var game = new Game(); //Singleton?
+		var game = new Game(document.getElementById("canvasOuterContainer")); //TODO: Add a singleton?
 		game.init();
 	},
 	methods: {
 		startSession: function() {
-
+			alert("LOL");
 		}
 	}
 });

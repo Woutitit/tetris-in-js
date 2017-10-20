@@ -1,9 +1,11 @@
-var agent = {
-	epochs: 100,
-	train() {
-		var game = new Game("gameCanvas");
-		game.init();
-	}
+/**
+* Agent.
+* @param {string} game
+* @constructor
+* @export
+*/
+function Agent(game) {
+	this.game = game;
 }
 
-export default agent;
+export default Agent;

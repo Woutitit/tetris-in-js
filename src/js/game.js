@@ -10,7 +10,7 @@ function Game(outerContainerEl) {
 	this.canvas = null;
 	this.canvasCtx = null;
 
-	// Canvas dimensions
+	// Canvas dimensions.
 	this.dimensions = {
 		WIDTH: 570,
 		HEIGHT: 320
@@ -25,8 +25,12 @@ Game.prototype = {
 		this.canvas = createCanvas(this.dimensions.WIDTH, this.dimensions.HEIGHT);
 		this.canvasCtx = this.canvas.getContext("2d");
 
-		container.appendChild(this.canvas); //To hold canvas
+		container.appendChild(this.canvas); //To hold canvas.
 		this.outerContainerEl.appendChild(container);
+	},
+
+	start: function() {
+		console.log("The game has started.")
 	}
 }
 

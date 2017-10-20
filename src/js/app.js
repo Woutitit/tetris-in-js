@@ -5,13 +5,21 @@ import Agent from "./agent.js";
 
 var app = new Vue({
 	el: "#app",
+	data: function() {
+		return {
+			game: null,
+			agent: null
+		}
+	},
 	mounted: function() {
-		var game = new Game(document.getElementById("canvasOuterContainer")); //TODO: Add a singleton?
-		game.init();
+		this.game = new Game(document.getElementById("canvasOuterContainer")); //TODO: Add a singleton?
+		this.game.init();
+
+		this.agent = new Agent(this.game);
 	},
 	methods: {
 		startSession: function() {
-			alert("LOL");
+			this.game.start();
 		}
 	}
 });

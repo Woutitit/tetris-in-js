@@ -109,13 +109,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
 	el: "#app",
+	data: function () {
+		return {
+			game: null,
+			agent: null
+		};
+	},
 	mounted: function () {
-		var game = new __WEBPACK_IMPORTED_MODULE_1__game_js__["a" /* default */](document.getElementById("canvasOuterContainer")); //TODO: Add a singleton?
-		game.init();
+		this.game = new __WEBPACK_IMPORTED_MODULE_1__game_js__["a" /* default */](document.getElementById("canvasOuterContainer")); //TODO: Add a singleton?
+		this.game.init();
+
+		this.agent = new __WEBPACK_IMPORTED_MODULE_3__agent_js__["a" /* default */](this.game);
 	},
 	methods: {
 		startSession: function () {
-			alert("LOL");
+			this.game.start();
 		}
 	}
 });
@@ -11138,7 +11146,7 @@ function Game(outerContainerEl) {
 	this.canvas = null;
 	this.canvasCtx = null;
 
-	// Canvas dimensions
+	// Canvas dimensions.
 	this.dimensions = {
 		WIDTH: 570,
 		HEIGHT: 320
@@ -11152,8 +11160,12 @@ Game.prototype = {
 		this.canvas = createCanvas(this.dimensions.WIDTH, this.dimensions.HEIGHT);
 		this.canvasCtx = this.canvas.getContext("2d");
 
-		container.appendChild(this.canvas); //To hold canvas
+		container.appendChild(this.canvas); //To hold canvas.
 		this.outerContainerEl.appendChild(container);
+	},
+
+	start: function () {
+		console.log("The game has started.");
 	}
 
 	/**
@@ -11183,15 +11195,17 @@ Game.prototype = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-var agent = {
-	epochs: 100,
-	train() {
-		var game = new Game("gameCanvas");
-		game.init();
-	}
-};
+/**
+* Agent.
+* @param {string} game
+* @constructor
+* @export
+*/
+function Agent(game) {
+	this.game = game;
+}
 
-/* unused harmony default export */ var _unused_webpack_default_export = (agent);
+/* harmony default export */ __webpack_exports__["a"] = (Agent);
 
 /***/ })
 /******/ ]);

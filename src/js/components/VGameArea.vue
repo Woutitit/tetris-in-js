@@ -6,7 +6,7 @@
 
 .canvas-container {
 	margin: 0 auto;
-	max-width: 320px;
+	max-width: 570px;
     position: relative;
 }
 
@@ -24,10 +24,10 @@
 				type: String
 			},
 			width: {
-				type: Number
+				type: String
 			},
 			height: {
-				type: Number
+				type: String
 			}
 		},
 

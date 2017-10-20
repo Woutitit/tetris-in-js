@@ -98,8 +98,13 @@ module.exports = g;
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__agent_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_VGameArea_vue__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__game_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__neural_network_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__neural_network_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__neural_network_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__agent_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_VGameArea_vue__ = __webpack_require__(9);
+
+
 
 
 
@@ -109,11 +114,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
 	el: "#app",
 	components: {
-		"v-game-area": __WEBPACK_IMPORTED_MODULE_2__components_VGameArea_vue__["a" /* default */]
+		"v-game-area": __WEBPACK_IMPORTED_MODULE_4__components_VGameArea_vue__["a" /* default */]
+	},
+	mounted: function () {
+		__WEBPACK_IMPORTED_MODULE_1__game_js__["a" /* default */].init();
 	},
 	methods: {
 		startSession() {
-			__WEBPACK_IMPORTED_MODULE_1__agent_js__["a" /* default */].train();
+			__WEBPACK_IMPORTED_MODULE_3__agent_js__["a" /* default */].train();
 		}
 	}
 });
@@ -11124,16 +11132,11 @@ process.umask = function() { return 0; };
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__game_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__neural_network_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__neural_network_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__neural_network_js__);
-
-
-
 var agent = {
 	epochs: 100,
 	train() {
-		__WEBPACK_IMPORTED_MODULE_0__game_js__["a" /* default */].init();
+		var game = new Game("gameCanvas");
+		game.init();
 	}
 };
 
@@ -11144,16 +11147,39 @@ var agent = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-var game = {
-	init() {
-		var gameArea = document.getElementById('gameArea');
-		var context = gameArea.getContext("2d");
+function Game(gameCanvas) {
+	this.canvas = null;
+	this.canvasCtx = null;
+}
 
-		context.fillRect(20, 20, 20, 20);
+/**
+* Default dimensions.
+* @enum {string}
+*/
+Game.prototype = {
+	init: function () {
+		createCanvas();
 	}
-};
 
-/* harmony default export */ __webpack_exports__["a"] = (game);
+	/**
+ * Default dimensions.
+ * @enum {string}
+ */
+};Game.dimensions = {};
+
+/**
+* Create canvas element.
+* @param {HTMLElement} container Element to append canvas to.
+* @param {number} width
+* @param {number} height
+* @return {HTMLCanvasElement}
+*/
+//TODO: Get this out of the global scope with self-contained function and make a module of it
+function createCanvas(container, width, height) {
+	alert("lo");
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Game);
 
 /***/ }),
 /* 8 */
@@ -11251,7 +11277,7 @@ exports = module.exports = __webpack_require__(12)(undefined);
 
 
 // module
-exports.push([module.i, "\n.game-area {\r\n\tborder: 1px solid #000;\r\n\twidth: 100%;\n}\n.canvas-container {\r\n\tmargin: 0 auto;\r\n\tmax-width: 320px;\r\n    position: relative;\n}\r\n\r\n", ""]);
+exports.push([module.i, "\n.game-area {\r\n\tborder: 1px solid #000;\r\n\twidth: 100%;\n}\n.canvas-container {\r\n\tmargin: 0 auto;\r\n\tmax-width: 570px;\r\n    position: relative;\n}\r\n\r\n", ""]);
 
 // exports
 
@@ -11732,10 +11758,10 @@ module.exports = function normalizeComponent (
 			type: String
 		},
 		width: {
-			type: Number
+			type: String
 		},
 		height: {
-			type: Number
+			type: String
 		}
 	},
 

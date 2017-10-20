@@ -1,10 +1,37 @@
-var game = {
-	init() {
-		var gameArea = document.getElementById('gameArea');
-		var context = gameArea.getContext("2d");
+function Game(gameCanvas) {
+	this.canvas = null;
+	this.canvasCtx = null;
+}
 
-		context.fillRect(20,20,20,20);	
+/**
+* Default dimensions.
+* @enum {string}
+*/
+Game.prototype = {
+	init: function() {
+		createCanvas();
 	}
 }
 
-export default game;
+/**
+* Default dimensions.
+* @enum {string}
+*/
+Game.dimensions = {
+
+}
+
+
+/**
+* Create canvas element.
+* @param {HTMLElement} container Element to append canvas to.
+* @param {number} width
+* @param {number} height
+* @return {HTMLCanvasElement}
+*/
+//TODO: Get this out of the global scope with self-contained function and make a module of it
+function createCanvas(container, width, height){
+	alert("lo");
+}
+
+export default Game;

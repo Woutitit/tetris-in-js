@@ -12,11 +12,12 @@ var app = new Vue({
 		"v-game-area": VGameArea
 	},
 	mounted: function() {
-		Game.init();
+		var game = new Game(); //Singleton?
+		game.init();
 	},
 	methods: {
-		startSession() {
-			Agent.train()
+		startSession: function() {
+
 		}
 	}
 });

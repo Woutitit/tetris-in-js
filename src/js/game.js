@@ -1,20 +1,24 @@
-function Game(gameCanvas) {
-	this.canvas = null;
-	this.canvasCtx = null;
+/**
+* Game.
+* @param {string} outerContainerId Outer containing element id.
+* @constructor
+* @export
+*/
+function Game(outerContainerEl) {
+	this.outerContainerEl = outerContainerEl;
 }
 
-/**
-* Default dimensions.
-* @enum {string}
-*/
+
 Game.prototype = {
 	init: function() {
+		document.createElement("div");
 		createCanvas();
 	}
 }
 
+
 /**
-* Default dimensions.
+* Canvas dimensions.
 * @enum {string}
 */
 Game.dimensions = {
@@ -29,9 +33,13 @@ Game.dimensions = {
 * @param {number} height
 * @return {HTMLCanvasElement}
 */
-//TODO: Get this out of the global scope with self-contained function and make a module of it
 function createCanvas(container, width, height){
-	alert("lo");
+	var canvas = document.createElement("canvas");
+	canvas.width = width;
+	canvas.height = height;
+	container.appendChild(canvas);
+
+	return canvas;
 }
 
 export default Game;

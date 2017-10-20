@@ -98,10 +98,10 @@ module.exports = g;
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__game_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__neural_network_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__game_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__neural_network_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__neural_network_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__neural_network_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__agent_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__agent_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_VGameArea_vue__ = __webpack_require__(9);
 
 
@@ -117,12 +117,11 @@ var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
 		"v-game-area": __WEBPACK_IMPORTED_MODULE_4__components_VGameArea_vue__["a" /* default */]
 	},
 	mounted: function () {
-		__WEBPACK_IMPORTED_MODULE_1__game_js__["a" /* default */].init();
+		var game = new __WEBPACK_IMPORTED_MODULE_1__game_js__["a" /* default */](); //Singleton?
+		game.init();
 	},
 	methods: {
-		startSession() {
-			__WEBPACK_IMPORTED_MODULE_3__agent_js__["a" /* default */].train();
-		}
+		startSession: function () {}
 	}
 });
 
@@ -11132,37 +11131,24 @@ process.umask = function() { return 0; };
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-var agent = {
-	epochs: 100,
-	train() {
-		var game = new Game("gameCanvas");
-		game.init();
-	}
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (agent);
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function Game(gameCanvas) {
-	this.canvas = null;
-	this.canvasCtx = null;
+/**
+* Game.
+* @param {string} outerContainerId Outer containing element id.
+* @constructor
+* @export
+*/
+function Game(outerContainerEl) {
+	this.outerContainerEl = outerContainerEl;
 }
 
-/**
-* Default dimensions.
-* @enum {string}
-*/
 Game.prototype = {
 	init: function () {
+		document.createElement("div");
 		createCanvas();
 	}
 
 	/**
- * Default dimensions.
+ * Canvas dimensions.
  * @enum {string}
  */
 };Game.dimensions = {};
@@ -11174,18 +11160,37 @@ Game.prototype = {
 * @param {number} height
 * @return {HTMLCanvasElement}
 */
-//TODO: Get this out of the global scope with self-contained function and make a module of it
 function createCanvas(container, width, height) {
-	alert("lo");
+	var canvas = document.createElement("canvas");
+	canvas.width = width;
+	canvas.height = height;
+	container.appendChild(canvas);
+
+	return canvas;
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Game);
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports) {
 
 // The brain of the agent
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var agent = {
+	epochs: 100,
+	train() {
+		var game = new Game("gameCanvas");
+		game.init();
+	}
+};
+
+/* unused harmony default export */ var _unused_webpack_default_export = (agent);
 
 /***/ }),
 /* 9 */

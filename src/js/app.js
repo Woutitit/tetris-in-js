@@ -20,6 +20,7 @@ var app = new Vue({
 	methods: {
 		startSession: function() {
 			this.game.start();
+			this.agent.start(); //Start training of agent
 		}
 	}
 });

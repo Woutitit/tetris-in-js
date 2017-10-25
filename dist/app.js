@@ -11677,18 +11677,36 @@ module.exports = function listToStyles (parentId, list) {
 //
 
 /* harmony default export */ __webpack_exports__["a"] = ({
+	name: "Canvas",
+
 	props: ["id", "width", "height"],
+
 	data: function () {
 		return {
-			canvas: null
+			canvas: null,
+			canvasCtx: null
 		};
 	},
+
 	methods: {
 		/**
-   * Initialize game canvas
+   * Initialize game canvas.
    */
 		init: function () {
 			this.canvas = document.getElementById(this.id);
+			this.canvasCtx = this.canvas.getContext("2d");
+
+			this.startListening();
+
+			new Hero(); // Dependency injection to draw initial position of hero.
+		},
+
+		/**
+   * Bind key / mouse events.
+   */
+		startListening: function () {
+			document.addEventListener("keyup", this);
+			document.addEventListener("keydown", this);
 		}
 	}
 });

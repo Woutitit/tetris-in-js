@@ -1,4 +1,6 @@
 <template>
-	<h1>LOL</h1>
+	<div>
+		<slot></slot>
+	</div>
 </template>
 

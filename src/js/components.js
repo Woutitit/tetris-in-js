@@ -1,5 +1,6 @@
 var components = {
-	"v-game": require("./components/Game.vue").default
+	"v-canvas": require("./components/Canvas.vue").default,
+	"v-game": require("./components/Game.vue").default,
 }
 
 export default components;

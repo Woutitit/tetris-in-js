@@ -98,10 +98,12 @@ module.exports = g;
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__game_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__game_game_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__game_game_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__game_game_js__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__neural_network_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__neural_network_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__neural_network_js__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__agent_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__agent_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__agent_js__);
 
 
 
@@ -116,14 +118,15 @@ var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
 		};
 	},
 	mounted: function () {
-		this.game = new __WEBPACK_IMPORTED_MODULE_1__game_js__["a" /* default */](document.getElementById("canvasOuterContainer")); //TODO: Add a singleton?
+		this.game = new __WEBPACK_IMPORTED_MODULE_1__game_game_js__["default"](document.getElementById("canvasOuterContainer")); //TODO: Add a singleton?
 		this.game.init();
 
-		this.agent = new __WEBPACK_IMPORTED_MODULE_3__agent_js__["a" /* default */](this.game);
+		this.agent = new __WEBPACK_IMPORTED_MODULE_3__agent_js__["default"](this.game);
 	},
 	methods: {
 		startSession: function () {
 			this.game.start();
+			this.agent.start(); //Start training of agent
 		}
 	}
 });
@@ -11130,82 +11133,24 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/**
-* Game.
-* @param {string} outerContainerId Outer containing element id.
-* @constructor
-* @export
-*/
-function Game(outerContainerEl) {
-	this.outerContainerEl = outerContainerEl;
-
-	this.canvas = null;
-	this.canvasCtx = null;
-
-	// Canvas dimensions.
-	this.dimensions = {
-		WIDTH: 570,
-		HEIGHT: 320
-	};
-}
-
-Game.prototype = {
-	init: function () {
-		var container = document.createElement("div");
-
-		this.canvas = createCanvas(this.dimensions.WIDTH, this.dimensions.HEIGHT);
-		this.canvasCtx = this.canvas.getContext("2d");
-
-		container.appendChild(this.canvas); //To hold canvas.
-		this.outerContainerEl.appendChild(container);
-	},
-
-	start: function () {
-		console.log("The game has started.");
-	}
-
-	/**
- * Create canvas element.
- * @param {number} width
- * @param {number} height
- * @return {HTMLCanvasElement}
- */
-};function createCanvas(width, height) {
-	var canvas = document.createElement("canvas");
-	canvas.width = width;
-	canvas.height = height;
-
-	return canvas;
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Game);
-
-/***/ }),
+/* 6 */,
 /* 7 */
 /***/ (function(module, exports) {
 
-// The brain of the agent
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\Users\\woutb\\Documents\\Code projects\\AI\\Machine learning algorithms\\Flappy bird\\src\\js\\neural_network.js'\n    at Error (native)");
 
 /***/ }),
 /* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\Users\\woutb\\Documents\\Code projects\\AI\\Machine learning algorithms\\Flappy bird\\src\\js\\agent.js'\n    at Error (native)");
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__) {
 
 "use strict";
-/**
-* Agent.
-* @param {string} game
-* @constructor
-* @export
-*/
-function Agent(game) {
-	this.game = game;
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Agent);
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\Users\\woutb\\Documents\\Code projects\\AI\\Machine learning algorithms\\Flappy bird\\src\\js\\game\\game.js'\n    at Error (native)");
 
 /***/ })
 /******/ ]);

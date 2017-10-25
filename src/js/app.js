@@ -1,5 +1,5 @@
 import Vue from "vue";
-import Game from "./game.js";
+import Game from "./game/game.js";
 import NN from "./neural_network.js";
 import Agent from "./agent.js";
 

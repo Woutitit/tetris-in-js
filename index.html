@@ -6,34 +6,10 @@
 * {
 	box-sizing: border-box;
 }
-
-.canvas-outer-container {
-	border: 1px solid #000;
-	margin: 0 auto;
-	max-width: 570px;
-	width: 100%
-}
 </style>
 <body>
 	<div id="app">
-
-		<h1>Watch a bot learn to play a simple game!</h1>
-		<p>Episode: 1</p>
-
-		<div class="button-group">
-			<button v-on:click="startSession">Start</button>
-			<button>Reset</button>
-		</div>
-
-		<h2>Speed</h2>
-		<div class="button-group">
-			<button>2x</button>
-			<button>5x</button>
-			<button>10x</button>
-		</div>
-
-		<div id="canvasOuterContainer" class="canvas-outer-container"></div>
-		
+		<v-game></v-game>
 	</div>
 	<script src="dist/app.js"></script>
 </body>

@@ -11,7 +11,9 @@ canvas {
 	export default {
 		name: "Canvas",
 
+
 		props: ["id", "width", "height"],
+
 
 		data: function() {
 			return {
@@ -23,10 +25,12 @@ canvas {
 			}
 		},
 
+
 		mounted: function() {
 			this.init();
 		},
 
+		
 		methods: {
 			/**
 			 * Initialize game canvas.
@@ -34,7 +38,6 @@ canvas {
 			init: function() {
 				this.canvas = document.getElementById(this.id);
 				this.canvasCtx = this.canvas.getContext("2d");
-
 
 				this.startListening();
 
@@ -55,10 +58,27 @@ canvas {
 			 */
 			stopListening: function() {
 
+			},
+
+
+			/**
+			 * Catch all events dispatched to this object.
+			 * @param {Event} e.
+			 */
+			handleEvent: function(e) {
+				switch (e) {
+                    case "keydown":
+                    	this.onKeyDown(e);
+                }
 			}
 
 
+			/**
+			 * Handle keydown events.
+			 */
+			onKeyDown: function() {
 
+			}
 		}
 	}
 </script>

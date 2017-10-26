@@ -10,7 +10,7 @@ Hero.prototype = {
 	 * Initialize Hero character.
 	 */
 	init: function() {
-		this.draw(0, 300);
+		this.draw(0, 300); // The y position should be height of canvas minus height of hero to place the hero completely at bottom of the canvas.
 	},
 
 

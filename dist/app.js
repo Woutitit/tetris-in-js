@@ -11320,7 +11320,7 @@ exports = module.exports = __webpack_require__(11)(undefined);
 
 
 // module
-exports.push([module.i, "\ncanvas {\r\n\tborder: 1px solid #000;\n}\r\n", ""]);
+exports.push([module.i, "\ncanvas {\r\n\t/* TODO: Position canvas in middle of web page and make it responsive; */\n}\r\n", ""]);
 
 // exports
 
@@ -11766,7 +11766,7 @@ Hero.prototype = {
   * Initialize Hero character.
   */
 	init: function () {
-		this.draw(0, 300);
+		this.draw(0, 300); // The y position should be height of canvas minus height of hero to place the hero completely at bottom of the canvas.
 	},
 
 	/**

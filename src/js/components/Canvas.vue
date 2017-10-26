@@ -23,7 +23,7 @@ canvas {
 					JUMP: {"38": 1, "32": 1}
 				},
 
-				hero: null
+				hero: null,
 			}
 		},
 
@@ -48,7 +48,10 @@ canvas {
 
 			update: function() {
 				this.clearCanvas();
-				console.log("Update game canvas.");
+
+				this.hero.draw(this.hero.xPos, this.hero.yPos);
+
+				requestAnimationFrame(this.update); // Will continously run the "update" method.
 			},
 
 

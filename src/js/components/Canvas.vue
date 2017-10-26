@@ -16,8 +16,15 @@ canvas {
 		data: function() {
 			return {
 				canvas: null,
-				canvasCtx: null
+				canvasCtx: null,
+				keycodes: {
+					JUMP: ["38", "32"]
+				}
 			}
+		},
+
+		mounted: function() {
+			this.init();
 		},
 
 		methods: {
@@ -28,18 +35,30 @@ canvas {
 				this.canvas = document.getElementById(this.id);
 				this.canvasCtx = this.canvas.getContext("2d");
 
+
 				this.startListening();
 
-				new Hero(); // Dependency injection to draw initial position of hero.
+				//new Hero(); // Dependency injection to draw initial position of hero.
 			},
 
+
 			/**
-			 * Bind key / mouse events.
+			 * Bind revelant mouse / key events.
 			 */
-			 startListening: function() {
-			 	document.addEventListener("keyup", this);
-			 	document.addEventListener("keydown", this);
-			 }
+			startListening: function() {
+				document.addEventListener("keydown", this);
+			},
+
+
+			/**
+			 * Unbind revelant mouse / key events.
+			 */
+			stopListening: function() {
+
+			}
+
+
+
 		}
 	}
 </script>

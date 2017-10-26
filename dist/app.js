@@ -11728,6 +11728,7 @@ module.exports = function listToStyles (parentId, list) {
 			switch (e.type) {
 				case "keydown":
 					this.onKeyDown(e);
+					break;
 			}
 		},
 

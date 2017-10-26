@@ -26,6 +26,7 @@ Hero.prototype = {
 	 * Let hero jump.
 	 */
 	jump: function() {
+		this.canvasCtx.fillRect(10, 10, 50, 50);
 
 	}
 }

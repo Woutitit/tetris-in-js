@@ -19,8 +19,8 @@ canvas {
 				canvas: null,
 				canvasCtx: null,
 
-				keycodes: {
-					JUMP: ["38", "32"]
+				keyCodes: {
+					JUMP: {"38": 1, "32": 1}
 				},
 
 				hero: null
@@ -33,56 +33,68 @@ canvas {
 		
 		methods: {
 			/**
-			 * Initialize game canvas.
-			 */
-			 init: function() {
-			 	this.canvas = document.getElementById(this.id);
-			 	this.canvasCtx = this.canvas.getContext("2d");
+			* Initialize game canvas.
+			*/
+			init: function() {
+				this.canvas = document.getElementById(this.id);
+				this.canvasCtx = this.canvas.getContext("2d");
 
-			 	this.hero = new Hero(this.canvas);
+				this.hero = new Hero(this.canvas);
 
-			 	this.startListening();
+				this.startListening();
+				this.update();
+			},
+
+
+			update: function() {
+				this.clearCanvas();
+				console.log("Update game canvas.");
+			},
+
+
+			clearCanvas: function() {
+				this.canvasCtx.clearRect(0, 0, this.width, this.height);
 			},
 
 
 			/**
-			 * Bind revelant mouse / key events.
-			 */
-			 startListening: function() {
-			 	document.addEventListener("keydown", this);
-			 },
+			* Bind revelant mouse / key events.
+			*/
+			startListening: function() {
+				document.addEventListener("keydown", this);
+			},
 
 
 			/**
-			 * Unbind revelant mouse / key events.
-			 */
-			 stopListening: function() {
+			* Unbind revelant mouse / key events.
+			*/
+			stopListening: function() {
 
-			 },
-
-
-			/**
-			 * Catch and dispatch an event to this object.
-			 * @param {Event} e
-			 */
-			 handleEvent: function(e) {
-			 	switch(e.type) {
-			 		case "keydown":
-			 		this.onKeyDown(e);
-			 		break;
-			 	}
-			 },
+			},
 
 
 			/**
-			 * Handle keydown events.
-			 * @param {Event} e
-			 */
-			 onKeyDown: function(e) {
-			 	if(this.keycodes[e.keyCode]) {
-			 		this.hero.jump();
-			 	}
-			 }
+			* Catch and dispatch an event to this object.
+			* @param {Event} e
+			*/
+			handleEvent: function(e) {
+				switch(e.type) {
+					case "keydown":
+					this.onKeyDown(e);
+					break;
+				}
+			},
+
+
+			/**
+			* Handle keydown events.
+			* @param {Event} e
+			*/
+			onKeyDown: function(e) {
+				if(this.keyCodes.JUMP[e.keyCode]) {
+					this.hero.jump();
+				}
 			}
 		}
+	}
 </script>

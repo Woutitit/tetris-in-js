@@ -11688,8 +11688,8 @@ module.exports = function listToStyles (parentId, list) {
 			canvas: null,
 			canvasCtx: null,
 
-			keycodes: {
-				JUMP: ["38", "32"]
+			keyCodes: {
+				JUMP: { "38": 1, "32": 1 }
 			},
 
 			hero: null
@@ -11702,8 +11702,8 @@ module.exports = function listToStyles (parentId, list) {
 
 	methods: {
 		/**
-   * Initialize game canvas.
-   */
+  * Initialize game canvas.
+  */
 		init: function () {
 			this.canvas = document.getElementById(this.id);
 			this.canvasCtx = this.canvas.getContext("2d");
@@ -11711,24 +11711,34 @@ module.exports = function listToStyles (parentId, list) {
 			this.hero = new __WEBPACK_IMPORTED_MODULE_0__hero_js__["a" /* default */](this.canvas);
 
 			this.startListening();
+			this.update();
+		},
+
+		update: function () {
+			this.clearCanvas();
+			console.log("Update game canvas.");
+		},
+
+		clearCanvas: function () {
+			this.canvasCtx.clearRect(0, 0, this.width, this.height);
 		},
 
 		/**
-   * Bind revelant mouse / key events.
-   */
+  * Bind revelant mouse / key events.
+  */
 		startListening: function () {
 			document.addEventListener("keydown", this);
 		},
 
 		/**
-   * Unbind revelant mouse / key events.
-   */
+  * Unbind revelant mouse / key events.
+  */
 		stopListening: function () {},
 
 		/**
-   * Catch and dispatch an event to this object.
-   * @param {Event} e
-   */
+  * Catch and dispatch an event to this object.
+  * @param {Event} e
+  */
 		handleEvent: function (e) {
 			switch (e.type) {
 				case "keydown":
@@ -11738,11 +11748,11 @@ module.exports = function listToStyles (parentId, list) {
 		},
 
 		/**
-   * Handle keydown events.
-   * @param {Event} e
-   */
+  * Handle keydown events.
+  * @param {Event} e
+  */
 		onKeyDown: function (e) {
-			if (this.keycodes[e.keyCode]) {
+			if (this.keyCodes.JUMP[e.keyCode]) {
 				this.hero.jump();
 			}
 		}
@@ -11779,7 +11789,9 @@ Hero.prototype = {
 	/**
   * Let hero jump.
   */
-	jump: function () {}
+	jump: function () {
+		this.canvasCtx.fillRect(10, 10, 50, 50);
+	}
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Hero);

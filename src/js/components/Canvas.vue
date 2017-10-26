@@ -41,7 +41,7 @@ canvas {
 
 			 	this.startListening();
 
-				this.hero = new Hero(); // Dependency injection to draw initial position of hero.
+				this.hero = new Hero();
 			},
 
 

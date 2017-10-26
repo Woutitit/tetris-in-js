@@ -8,7 +8,7 @@ Hero.prototype = {
 	 */
 	init: function() {
 
-	}
+	},
 
 
 	/**

@@ -11,7 +11,6 @@ canvas {
 	export default {
 		name: "Canvas",
 
-
 		props: ["id", "width", "height"],
 
 
@@ -25,11 +24,9 @@ canvas {
 			}
 		},
 
-
 		mounted: function() {
 			this.init();
 		},
-
 		
 		methods: {
 			/**
@@ -41,7 +38,7 @@ canvas {
 
 				this.startListening();
 
-				//new Hero(); // Dependency injection to draw initial position of hero.
+				this.hero = new Hero(); // Dependency injection to draw initial position of hero.
 			},
 
 
@@ -63,21 +60,24 @@ canvas {
 
 			/**
 			 * Catch all events dispatched to this object.
-			 * @param {Event} e.
+			 * @param {Event} e
 			 */
 			handleEvent: function(e) {
-				switch (e) {
+				switch (e.type) {
                     case "keydown":
                     	this.onKeyDown(e);
                 }
-			}
+			},
 
 
 			/**
 			 * Handle keydown events.
+			 * @param {Event} e
 			 */
-			onKeyDown: function() {
-
+			onKeyDown: function(e) {
+				if(this.keycodes[e.keyCode]) {
+					this.hero.jump();
+				}
 			}
 		}
 	}

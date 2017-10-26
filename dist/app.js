@@ -11236,7 +11236,6 @@ var components = {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_Canvas_vue__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_Canvas_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_Canvas_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1ede9e78_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Canvas_vue__ = __webpack_require__(16);
 var disposed = false
 function injectStyle (ssrContext) {
@@ -11257,7 +11256,7 @@ var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_Canvas_vue__["default"],
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_Canvas_vue__["a" /* default */],
   __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1ede9e78_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Canvas_vue__["a" /* default */],
   __vue_template_functional__,
   __vue_styles__,
@@ -11664,9 +11663,85 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ }),
 /* 14 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed: SyntaxError: C:/Users/woutb/Documents/Code projects/AI/Machine learning algorithms/Flappy bird/src/js/components/Canvas.vue: Unexpected token, expected , (79:3)\n\n  77 | \t\t\t * Handle keydown events.\n  78 | \t\t\t */\n> 79 | \t\t\tonKeyDown: function() {\n     | \t\t\t^\n  80 | \n  81 | \t\t\t}\n  82 | \t\t}\n");
+"use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+	name: "Canvas",
+
+	props: ["id", "width", "height"],
+
+	data: function () {
+		return {
+			canvas: null,
+			canvasCtx: null,
+			keycodes: {
+				JUMP: ["38", "32"]
+			}
+		};
+	},
+
+	mounted: function () {
+		this.init();
+	},
+
+	methods: {
+		/**
+   * Initialize game canvas.
+   */
+		init: function () {
+			this.canvas = document.getElementById(this.id);
+			this.canvasCtx = this.canvas.getContext("2d");
+
+			this.startListening();
+
+			this.hero = new Hero(); // Dependency injection to draw initial position of hero.
+		},
+
+		/**
+   * Bind revelant mouse / key events.
+   */
+		startListening: function () {
+			document.addEventListener("keydown", this);
+		},
+
+		/**
+   * Unbind revelant mouse / key events.
+   */
+		stopListening: function () {},
+
+		/**
+   * Catch all events dispatched to this object.
+   * @param {Event} e
+   */
+		handleEvent: function (e) {
+			switch (e.type) {
+				case "keydown":
+					this.onKeyDown(e);
+			}
+		},
+
+		/**
+   * Handle keydown events.
+   * @param {Event} e
+   */
+		onKeyDown: function (e) {
+			if (this.keycodes[e.keyCode]) {
+				this.hero.jump();
+			}
+		}
+	}
+});
 
 /***/ }),
 /* 15 */,

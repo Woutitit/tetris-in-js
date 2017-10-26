@@ -11666,6 +11666,8 @@ module.exports = function listToStyles (parentId, list) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__hero_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__hero_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__hero_js__);
 //
 //
 //
@@ -11674,7 +11676,8 @@ module.exports = function listToStyles (parentId, list) {
 //
 //
 //
-//
+
+
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 	name: "Canvas",
@@ -11685,9 +11688,12 @@ module.exports = function listToStyles (parentId, list) {
 		return {
 			canvas: null,
 			canvasCtx: null,
+
 			keycodes: {
 				JUMP: ["38", "32"]
-			}
+			},
+
+			hero: null
 		};
 	},
 
@@ -11705,7 +11711,7 @@ module.exports = function listToStyles (parentId, list) {
 
 			this.startListening();
 
-			this.hero = new Hero(); // Dependency injection to draw initial position of hero.
+			this.hero = new __WEBPACK_IMPORTED_MODULE_0__hero_js__["default"](); // Dependency injection to draw initial position of hero.
 		},
 
 		/**
@@ -11745,7 +11751,13 @@ module.exports = function listToStyles (parentId, list) {
 });
 
 /***/ }),
-/* 15 */,
+/* 15 */
+/***/ (function(module, __webpack_exports__) {
+
+"use strict";
+throw new Error("Module build failed: SyntaxError: C:/Users/woutb/Documents/Code projects/AI/Machine learning algorithms/Flappy bird/src/js/hero.js: Unexpected token, expected , (17:1)\n\n  15 | \t * Let hero jump.\n  16 | \t */\n> 17 | \tjump: function() {\n     | \t^\n  18 | \n  19 | \t}\n  20 | }\n");
+
+/***/ }),
 /* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 

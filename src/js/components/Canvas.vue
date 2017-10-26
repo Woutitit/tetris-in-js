@@ -1,5 +1,4 @@
 <style>
-
 canvas {
 	border: 1px solid #000;
 }
@@ -8,6 +7,8 @@ canvas {
 	<canvas :id="id" :width="width" :height="height"></canvas>
 </template>
 <script>
+	import Hero from "../hero.js";
+
 	export default {
 		name: "Canvas",
 
@@ -17,9 +18,12 @@ canvas {
 			return {
 				canvas: null,
 				canvasCtx: null,
+
 				keycodes: {
 					JUMP: ["38", "32"]
-				}
+				},
+
+				hero: null
 			}
 		},
 
@@ -64,8 +68,8 @@ canvas {
 			 handleEvent: function(e) {
 			 	switch(e.type) {
 			 		case "keydown":
-			 			this.onKeyDown(e);
-			 			break;
+			 		this.onKeyDown(e);
+			 		break;
 			 	}
 			 },
 
@@ -81,4 +85,4 @@ canvas {
 			 }
 			}
 		}
-	</script>
+</script>

@@ -39,9 +39,9 @@ canvas {
 			 	this.canvas = document.getElementById(this.id);
 			 	this.canvasCtx = this.canvas.getContext("2d");
 
-			 	this.startListening();
+			 	this.hero = new Hero(this.canvas);
 
-				this.hero = new Hero();
+			 	this.startListening();
 			},
 
 
@@ -62,7 +62,7 @@ canvas {
 
 
 			/**
-			 * Catch all events dispatched to this object.
+			 * Catch and dispatch an event to this object.
 			 * @param {Event} e
 			 */
 			 handleEvent: function(e) {

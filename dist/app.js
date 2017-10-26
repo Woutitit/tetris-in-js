@@ -11708,9 +11708,9 @@ module.exports = function listToStyles (parentId, list) {
 			this.canvas = document.getElementById(this.id);
 			this.canvasCtx = this.canvas.getContext("2d");
 
-			this.startListening();
+			this.hero = new __WEBPACK_IMPORTED_MODULE_0__hero_js__["a" /* default */](this.canvas);
 
-			this.hero = new __WEBPACK_IMPORTED_MODULE_0__hero_js__["a" /* default */]();
+			this.startListening();
 		},
 
 		/**
@@ -11726,7 +11726,7 @@ module.exports = function listToStyles (parentId, list) {
 		stopListening: function () {},
 
 		/**
-   * Catch all events dispatched to this object.
+   * Catch and dispatch an event to this object.
    * @param {Event} e
    */
 		handleEvent: function (e) {
@@ -11754,7 +11754,10 @@ module.exports = function listToStyles (parentId, list) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Hero() {
+function Hero(canvas) {
+	this.canvas = canvas;
+	this.canvasCtx = this.canvas.getContext("2d");
+
 	this.init();
 }
 
@@ -11762,7 +11765,16 @@ Hero.prototype = {
 	/**
   * Initialize Hero character.
   */
-	init: function () {},
+	init: function () {
+		this.draw(0, 300);
+	},
+
+	/**
+  * Draw hero.
+  */
+	draw: function (x, y) {
+		this.canvasCtx.fillRect(x, y, 50, 50);
+	},
 
 	/**
   * Let hero jump.

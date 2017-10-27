@@ -11667,7 +11667,7 @@ module.exports = function listToStyles (parentId, list) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__intro_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__hero_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helicopter_js__ = __webpack_require__(16);
 //
 //
 //
@@ -11768,6 +11768,10 @@ module.exports = function listToStyles (parentId, list) {
 
 			if (this.playingIntro) {
 				new __WEBPACK_IMPORTED_MODULE_0__intro_js__["a" /* default */](this.canvas, this.dimensions, this.spriteSheet, this.spritePos);
+			}
+
+			if (this.isPlaying) {
+				var helicopter = new __WEBPACK_IMPORTED_MODULE_1__helicopter_js__["a" /* default */]();
 			}
 
 			requestAnimationFrame(this.update); // Will continously run the "update" method.
@@ -11920,28 +11924,10 @@ Hero.prototype = {
 		this.yPos = y;
 
 		this.canvasCtx.fillRect(this.xPos, this.yPos, 50, 50);
-	},
-
-	/**
-  * Let hero jump.
-  */
-	jump: function () {
-		//TODO: Have an "isJumping" var so we can disable the jump when the jump still going on through if (!isJumping) {// Only then execute this code }
-		// The this.update is gewoon om de jumping sprite te laten zien?
-		var self = this;
-		var minHeight = 100;
-
-		setInterval(function () {
-			if (minHeight > self.yPos) {
-				self.yPos += 5;
-			} else {
-				self.yPos += -5;
-			}
-		}, 1000 / 60);
 	}
 };
 
-/* unused harmony default export */ var _unused_webpack_default_export = (Hero);
+/* harmony default export */ __webpack_exports__["a"] = (Hero);
 
 /***/ }),
 /* 17 */

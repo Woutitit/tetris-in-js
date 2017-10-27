@@ -26,27 +26,6 @@ Hero.prototype = {
 
 		this.canvasCtx.fillRect(this.xPos, this.yPos, 50, 50);
 	},
-
-
-	/**
-	 * Let hero jump.
-	 */
-	jump: function() {
-		//TODO: Have an "isJumping" var so we can disable the jump when the jump still going on through if (!isJumping) {// Only then execute this code }
-		// The this.update is gewoon om de jumping sprite te laten zien?
-		var self = this;
-		var minHeight = 100;
-
-		setInterval(function(){
-			if(minHeight > self.yPos) {
-				self.yPos += 5;
-			} else {
-				self.yPos += -5;
-			}
-			
-		}, 1000/60);
-
-	}
 }
 
 export default Hero;

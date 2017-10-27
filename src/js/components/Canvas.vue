@@ -11,7 +11,7 @@ canvas {
 </template>
 <script>
 	import Intro from "../intro.js";
-	import Hero from "../hero.js";
+	import Helicopter from "../helicopter.js";
 
 	export default {
 		name: "Canvas",
@@ -105,6 +105,10 @@ canvas {
 
 				if(this.playingIntro) {
 					new Intro(this.canvas, this.dimensions, this.spriteSheet, this.spritePos);
+				}
+
+				if(this.isPlaying) {
+					var helicopter = new Helicopter();
 				}
 
 				requestAnimationFrame(this.update); // Will continously run the "update" method.

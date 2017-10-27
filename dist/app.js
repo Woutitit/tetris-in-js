@@ -11685,35 +11685,33 @@ module.exports = function listToStyles (parentId, list) {
 
 	data: function () {
 		return {
+			imageSprite: null,
 			canvas: null,
 			canvasCtx: null,
-
 			keyCodes: {
 				JUMP: { "38": 1, "32": 1 }
 			},
-
 			hero: null
 		};
 	},
 
 	mounted: function () {
-		this.loadImages().then(() => {
-			console.log("LOL");
+		this.loadImageSprite().then(() => {
 			this.init();
 		});
 	},
 
 	methods: {
-		loadImages: function () {
-			return new Promise(function (resolve, reject) {
-				var imageSprite = new Image();
-				imageSprite.src = "src/assets/spritesheet.png";
+		loadImageSprite: function () {
+			return new Promise((resolve, reject) => {
+				this.imageSprite = new Image();
+				this.imageSprite.src = "src/assets/spritesheet.png";
 
-				imageSprite.onload = function () {
-					resolve(imageSprite);
+				this.imageSprite.onload = function () {
+					resolve(this.imageSprite);
 				};
 
-				imageSprite.onerror = function (error) {
+				this.imageSprite.onerror = function (error) {
 					reject(error);
 				};
 			});

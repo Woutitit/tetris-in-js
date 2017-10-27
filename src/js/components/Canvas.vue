@@ -2,6 +2,8 @@
 canvas {
 	/* TODO: Position canvas in middle of web page and make it responsive; */
 	/* border: 1px solid #000; */
+	display: block;
+	margin: auto;
 }
 </style>
 <template>

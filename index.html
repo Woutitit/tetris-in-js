@@ -6,12 +6,20 @@
 * {
 	box-sizing: border-box;
 }
+
+.u--textCenter {
+	text-align: center;
+}
 </style>
 <body>
 	<div id="app">
-		<v-game>
+		<div class="u--textCenter">
+			<h1>Simple game.</h1>
+			<p>Play this simple game or let the bot play it.</p>
+		</div>
+		<div class="game-canvas-container">
 			<v-canvas id="gameCanvas" width="600" height="150"></v-canvas>
-		</v-game>
+		</div>
 	</div>
 	<script src="dist/app.js"></script>
 </body>

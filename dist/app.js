@@ -11320,7 +11320,7 @@ exports = module.exports = __webpack_require__(11)(undefined);
 
 
 // module
-exports.push([module.i, "\ncanvas {\r\n\t/* TODO: Position canvas in middle of web page and make it responsive; */\r\n\t/* border: 1px solid #000; */\n}\r\n", ""]);
+exports.push([module.i, "\ncanvas {\r\n\t/* TODO: Position canvas in middle of web page and make it responsive; */\r\n\t/* border: 1px solid #000; */\r\n\tdisplay: block;\r\n\tmargin: auto;\n}\r\n", ""]);
 
 // exports
 
@@ -11668,6 +11668,8 @@ module.exports = function listToStyles (parentId, list) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__intro_js__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__hero_js__ = __webpack_require__(16);
+//
+//
 //
 //
 //

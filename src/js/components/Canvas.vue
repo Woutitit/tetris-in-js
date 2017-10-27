@@ -22,7 +22,8 @@ canvas {
 			return {
 				spriteSheet: null,
 				spritePos: {
-					START_BUTTON: { x: 0, y: 0 }
+					START_BUTTON: { x: 0, y: 0 },
+					HELICOPTER: { x: 32, y: 0 }
 				},
 
 				canvas: null,
@@ -108,7 +109,7 @@ canvas {
 				}
 
 				if(this.isPlaying) {
-					var helicopter = new Helicopter(this.canvas);
+					var helicopter = new Helicopter(this.canvas, this.spriteSheet, this.spritePos.HELICOPTER.x, this.spritePos.HELICOPTER.y);
 				}
 
 				requestAnimationFrame(this.update); // Will continously run the "update" method.
@@ -177,7 +178,8 @@ canvas {
 			* @param {Event} e
 			*/
 			onMouseDown: function(e) {
-				// Will get mouseclick position with respect to canvas and then check what to activate based on that.
+				// Will get mouseclick position with respect to canvas.
+				// Useful to check whether certain canvas objects have been clicked.
 				var mouseX = parseInt(e.clientX) - this.canvas.getBoundingClientRect().left;
 				var mouseY = parseInt(e.clientY) - this.canvas.getBoundingClientRect().top;
 				

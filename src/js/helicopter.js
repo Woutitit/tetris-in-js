@@ -1,9 +1,12 @@
-function Helicopter(canvas) {
+function Helicopter(canvas, spriteSheet, spritePosX, spritePosY) {
 	this.canvas = canvas;
 	this.canvasCtx = this.canvas.getContext("2d");
 
-	this.xPos = 0;
-	this.yPos = 0;
+	this.spriteSheet = spriteSheet;
+	this.spritePosX = spritePosX;
+	this.spritePosY = spritePosY;
+
+	this.dimensions = { WIDTH: 61, HEIGHT: 32 }
 
 	this.init()
 }
@@ -18,14 +21,27 @@ Helicopter.prototype = {
 
 
 	/**
-	 * Draw hero.
+	 * Draw helicopter.
 	 */
-	draw: function(x, y) {
-		this.xPos = x;
-		this.yPos = y;
+	draw: function() {
 
-		this.canvasCtx.fillStyle = "#000";
-		this.canvasCtx.fillRect(50, 50, 50, 50);
+		var helicopterCanvasX = 10;
+		var helicopterCanvasY = 50;
+
+		var helicopterSourceWidth = this.dimensions.WIDTH;
+		var helicopterSourceHeight = this.dimensions.HEIGHT;
+
+		this.canvasCtx.drawImage(
+			this.spriteSheet, 
+			this.spritePosX, 
+			this.spritePosY, 
+			helicopterSourceWidth, 
+			helicopterSourceHeight, 
+			helicopterCanvasX, 
+			helicopterCanvasY, 
+			this.dimensions.WIDTH, 
+			this.dimensions.HEIGHT
+		);
 	},
 }
 

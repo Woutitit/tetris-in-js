@@ -11692,7 +11692,8 @@ module.exports = function listToStyles (parentId, list) {
 		return {
 			spriteSheet: null,
 			spritePos: {
-				START_BUTTON: { x: 0, y: 0 }
+				START_BUTTON: { x: 0, y: 0 },
+				HELICOPTER: { x: 32, y: 0 }
 			},
 
 			canvas: null,
@@ -11771,7 +11772,7 @@ module.exports = function listToStyles (parentId, list) {
 			}
 
 			if (this.isPlaying) {
-				var helicopter = new __WEBPACK_IMPORTED_MODULE_1__helicopter_js__["a" /* default */](this.canvas);
+				var helicopter = new __WEBPACK_IMPORTED_MODULE_1__helicopter_js__["a" /* default */](this.canvas, this.spriteSheet, this.spritePos.HELICOPTER.x, this.spritePos.HELICOPTER.y);
 			}
 
 			requestAnimationFrame(this.update); // Will continously run the "update" method.
@@ -11831,7 +11832,8 @@ module.exports = function listToStyles (parentId, list) {
   * @param {Event} e
   */
 		onMouseDown: function (e) {
-			// Will get mouseclick position with respect to canvas and then check what to activate based on that.
+			// Will get mouseclick position with respect to canvas.
+			// Useful to check whether certain canvas objects have been clicked.
 			var mouseX = parseInt(e.clientX) - this.canvas.getBoundingClientRect().left;
 			var mouseY = parseInt(e.clientY) - this.canvas.getBoundingClientRect().top;
 
@@ -11896,12 +11898,15 @@ Intro.prototype = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Helicopter(canvas) {
+function Helicopter(canvas, spriteSheet, spritePosX, spritePosY) {
 	this.canvas = canvas;
 	this.canvasCtx = this.canvas.getContext("2d");
 
-	this.xPos = 0;
-	this.yPos = 0;
+	this.spriteSheet = spriteSheet;
+	this.spritePosX = spritePosX;
+	this.spritePosY = spritePosY;
+
+	this.dimensions = { WIDTH: 61, HEIGHT: 32 };
 
 	this.init();
 }
@@ -11915,14 +11920,17 @@ Helicopter.prototype = {
 	},
 
 	/**
-  * Draw hero.
+  * Draw helicopter.
   */
-	draw: function (x, y) {
-		this.xPos = x;
-		this.yPos = y;
+	draw: function () {
 
-		this.canvasCtx.fillStyle = "#000";
-		this.canvasCtx.fillRect(50, 50, 50, 50);
+		var helicopterCanvasX = 10;
+		var helicopterCanvasY = 50;
+
+		var helicopterSourceWidth = this.dimensions.WIDTH;
+		var helicopterSourceHeight = this.dimensions.HEIGHT;
+
+		this.canvasCtx.drawImage(this.spriteSheet, this.spritePosX, this.spritePosY, helicopterSourceWidth, helicopterSourceHeight, helicopterCanvasX, helicopterCanvasY, this.dimensions.WIDTH, this.dimensions.HEIGHT);
 	}
 };
 

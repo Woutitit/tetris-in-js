@@ -11690,12 +11690,18 @@ module.exports = function listToStyles (parentId, list) {
 			spritePos: {
 				START_BUTTON: { x: 0, y: 0 }
 			},
+
 			canvas: null,
 			canvasCtx: null,
+
 			keyCodes: {
 				JUMP: { "38": 1, "32": 1 }
 			},
-			hero: null
+
+			hero: null,
+
+			isPlaying: false,
+			isPaused: false
 		};
 	},
 
@@ -11754,7 +11760,10 @@ module.exports = function listToStyles (parentId, list) {
 		/**
   * Starts gameplay.
   */
-		start: function () {},
+		start: function () {
+			this.isPlaying = true;
+			console.log("Start playing.");
+		},
 
 		update: function () {
 			this.clearCanvas();
@@ -11817,7 +11826,7 @@ module.exports = function listToStyles (parentId, list) {
 			var mouseX = parseInt(e.clientX) - this.canvas.getBoundingClientRect().left;
 			var mouseY = parseInt(e.clientY) - this.canvas.getBoundingClientRect().top;
 
-			if (!game.isPlaying) {
+			if (!this.isPlaying) {
 				// This means that we are on the start screen so we should
 				// We should check if mouseclick event was on area of button.
 				// Or we should not check and just automatically let the game play no matter where it is clicked.

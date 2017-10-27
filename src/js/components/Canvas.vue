@@ -21,12 +21,18 @@ canvas {
 				spritePos: {
 					START_BUTTON: { x: 0, y: 0 }
 				},
+
 				canvas: null,
 				canvasCtx: null,
+
 				keyCodes: {
 					JUMP: { "38": 1, "32": 1}
 				},
+
 				hero: null,
+
+				isPlaying: false,
+				isPaused: false
 			}
 		},
 
@@ -100,6 +106,8 @@ canvas {
 			* Starts gameplay.
 			*/
 			start: function() {
+				this.isPlaying = true;
+				console.log("Start playing.");
 
 			},
 
@@ -173,7 +181,7 @@ canvas {
 				var mouseX = parseInt(e.clientX) - this.canvas.getBoundingClientRect().left;
 				var mouseY = parseInt(e.clientY) - this.canvas.getBoundingClientRect().top;
 
-				if(!game.isPlaying) {
+				if(!this.isPlaying) {
 					// This means that we are on the start screen so we should
 					// We should check if mouseclick event was on area of button.
 					// Or we should not check and just automatically let the game play no matter where it is clicked.

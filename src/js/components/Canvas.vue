@@ -1,7 +1,7 @@
 <style>
 canvas {
 	/* TODO: Position canvas in middle of web page and make it responsive; */
-	border: 1px solid #000;
+	/* border: 1px solid #000; */
 }
 </style>
 <template>
@@ -96,7 +96,10 @@ canvas {
 			* Main loop. Continously gets called by requestAnimationFrame meaning it's also "watching" all global vars used in this method.
 			*/
 			update: function() {
+				// Also the 60 FPS thing from google I think is only important for sprite animations such as walking (?).
 				this.clearCanvas(); // Always clear canvas per frame to not draw any doubles.
+
+				this.drawBackground();
 
 				if(this.playingIntro) {
 					new Intro(this.canvas, this.dimensions, this.spriteSheet, this.spritePos);
@@ -108,6 +111,13 @@ canvas {
 
 			clearCanvas: function() {
 				this.canvasCtx.clearRect(0, 0, this.width, this.height);
+			},
+
+
+			drawBackground: function() {
+				this.canvasCtx.fillStyle = "#EEE";
+				this.canvasCtx.fillRect(0, 0, this.dimensions.WIDTH, this.dimensions.HEIGHT);
+
 			},
 
 

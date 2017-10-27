@@ -11320,7 +11320,7 @@ exports = module.exports = __webpack_require__(11)(undefined);
 
 
 // module
-exports.push([module.i, "\ncanvas {\r\n\t/* TODO: Position canvas in middle of web page and make it responsive; */\r\n\tborder: 1px solid #000;\n}\r\n", ""]);
+exports.push([module.i, "\ncanvas {\r\n\t/* TODO: Position canvas in middle of web page and make it responsive; */\r\n\t/* border: 1px solid #000; */\n}\r\n", ""]);
 
 // exports
 
@@ -11759,7 +11759,10 @@ module.exports = function listToStyles (parentId, list) {
   * Main loop. Continously gets called by requestAnimationFrame meaning it's also "watching" all global vars used in this method.
   */
 		update: function () {
+			// Also the 60 FPS thing from google I think is only important for sprite animations such as walking (?).
 			this.clearCanvas(); // Always clear canvas per frame to not draw any doubles.
+
+			this.drawBackground();
 
 			if (this.playingIntro) {
 				new __WEBPACK_IMPORTED_MODULE_0__intro_js__["a" /* default */](this.canvas, this.dimensions, this.spriteSheet, this.spritePos);
@@ -11770,6 +11773,11 @@ module.exports = function listToStyles (parentId, list) {
 
 		clearCanvas: function () {
 			this.canvasCtx.clearRect(0, 0, this.width, this.height);
+		},
+
+		drawBackground: function () {
+			this.canvasCtx.fillStyle = "#EEE";
+			this.canvasCtx.fillRect(0, 0, this.dimensions.WIDTH, this.dimensions.HEIGHT);
 		},
 
 		/**

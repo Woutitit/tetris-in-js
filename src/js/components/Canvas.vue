@@ -108,7 +108,7 @@ canvas {
 				}
 
 				if(this.isPlaying) {
-					var helicopter = new Helicopter();
+					var helicopter = new Helicopter(this.canvas);
 				}
 
 				requestAnimationFrame(this.update); // Will continously run the "update" method.
@@ -123,7 +123,6 @@ canvas {
 			drawBackground: function() {
 				this.canvasCtx.fillStyle = "#EEE";
 				this.canvasCtx.fillRect(0, 0, this.dimensions.WIDTH, this.dimensions.HEIGHT);
-
 			},
 
 
@@ -166,7 +165,7 @@ canvas {
 			*/
 			onKeyDown: function(e) {
 				if(this.keyCodes.JUMP[e.keyCode]) {
-					this.hero.jump();
+					//this.hero.jump();
 				}
 
 				//TODO: Make "Enter", "Space" en "Up" also start game if game status is not playing.
@@ -181,13 +180,11 @@ canvas {
 				// Will get mouseclick position with respect to canvas and then check what to activate based on that.
 				var mouseX = parseInt(e.clientX) - this.canvas.getBoundingClientRect().left;
 				var mouseY = parseInt(e.clientY) - this.canvas.getBoundingClientRect().top;
-
-				if(!this.isPlaying) {
-					// This means that we are on the start screen so we should
-					// We should check if mouseclick event was on area of button.
-					// Or we should not check and just automatically let the game play no matter where it is clicked.
-					// Only thing we have to check is whether they have clicked on the canvas element but we can see that with e and then the id.
-					this.start();
+				
+				if(e.target == this.canvas) {
+					if(!this.isPlaying) {
+						this.start();
+					}	
 				}
 			}
 		}

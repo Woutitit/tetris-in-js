@@ -11771,7 +11771,7 @@ module.exports = function listToStyles (parentId, list) {
 			}
 
 			if (this.isPlaying) {
-				var helicopter = new __WEBPACK_IMPORTED_MODULE_1__helicopter_js__["a" /* default */]();
+				var helicopter = new __WEBPACK_IMPORTED_MODULE_1__helicopter_js__["a" /* default */](this.canvas);
 			}
 
 			requestAnimationFrame(this.update); // Will continously run the "update" method.
@@ -11819,9 +11819,9 @@ module.exports = function listToStyles (parentId, list) {
   * @param {Event} e
   */
 		onKeyDown: function (e) {
-			if (this.keyCodes.JUMP[e.keyCode]) {
-				this.hero.jump();
-			}
+			if (this.keyCodes.JUMP[e.keyCode]) {}
+			//this.hero.jump();
+
 
 			//TODO: Make "Enter", "Space" en "Up" also start game if game status is not playing.
 		},
@@ -11835,12 +11835,10 @@ module.exports = function listToStyles (parentId, list) {
 			var mouseX = parseInt(e.clientX) - this.canvas.getBoundingClientRect().left;
 			var mouseY = parseInt(e.clientY) - this.canvas.getBoundingClientRect().top;
 
-			if (!this.isPlaying) {
-				// This means that we are on the start screen so we should
-				// We should check if mouseclick event was on area of button.
-				// Or we should not check and just automatically let the game play no matter where it is clicked.
-				// Only thing we have to check is whether they have clicked on the canvas element but we can see that with e and then the id.
-				this.start();
+			if (e.target == this.canvas) {
+				if (!this.isPlaying) {
+					this.start();
+				}
 			}
 		}
 	}
@@ -11898,7 +11896,7 @@ Intro.prototype = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Hero(canvas) {
+function Helicopter(canvas) {
 	this.canvas = canvas;
 	this.canvasCtx = this.canvas.getContext("2d");
 
@@ -11908,12 +11906,12 @@ function Hero(canvas) {
 	this.init();
 }
 
-Hero.prototype = {
+Helicopter.prototype = {
 	/**
   * Initialize Hero character.
   */
 	init: function () {
-		this.draw(0, 300); // The y position should be height of canvas minus height of hero to place the hero completely at bottom of the canvas.
+		this.draw(0, 100); // The y position should be height of canvas minus height of hero to place the hero completely at bottom of the canvas.
 	},
 
 	/**
@@ -11923,11 +11921,12 @@ Hero.prototype = {
 		this.xPos = x;
 		this.yPos = y;
 
-		this.canvasCtx.fillRect(this.xPos, this.yPos, 50, 50);
+		this.canvasCtx.fillStyle = "#000";
+		this.canvasCtx.fillRect(50, 50, 50, 50);
 	}
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (Hero);
+/* harmony default export */ __webpack_exports__["a"] = (Helicopter);
 
 /***/ }),
 /* 17 */

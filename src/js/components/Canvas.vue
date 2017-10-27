@@ -27,11 +27,33 @@ canvas {
 			}
 		},
 
+
 		mounted: function() {
-			this.init();
+			this.loadImages().then(
+				() => {
+					console.log("LOL");
+					this.init();
+				});
 		},
+
 		
 		methods: {
+			loadImages: function() {
+				return new Promise(function(resolve,reject) {
+					var imageSprite = new Image();
+					imageSprite.src = "src/assets/spritesheet.png";
+
+					imageSprite.onload = function() {
+						resolve(imageSprite); 
+					}
+
+					imageSprite.onerror = function(error) {
+						reject(error);
+					}
+				})
+			},
+
+
 			/**
 			* Initialize game canvas.
 			*/

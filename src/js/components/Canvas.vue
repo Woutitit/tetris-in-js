@@ -17,6 +17,9 @@ canvas {
 		data: function() {
 			return {
 				imageSprite: null,
+				spritePos: {
+					START_BUTTON: { x: 0, y: 0 }
+				},
 				canvas: null,
 				canvasCtx: null,
 				keyCodes: {
@@ -58,10 +61,36 @@ canvas {
 				this.canvas = document.getElementById(this.id);
 				this.canvasCtx = this.canvas.getContext("2d");
 
-				this.hero = new Hero(this.canvas);
+				// So you have a SOURCE width, however with the third and fourth argument you can scale this source width if necessary.
+				// You could do this for bigger where obviously the width always stays the same but you want to scale the image up.
+				
 
-				this.startListening();
-				this.update();
+				var startButtonDimensions = {
+					START_BUTTON_WIDTH: 32,
+					START_BUTTON_HEIGHT: 32
+				}
+
+				var startButtonSourceWidth = startButtonDimensions.START_BUTTON_WIDTH;
+				var startButtonSourceHeight = startButtonDimensions.START_BUTTON_HEIGHT;
+
+				// TODO: Scale up the source width/height for bigger screens?
+
+				this.canvasCtx.drawImage(
+					this.imageSprite, 
+					this.spritePos.START_BUTTON.x, 
+					this.spritePos.START_BUTTON.y, 
+					startButtonSourceWidth, 
+					startButtonSourceHeight, 
+					10, 
+					10, 
+					startButtonDimensions.START_BUTTON_WIDTH, 
+					startButtonDimensions.START_BUTTON_HEIGHT
+					);
+
+				//this.hero = new Hero(this.canvas);
+
+				//this.startListening();
+				//this.update();
 			},
 
 

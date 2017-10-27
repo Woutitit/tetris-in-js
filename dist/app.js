@@ -11320,7 +11320,7 @@ exports = module.exports = __webpack_require__(11)(undefined);
 
 
 // module
-exports.push([module.i, "\ncanvas {\r\n\t/* TODO: Position canvas in middle of web page and make it responsive; */\n}\r\n", ""]);
+exports.push([module.i, "\ncanvas {\r\n\t/* TODO: Position canvas in middle of web page and make it responsive; */\r\n\tborder: 1px solid #000;\n}\r\n", ""]);
 
 // exports
 
@@ -11675,6 +11675,7 @@ module.exports = function listToStyles (parentId, list) {
 //
 //
 //
+//
 
 
 
@@ -11730,7 +11731,6 @@ module.exports = function listToStyles (parentId, list) {
 			// So you have a SOURCE width, however with the third and fourth argument you can scale this source width if necessary.
 			// You could do this for bigger where obviously the width always stays the same but you want to scale the image up.
 
-
 			var startButtonDimensions = {
 				START_BUTTON_WIDTH: 32,
 				START_BUTTON_HEIGHT: 32
@@ -11741,13 +11741,20 @@ module.exports = function listToStyles (parentId, list) {
 
 			// TODO: Scale up the source width/height for bigger screens?
 
-			this.canvasCtx.drawImage(this.imageSprite, this.spritePos.START_BUTTON.x, this.spritePos.START_BUTTON.y, startButtonSourceWidth, startButtonSourceHeight, 10, 10, startButtonDimensions.START_BUTTON_WIDTH, startButtonDimensions.START_BUTTON_HEIGHT);
+			this.canvasCtx.drawImage(this.imageSprite, this.spritePos.START_BUTTON.x, this.spritePos.START_BUTTON.y, startButtonSourceWidth, startButtonSourceHeight, 0, 0, startButtonDimensions.START_BUTTON_WIDTH, startButtonDimensions.START_BUTTON_HEIGHT);
 
 			//this.hero = new Hero(this.canvas);
 
-			//this.startListening();
+			this.startListening();
+			// Already run update function even before the game starts so that we could already show
+			// our hero blink or something. This update function is just here to make the canvas look like a 60FPS game.
 			//this.update();
 		},
+
+		/**
+  * Starts gameplay.
+  */
+		start: function () {},
 
 		update: function () {
 			this.clearCanvas();
@@ -11766,6 +11773,7 @@ module.exports = function listToStyles (parentId, list) {
   */
 		startListening: function () {
 			document.addEventListener("keydown", this);
+			document.addEventListener("mousedown", this);
 		},
 
 		/**
@@ -11782,6 +11790,9 @@ module.exports = function listToStyles (parentId, list) {
 				case "keydown":
 					this.onKeyDown(e);
 					break;
+				case "mousedown":
+					this.onMouseDown(e);
+					break;
 			}
 		},
 
@@ -11792,6 +11803,25 @@ module.exports = function listToStyles (parentId, list) {
 		onKeyDown: function (e) {
 			if (this.keyCodes.JUMP[e.keyCode]) {
 				this.hero.jump();
+			}
+
+			//TODO: Make "Enter", "Space" en "Up" also start game if game status is not playing.
+		},
+
+		/**
+  * Handle mousedown events.
+  * @param {Event} e
+  */
+		onMouseDown: function (e) {
+			// Will get mouseclick position with respect to canvas and then check what to activate based on that.
+			var mouseX = parseInt(e.clientX) - this.canvas.getBoundingClientRect().left;
+			var mouseY = parseInt(e.clientY) - this.canvas.getBoundingClientRect().top;
+
+			if (!game.isPlaying) {
+				// This means that we are on the start screen so we should
+				// We should check if mouseclick event was on area of button.
+				// Or we should not check and just automatically let the game play no matter where it is clicked.
+				this.start();
 			}
 		}
 	}

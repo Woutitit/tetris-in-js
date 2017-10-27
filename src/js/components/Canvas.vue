@@ -8,6 +8,7 @@ canvas {
 	<canvas :id="id" :width="width" :height="height"></canvas>
 </template>
 <script>
+	import Intro from "../intro.js";
 	import Hero from "../hero.js";
 
 	export default {
@@ -17,13 +18,14 @@ canvas {
 
 		data: function() {
 			return {
-				imageSprite: null,
+				spriteSheet: null,
 				spritePos: {
 					START_BUTTON: { x: 0, y: 0 }
 				},
 
 				canvas: null,
 				canvasCtx: null,
+				dimensions: null,
 
 				keyCodes: {
 					JUMP: { "38": 1, "32": 1}
@@ -31,6 +33,7 @@ canvas {
 
 				hero: null,
 
+				playingIntro: true,
 				isPlaying: false,
 				isPaused: false
 			}
@@ -38,23 +41,23 @@ canvas {
 
 
 		mounted: function() {
-			this.loadImageSprite().then(() => {
+			this.loadSpriteSheet().then(() => {
 				this.init();
 			});
 		},
 
 		
 		methods: {
-			loadImageSprite: function() {
+			loadSpriteSheet: function() {
 				return new Promise((resolve,reject) => {
-					this.imageSprite = new Image();
-					this.imageSprite.src = "src/assets/spritesheet.png";
+					this.spriteSheet = new Image();
+					this.spriteSheet.src = "src/assets/spritesheet.png";
 
-					this.imageSprite.onload = function() {
-						resolve(this.imageSprite); 
+					this.spriteSheet.onload = function() {
+						resolve(this.spriteSheet); 
 					}
 
-					this.imageSprite.onerror = function(error) {
+					this.spriteSheet.onerror = function(error) {
 						reject(error);
 					}
 				});
@@ -67,38 +70,15 @@ canvas {
 			init: function() {
 				this.canvas = document.getElementById(this.id);
 				this.canvasCtx = this.canvas.getContext("2d");
+				this.dimensions = { WIDTH: this.width, HEIGHT: this.height }
 
-				// So you have a SOURCE width, however with the third and fourth argument you can scale this source width if necessary.
-				// You could do this for bigger where obviously the width always stays the same but you want to scale the image up.
-				
-				var startButtonDimensions = {
-					START_BUTTON_WIDTH: 32,
-					START_BUTTON_HEIGHT: 32
-				}
-
-				var startButtonSourceWidth = startButtonDimensions.START_BUTTON_WIDTH;
-				var startButtonSourceHeight = startButtonDimensions.START_BUTTON_HEIGHT;
-
-				// TODO: Scale up the source width/height for bigger screens?
-
-				this.canvasCtx.drawImage(
-					this.imageSprite, 
-					this.spritePos.START_BUTTON.x, 
-					this.spritePos.START_BUTTON.y, 
-					startButtonSourceWidth, 
-					startButtonSourceHeight, 
-					0, 
-					0, 
-					startButtonDimensions.START_BUTTON_WIDTH, 
-					startButtonDimensions.START_BUTTON_HEIGHT
-					);
 
 				//this.hero = new Hero(this.canvas);
 
 				this.startListening();
 				// Already run update function even before the game starts so that we could already show
 				// our hero blink or something. This update function is just here to make the canvas look like a 60FPS game.
-				//this.update();
+				this.update();
 			},
 
 
@@ -107,15 +87,20 @@ canvas {
 			*/
 			start: function() {
 				this.isPlaying = true;
-				console.log("Start playing.");
+				this.playingIntro = false;
 
 			},
 
 
+			/**
+			* Main loop. Continously gets called by requestAnimationFrame meaning it's also "watching" all global vars used in this method.
+			*/
 			update: function() {
-				this.clearCanvas();
+				this.clearCanvas(); // Always clear canvas per frame to not draw any doubles.
 
-				this.hero.draw(this.hero.xPos, this.hero.yPos);
+				if(this.playingIntro) {
+					new Intro(this.canvas, this.dimensions, this.spriteSheet, this.spritePos);
+				}
 
 				requestAnimationFrame(this.update); // Will continously run the "update" method.
 			},
@@ -185,6 +170,7 @@ canvas {
 					// This means that we are on the start screen so we should
 					// We should check if mouseclick event was on area of button.
 					// Or we should not check and just automatically let the game play no matter where it is clicked.
+					// Only thing we have to check is whether they have clicked on the canvas element but we can see that with e and then the id.
 					this.start();
 				}
 			}

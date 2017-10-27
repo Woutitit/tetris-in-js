@@ -11224,7 +11224,7 @@ process.umask = function() { return 0; };
 "use strict";
 var components = {
 	"v-canvas": __webpack_require__(8).default,
-	"v-game": __webpack_require__(17).default
+	"v-game": __webpack_require__(18).default
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (components);
@@ -11236,7 +11236,7 @@ var components = {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_Canvas_vue__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1ede9e78_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Canvas_vue__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1ede9e78_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Canvas_vue__ = __webpack_require__(17);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
@@ -11666,7 +11666,8 @@ module.exports = function listToStyles (parentId, list) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__hero_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__intro_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__hero_js__ = __webpack_require__(16);
 //
 //
 //
@@ -11676,6 +11677,7 @@ module.exports = function listToStyles (parentId, list) {
 //
 //
 //
+
 
 
 
@@ -11686,13 +11688,14 @@ module.exports = function listToStyles (parentId, list) {
 
 	data: function () {
 		return {
-			imageSprite: null,
+			spriteSheet: null,
 			spritePos: {
 				START_BUTTON: { x: 0, y: 0 }
 			},
 
 			canvas: null,
 			canvasCtx: null,
+			dimensions: null,
 
 			keyCodes: {
 				JUMP: { "38": 1, "32": 1 }
@@ -11700,28 +11703,29 @@ module.exports = function listToStyles (parentId, list) {
 
 			hero: null,
 
+			playingIntro: true,
 			isPlaying: false,
 			isPaused: false
 		};
 	},
 
 	mounted: function () {
-		this.loadImageSprite().then(() => {
+		this.loadSpriteSheet().then(() => {
 			this.init();
 		});
 	},
 
 	methods: {
-		loadImageSprite: function () {
+		loadSpriteSheet: function () {
 			return new Promise((resolve, reject) => {
-				this.imageSprite = new Image();
-				this.imageSprite.src = "src/assets/spritesheet.png";
+				this.spriteSheet = new Image();
+				this.spriteSheet.src = "src/assets/spritesheet.png";
 
-				this.imageSprite.onload = function () {
-					resolve(this.imageSprite);
+				this.spriteSheet.onload = function () {
+					resolve(this.spriteSheet);
 				};
 
-				this.imageSprite.onerror = function (error) {
+				this.spriteSheet.onerror = function (error) {
 					reject(error);
 				};
 			});
@@ -11733,28 +11737,14 @@ module.exports = function listToStyles (parentId, list) {
 		init: function () {
 			this.canvas = document.getElementById(this.id);
 			this.canvasCtx = this.canvas.getContext("2d");
+			this.dimensions = { WIDTH: this.width, HEIGHT: this.height
 
-			// So you have a SOURCE width, however with the third and fourth argument you can scale this source width if necessary.
-			// You could do this for bigger where obviously the width always stays the same but you want to scale the image up.
+				//this.hero = new Hero(this.canvas);
 
-			var startButtonDimensions = {
-				START_BUTTON_WIDTH: 32,
-				START_BUTTON_HEIGHT: 32
-			};
-
-			var startButtonSourceWidth = startButtonDimensions.START_BUTTON_WIDTH;
-			var startButtonSourceHeight = startButtonDimensions.START_BUTTON_HEIGHT;
-
-			// TODO: Scale up the source width/height for bigger screens?
-
-			this.canvasCtx.drawImage(this.imageSprite, this.spritePos.START_BUTTON.x, this.spritePos.START_BUTTON.y, startButtonSourceWidth, startButtonSourceHeight, 0, 0, startButtonDimensions.START_BUTTON_WIDTH, startButtonDimensions.START_BUTTON_HEIGHT);
-
-			//this.hero = new Hero(this.canvas);
-
-			this.startListening();
+			};this.startListening();
 			// Already run update function even before the game starts so that we could already show
 			// our hero blink or something. This update function is just here to make the canvas look like a 60FPS game.
-			//this.update();
+			this.update();
 		},
 
 		/**
@@ -11762,13 +11752,18 @@ module.exports = function listToStyles (parentId, list) {
   */
 		start: function () {
 			this.isPlaying = true;
-			console.log("Start playing.");
+			this.playingIntro = false;
 		},
 
+		/**
+  * Main loop. Continously gets called by requestAnimationFrame meaning it's also "watching" all global vars used in this method.
+  */
 		update: function () {
-			this.clearCanvas();
+			this.clearCanvas(); // Always clear canvas per frame to not draw any doubles.
 
-			this.hero.draw(this.hero.xPos, this.hero.yPos);
+			if (this.playingIntro) {
+				new __WEBPACK_IMPORTED_MODULE_0__intro_js__["a" /* default */](this.canvas, this.dimensions, this.spriteSheet, this.spritePos);
+			}
 
 			requestAnimationFrame(this.update); // Will continously run the "update" method.
 		},
@@ -11830,6 +11825,7 @@ module.exports = function listToStyles (parentId, list) {
 				// This means that we are on the start screen so we should
 				// We should check if mouseclick event was on area of button.
 				// Or we should not check and just automatically let the game play no matter where it is clicked.
+				// Only thing we have to check is whether they have clicked on the canvas element but we can see that with e and then the id.
 				this.start();
 			}
 		}
@@ -11838,6 +11834,53 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ }),
 /* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function Intro(canvas, canvasDimensions, spriteSheet, spritePos) {
+	this.canvas = canvas;
+	this.canvasCtx = this.canvas.getContext("2d");
+	this.canvasDimensions = canvasDimensions;
+
+	this.spriteSheet = spriteSheet;
+	this.spritePos = spritePos;
+
+	this.dimensions = {
+		START_BUTTON: { WIDTH: 32, HEIGHT: 32 }
+	};
+
+	this.draw(); // Immediately draw, no init needed.
+}
+
+Intro.prototype = {
+	/**
+  * Draw intro screen.
+  */
+	draw: function () {
+
+		// TODO: Add message "Press to start" in like Courier font.
+		// TODO: Make this a panel with button + text?
+
+		this.drawStartButton();
+	},
+
+	drawStartButton: function () {
+		var startButtonSourceWidth = this.dimensions.START_BUTTON.WIDTH;
+		var startButtonSourceHeight = this.dimensions.START_BUTTON.HEIGHT;
+
+		// Position start button in the middle.
+		// TODO: Add general method for center positioning?
+		var startButtonX = this.canvasDimensions.WIDTH / 2 - this.dimensions.START_BUTTON.WIDTH / 2;
+		var startButtonY = this.canvasDimensions.HEIGHT / 2 - this.dimensions.START_BUTTON.HEIGHT / 2;
+
+		this.canvasCtx.drawImage(this.spriteSheet, this.spritePos.START_BUTTON.x, this.spritePos.START_BUTTON.y, startButtonSourceWidth, startButtonSourceHeight, startButtonX, startButtonY, this.dimensions.START_BUTTON.WIDTH, this.dimensions.START_BUTTON.HEIGHT);
+	}
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Intro);
+
+/***/ }),
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11891,7 +11934,7 @@ Hero.prototype = {
 /* unused harmony default export */ var _unused_webpack_default_export = (Hero);
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11915,12 +11958,12 @@ if (false) {
 }
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4b4acbdc_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Game_vue__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4b4acbdc_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Game_vue__ = __webpack_require__(19);
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
@@ -11966,7 +12009,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

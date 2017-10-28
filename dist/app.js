@@ -21030,6 +21030,11 @@ Helicopter.prototype = {
 		}
 	},
 
+	/**
+ * Enables controls for helicopter to be able to move it.
+ * @param {Array} keysPressed
+ * @param {Object} keyBindings
+ */
 	enableControls: function (keysPressed, keyBindings) {
 		// Will trigger when AT LEAST one key is pressed. isPlaying = true means we only need to check for helicopter movement here.
 		if (keysPressed.length > 0) {

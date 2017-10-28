@@ -32,30 +32,10 @@ canvas {
 				boundaries: null,
 
 				keyBindings: {
-					menu: {
-						START: [
-						"Enter"
-						],
-
-						RESTART: [
-						"Enter"
-						]
-					},
-
-					helicopter: {
-						MOVE_LEFT: [
-						"ArrowLeft"
-						],
-						MOVE_UP: [
-						"ArrowUp"
-						],
-						MOVE_RIGHT: [
-						"ArrowRight"
-						],
-						MOVE_DOWN: [
-						"ArrowDown"
-						],
-					}
+					MOVE_LEFT: "ArrowLeft",
+					MOVE_UP: "ArrowUp",
+					MOVE_RIGHT: "ArrowRight",
+					MOVE_DOWN: "ArrowDown"
 				},
 
 				keysPressed: [], // Temporarily holds all keys pressed.
@@ -142,10 +122,12 @@ canvas {
 
 					// Will trigger when AT LEAST one key is pressed.
 					if(this.keysPressed.length > 0) {
-						console.log("LOL");
+						// Currently we can only assign ONE key to MOVE_UP. Later we should be able to assign more and check for them.
+						if (this.keysPressed.includes(this.keyBindings.MOVE_LEFT)) this.helicopter.move("left");
+						if (this.keysPressed.includes(this.keyBindings.MOVE_UP)) this.helicopter.move("up");
+						if (this.keysPressed.includes(this.keyBindings.MOVE_RIGHT)) this.helicopter.move("right");
+						if (this.keysPressed.includes(this.keyBindings.MOVE_DOWN)) this.helicopter.move("down");
 					}
-
-
 				}
 
 				requestAnimationFrame(this.update); // Will continously run the "update" method.

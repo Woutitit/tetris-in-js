@@ -12,7 +12,7 @@ function Helicopter(canvas, canvasBoundaries, spriteSheet, spritePosX, spritePos
 	this.helicopterCanvasX = 10;
 	this.helicopterCanvasY = 50;
 
-	this.ACCELERATION = 1; // Instead we could also always add + 1 or something with a max speed to make a more smooth movement.
+	this.ACCELERATION = 3; // Instead we could also always add + 1 or something with a max speed to make a more smooth movement.
 }
 
 Helicopter.prototype = {

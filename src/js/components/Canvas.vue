@@ -89,8 +89,6 @@ canvas {
 				this.helicopter = new Helicopter(this.canvas, this.boundaries, this.spriteSheet, this.spritePos.HELICOPTER.x, this.spritePos.HELICOPTER.y);
 
 				this.startListening();
-				// Already run update function even before the game starts so that we could already show
-				// our hero blink or something. This update function is just here to make the canvas look like a 60FPS game.
 				this.update();
 			},
 
@@ -99,12 +97,6 @@ canvas {
 			* Main loop. Continously gets called by requestAnimationFrame meaning it's also "watching" all global vars used in this method.
 			*/
 			update: function() {
-				// Also the 60 FPS thing from google I think is only important for sprite animations such as walking (?).
-				// WE CAN'T CREATE NEW OBJECTS IN UPDATE METHOD CUZ IT WILL ALWAYS LOSE PROPERTIES DATA IMMEDIATLY. DO IT IN INIT(?).
-				// Only objects we can create in here are objects we won't modify the data of later.
-				// So since we CAN'T create AND use objects in this method we should CREATE a parent objects in the init() that will hold all current enemies.
-				// Then we can CREATE and hold these enemies (in an array for example). And then we can keep track of all of the hitboxes until they are off
-				// the screen.
 				this.clearCanvas(); // Always clear canvas per frame to not draw any doubles.
 
 				this.drawBackground();
@@ -115,12 +107,9 @@ canvas {
 				}
 
 				if(this.isPlaying) {
-					// SO THE GAME WILL NOW SPAWN OTHER HELICOPTERS WHICH IT HAS GOT TO AVOID (OR SHOOT).
-					// ALSO IT WILL SPAWN COINS WHICH WILL GET YOU (EXTRA) SCORE.
-					// HELICOPTERS WILL HAVE RANDOM SPEED ASSIGNED BETWEEN 1 AND 5.
 					this.helicopter.update();
 
-					// Will trigger when AT LEAST one key is pressed.
+					// Will trigger when AT LEAST one key is pressed. isPlaying = true means we only need to check for helicopter movement here.
 					if(this.keysPressed.length > 0) {
 						// Currently we can only assign ONE key to MOVE_UP. Later we should be able to assign more and check for them.
 						if (this.keysPressed.includes(this.keyBindings.MOVE_LEFT)) this.helicopter.move("left");
@@ -196,6 +185,7 @@ canvas {
 
 			/**
 			* Handle keydown events.
+			* @param {String} key - Registered key from event.
 			*/
 			onKeyDown: function(key) {
 				// TODO: Polyfill the event.key

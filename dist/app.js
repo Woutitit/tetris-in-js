@@ -11701,10 +11701,13 @@ module.exports = function listToStyles (parentId, list) {
 			dimensions: null,
 
 			keyCodes: {
-				JUMP: { "38": 1, "32": 1 }
+				LEFT: 37,
+				UP: 38,
+				RIGHT: 39,
+				DOWN: 40
 			},
 
-			hero: null,
+			helicopter: null,
 
 			playingIntro: true,
 			isPlaying: false,
@@ -11740,14 +11743,37 @@ module.exports = function listToStyles (parentId, list) {
 		init: function () {
 			this.canvas = document.getElementById(this.id);
 			this.canvasCtx = this.canvas.getContext("2d");
-			this.dimensions = { WIDTH: this.width, HEIGHT: this.height
+			this.dimensions = { WIDTH: this.width, HEIGHT: this.height };
 
-				//this.hero = new Hero(this.canvas);
+			this.helicopter = new __WEBPACK_IMPORTED_MODULE_1__helicopter_js__["a" /* default */](this.canvas, this.spriteSheet, this.spritePos.HELICOPTER.x, this.spritePos.HELICOPTER.y);
 
-			};this.startListening();
+			this.startListening();
 			// Already run update function even before the game starts so that we could already show
 			// our hero blink or something. This update function is just here to make the canvas look like a 60FPS game.
 			this.update();
+		},
+
+		/**
+  * Main loop. Continously gets called by requestAnimationFrame meaning it's also "watching" all global vars used in this method.
+  */
+		update: function () {
+			// Also the 60 FPS thing from google I think is only important for sprite animations such as walking (?).
+			// WE CAN'T CREATE NEW OBJECTS IN UPDATE METHOD CUZ IT WILL ALWAYS LOSE PROPERTIES DATA IMMEDIATLY. DO IT IN INIT(?).
+			// Only objects we can create in here are objects we won't modify the data of later.
+			this.clearCanvas(); // Always clear canvas per frame to not draw any doubles.
+
+			this.drawBackground();
+
+			if (this.playingIntro) {
+				new __WEBPACK_IMPORTED_MODULE_0__intro_js__["a" /* default */](this.canvas, this.dimensions, this.spriteSheet, this.spritePos);
+				// Will this create multiple intro's or only always 1 new intro?
+			}
+
+			if (this.isPlaying) {
+				this.helicopter.update();
+			}
+
+			requestAnimationFrame(this.update); // Will continously run the "update" method.
 		},
 
 		/**
@@ -11756,26 +11782,6 @@ module.exports = function listToStyles (parentId, list) {
 		start: function () {
 			this.isPlaying = true;
 			this.playingIntro = false;
-		},
-
-		/**
-  * Main loop. Continously gets called by requestAnimationFrame meaning it's also "watching" all global vars used in this method.
-  */
-		update: function () {
-			// Also the 60 FPS thing from google I think is only important for sprite animations such as walking (?).
-			this.clearCanvas(); // Always clear canvas per frame to not draw any doubles.
-
-			this.drawBackground();
-
-			if (this.playingIntro) {
-				new __WEBPACK_IMPORTED_MODULE_0__intro_js__["a" /* default */](this.canvas, this.dimensions, this.spriteSheet, this.spritePos);
-			}
-
-			if (this.isPlaying) {
-				var helicopter = new __WEBPACK_IMPORTED_MODULE_1__helicopter_js__["a" /* default */](this.canvas, this.spriteSheet, this.spritePos.HELICOPTER.x, this.spritePos.HELICOPTER.y);
-			}
-
-			requestAnimationFrame(this.update); // Will continously run the "update" method.
 		},
 
 		clearCanvas: function () {
@@ -11820,9 +11826,20 @@ module.exports = function listToStyles (parentId, list) {
   * @param {Event} e
   */
 		onKeyDown: function (e) {
-			if (this.keyCodes.JUMP[e.keyCode]) {}
-			//this.hero.jump();
-
+			switch (e.keyCode) {
+				case this.keyCodes.LEFT:
+					this.helicopter.left();
+					break;
+				case this.keyCodes.UP:
+					this.helicopter.up();
+					break;
+				case this.keyCodes.RIGHT:
+					this.helicopter.right();
+					break;
+				case this.keyCodes.DOWN:
+					this.helicopter.down();
+					break;
+			}
 
 			//TODO: Make "Enter", "Space" en "Up" also start game if game status is not playing.
 		},
@@ -11908,29 +11925,40 @@ function Helicopter(canvas, spriteSheet, spritePosX, spritePosY) {
 
 	this.dimensions = { WIDTH: 61, HEIGHT: 32 };
 
-	this.init();
+	this.helicopterCanvasX = 10;
+	this.helicopterCanvasY = 50;
 }
 
 Helicopter.prototype = {
 	/**
-  * Initialize Hero character.
-  */
-	init: function () {
-		this.draw(0, 100); // The y position should be height of canvas minus height of hero to place the hero completely at bottom of the canvas.
-	},
-
-	/**
-  * Draw helicopter.
-  */
-	draw: function () {
-
-		var helicopterCanvasX = 10;
-		var helicopterCanvasY = 50;
+ * Draw helicopter.
+ */
+	draw: function (canvasX, canvasY) {
 
 		var helicopterSourceWidth = this.dimensions.WIDTH;
 		var helicopterSourceHeight = this.dimensions.HEIGHT;
 
-		this.canvasCtx.drawImage(this.spriteSheet, this.spritePosX, this.spritePosY, helicopterSourceWidth, helicopterSourceHeight, helicopterCanvasX, helicopterCanvasY, this.dimensions.WIDTH, this.dimensions.HEIGHT);
+		this.canvasCtx.drawImage(this.spriteSheet, this.spritePosX, this.spritePosY, helicopterSourceWidth, helicopterSourceHeight, canvasX, canvasY, this.dimensions.WIDTH, this.dimensions.HEIGHT);
+	},
+
+	update: function () {
+		this.draw(this.helicopterCanvasX, this.helicopterCanvasY);
+	},
+
+	left: function () {
+		this.helicopterCanvasX -= 5;
+	},
+
+	up: function () {
+		this.helicopterCanvasY -= 5;
+	},
+
+	right: function () {
+		this.helicopterCanvasX += 5;
+	},
+
+	down: function () {
+		this.helicopterCanvasY += 5;
 	}
 };
 

@@ -8,25 +8,15 @@ function Helicopter(canvas, spriteSheet, spritePosX, spritePosY) {
 
 	this.dimensions = { WIDTH: 61, HEIGHT: 32 }
 
-	this.init()
+	this.helicopterCanvasX = 10;
+	this.helicopterCanvasY = 50;
 }
 
 Helicopter.prototype = {
 	/**
-	 * Initialize Hero character.
-	 */
-	init: function() {
-		this.draw(0, 100); // The y position should be height of canvas minus height of hero to place the hero completely at bottom of the canvas.
-	},
-
-
-	/**
-	 * Draw helicopter.
-	 */
-	draw: function() {
-
-		var helicopterCanvasX = 10;
-		var helicopterCanvasY = 50;
+	* Draw helicopter.
+	*/
+	draw: function(canvasX, canvasY) {
 
 		var helicopterSourceWidth = this.dimensions.WIDTH;
 		var helicopterSourceHeight = this.dimensions.HEIGHT;
@@ -37,11 +27,35 @@ Helicopter.prototype = {
 			this.spritePosY, 
 			helicopterSourceWidth, 
 			helicopterSourceHeight, 
-			helicopterCanvasX, 
-			helicopterCanvasY, 
+			canvasX, 
+			canvasY, 
 			this.dimensions.WIDTH, 
 			this.dimensions.HEIGHT
-		);
+			);
+	},
+
+
+	update: function() {
+		this.draw(this.helicopterCanvasX, this.helicopterCanvasY);
+	},
+
+
+	left: function() {
+		this.helicopterCanvasX -= 5;
+	},
+
+	up: function() {
+		this.helicopterCanvasY -= 5;
+	},
+
+
+	right: function() {
+		this.helicopterCanvasX += 5;
+	},
+
+
+	down: function() {
+		this.helicopterCanvasY += 5;
 	},
 }
 

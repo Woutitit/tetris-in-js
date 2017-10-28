@@ -31,10 +31,13 @@ canvas {
 				dimensions: null,
 
 				keyCodes: {
-					JUMP: { "38": 1, "32": 1}
+					LEFT: 37,
+					UP: 38,
+					RIGHT: 39,
+					DOWN: 40
 				},
 
-				hero: null,
+				helicopter: null,
 
 				playingIntro: true,
 				isPlaying: false,
@@ -76,12 +79,36 @@ canvas {
 				this.dimensions = { WIDTH: this.width, HEIGHT: this.height }
 
 
-				//this.hero = new Hero(this.canvas);
+				this.helicopter = new Helicopter(this.canvas, this.spriteSheet, this.spritePos.HELICOPTER.x, this.spritePos.HELICOPTER.y);
 
 				this.startListening();
 				// Already run update function even before the game starts so that we could already show
 				// our hero blink or something. This update function is just here to make the canvas look like a 60FPS game.
 				this.update();
+			},
+
+
+			/**
+			* Main loop. Continously gets called by requestAnimationFrame meaning it's also "watching" all global vars used in this method.
+			*/
+			update: function() {
+				// Also the 60 FPS thing from google I think is only important for sprite animations such as walking (?).
+				// WE CAN'T CREATE NEW OBJECTS IN UPDATE METHOD CUZ IT WILL ALWAYS LOSE PROPERTIES DATA IMMEDIATLY. DO IT IN INIT(?).
+				// Only objects we can create in here are objects we won't modify the data of later.
+				this.clearCanvas(); // Always clear canvas per frame to not draw any doubles.
+
+				this.drawBackground();
+
+				if(this.playingIntro) {
+					new Intro(this.canvas, this.dimensions, this.spriteSheet, this.spritePos);
+					// Will this create multiple intro's or only always 1 new intro?
+				}
+
+				if(this.isPlaying) {
+					this.helicopter.update();
+				}
+
+				requestAnimationFrame(this.update); // Will continously run the "update" method.
 			},
 
 
@@ -92,27 +119,6 @@ canvas {
 				this.isPlaying = true;
 				this.playingIntro = false;
 
-			},
-
-
-			/**
-			* Main loop. Continously gets called by requestAnimationFrame meaning it's also "watching" all global vars used in this method.
-			*/
-			update: function() {
-				// Also the 60 FPS thing from google I think is only important for sprite animations such as walking (?).
-				this.clearCanvas(); // Always clear canvas per frame to not draw any doubles.
-
-				this.drawBackground();
-
-				if(this.playingIntro) {
-					new Intro(this.canvas, this.dimensions, this.spriteSheet, this.spritePos);
-				}
-
-				if(this.isPlaying) {
-					var helicopter = new Helicopter(this.canvas, this.spriteSheet, this.spritePos.HELICOPTER.x, this.spritePos.HELICOPTER.y);
-				}
-
-				requestAnimationFrame(this.update); // Will continously run the "update" method.
 			},
 
 
@@ -165,9 +171,21 @@ canvas {
 			* @param {Event} e
 			*/
 			onKeyDown: function(e) {
-				if(this.keyCodes.JUMP[e.keyCode]) {
-					//this.hero.jump();
+				switch(e.keyCode) {
+					case this.keyCodes.LEFT:
+					this.helicopter.left();
+					break;
+					case this.keyCodes.UP:
+					this.helicopter.up();
+					break;
+					case this.keyCodes.RIGHT:
+					this.helicopter.right();
+					break;
+					case this.keyCodes.DOWN:
+					this.helicopter.down();
+					break;
 				}
+
 
 				//TODO: Make "Enter", "Space" en "Up" also start game if game status is not playing.
 			},

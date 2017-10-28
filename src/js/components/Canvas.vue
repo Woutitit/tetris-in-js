@@ -29,6 +29,7 @@ canvas {
 				canvas: null,
 				canvasCtx: null,
 				dimensions: null,
+				boundaries: null,
 
 				keyCodes: {
 					LEFT: 37,
@@ -76,10 +77,12 @@ canvas {
 			init: function() {
 				this.canvas = document.getElementById(this.id);
 				this.canvasCtx = this.canvas.getContext("2d");
-				this.dimensions = { WIDTH: this.width, HEIGHT: this.height }
+
+				this.dimensions = { WIDTH: this.width, HEIGHT: this.height };
+				this.boundaries = { LEFT: 0, TOP: 0, RIGHT: this.dimensions.HEIGHT, DOWN: this.dimensions.width };
 
 
-				this.helicopter = new Helicopter(this.canvas, this.spriteSheet, this.spritePos.HELICOPTER.x, this.spritePos.HELICOPTER.y);
+				this.helicopter = new Helicopter(this.canvas, this.boundaries, this.spriteSheet, this.spritePos.HELICOPTER.x, this.spritePos.HELICOPTER.y);
 
 				this.startListening();
 				// Already run update function even before the game starts so that we could already show

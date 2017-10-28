@@ -11699,6 +11699,7 @@ module.exports = function listToStyles (parentId, list) {
 			canvas: null,
 			canvasCtx: null,
 			dimensions: null,
+			boundaries: null,
 
 			keyCodes: {
 				LEFT: 37,
@@ -11743,9 +11744,11 @@ module.exports = function listToStyles (parentId, list) {
 		init: function () {
 			this.canvas = document.getElementById(this.id);
 			this.canvasCtx = this.canvas.getContext("2d");
-			this.dimensions = { WIDTH: this.width, HEIGHT: this.height };
 
-			this.helicopter = new __WEBPACK_IMPORTED_MODULE_1__helicopter_js__["a" /* default */](this.canvas, this.spriteSheet, this.spritePos.HELICOPTER.x, this.spritePos.HELICOPTER.y);
+			this.dimensions = { WIDTH: this.width, HEIGHT: this.height };
+			this.boundaries = { LEFT: 0, TOP: 0, RIGHT: this.dimensions.HEIGHT, DOWN: this.dimensions.width };
+
+			this.helicopter = new __WEBPACK_IMPORTED_MODULE_1__helicopter_js__["a" /* default */](this.canvas, this.boundaries, this.spriteSheet, this.spritePos.HELICOPTER.x, this.spritePos.HELICOPTER.y);
 
 			this.startListening();
 			// Already run update function even before the game starts so that we could already show
@@ -11913,9 +11916,10 @@ Intro.prototype = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Helicopter(canvas, spriteSheet, spritePosX, spritePosY) {
+function Helicopter(canvas, canvasBoundaries, spriteSheet, spritePosX, spritePosY) {
 	this.canvas = canvas;
 	this.canvasCtx = this.canvas.getContext("2d");
+	this.canvasBoundaries = canvasBoundaries;
 
 	this.spriteSheet = spriteSheet;
 	this.spritePosX = spritePosX;
@@ -11953,6 +11957,10 @@ Helicopter.prototype = {
  * @param {String} direction
  */
 	move: function (direction) {
+		// First check if the copter is not at the edges of the canvas yet. If not it can move.
+		// Also if it's less than the acceleration speed from the edge it should go the distance to the edge instead.
+		// So make a new hitbox object and then check if the edges of the hitbox reaches the bounds of the canvas.
+
 		switch (direction) {
 			case "left":
 				this.helicopterCanvasX -= this.ACCELERATION;

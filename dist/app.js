@@ -11828,16 +11828,16 @@ module.exports = function listToStyles (parentId, list) {
 		onKeyDown: function (e) {
 			switch (e.keyCode) {
 				case this.keyCodes.LEFT:
-					this.helicopter.left();
+					this.helicopter.move("left");
 					break;
 				case this.keyCodes.UP:
-					this.helicopter.up();
+					this.helicopter.move("up");
 					break;
 				case this.keyCodes.RIGHT:
-					this.helicopter.right();
+					this.helicopter.move("right");
 					break;
 				case this.keyCodes.DOWN:
-					this.helicopter.down();
+					this.helicopter.move("down");
 					break;
 			}
 
@@ -11941,24 +11941,32 @@ Helicopter.prototype = {
 		this.canvasCtx.drawImage(this.spriteSheet, this.spritePosX, this.spritePosY, helicopterSourceWidth, helicopterSourceHeight, canvasX, canvasY, this.dimensions.WIDTH, this.dimensions.HEIGHT);
 	},
 
+	/**
+ * If used in conjunction with requestAnimationFrame() it will update position of helicopter.
+ */
 	update: function () {
 		this.draw(this.helicopterCanvasX, this.helicopterCanvasY);
 	},
 
-	left: function () {
-		this.helicopterCanvasX -= 5;
-	},
-
-	up: function () {
-		this.helicopterCanvasY -= 5;
-	},
-
-	right: function () {
-		this.helicopterCanvasX += 5;
-	},
-
-	down: function () {
-		this.helicopterCanvasY += 5;
+	/**
+ * Move helicopter in certain direction.
+ * @param {String} direction
+ */
+	move: function (direction) {
+		switch (direction) {
+			case "left":
+				this.helicopterCanvasX -= 5;
+				break;
+			case "up":
+				this.helicopterCanvasY -= 5;
+				break;
+			case "right":
+				this.helicopterCanvasX += 5;
+				break;
+			case "down":
+				this.helicopterCanvasY += 5;
+				break;
+		}
 	}
 };
 

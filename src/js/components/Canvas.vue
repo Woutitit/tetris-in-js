@@ -173,16 +173,16 @@ canvas {
 			onKeyDown: function(e) {
 				switch(e.keyCode) {
 					case this.keyCodes.LEFT:
-					this.helicopter.left();
+					this.helicopter.move("left");
 					break;
 					case this.keyCodes.UP:
-					this.helicopter.up();
+					this.helicopter.move("up");
 					break;
 					case this.keyCodes.RIGHT:
-					this.helicopter.right();
+					this.helicopter.move("right");
 					break;
 					case this.keyCodes.DOWN:
-					this.helicopter.down();
+					this.helicopter.move("down");
 					break;
 				}
 

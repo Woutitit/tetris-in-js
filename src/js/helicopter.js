@@ -34,29 +34,34 @@ Helicopter.prototype = {
 			);
 	},
 
-
+	/**
+	* If used in conjunction with requestAnimationFrame() it will update position of helicopter.
+	*/
 	update: function() {
 		this.draw(this.helicopterCanvasX, this.helicopterCanvasY);
 	},
 
 
-	left: function() {
-		this.helicopterCanvasX -= 5;
-	},
-
-	up: function() {
-		this.helicopterCanvasY -= 5;
-	},
-
-
-	right: function() {
-		this.helicopterCanvasX += 5;
-	},
-
-
-	down: function() {
-		this.helicopterCanvasY += 5;
-	},
+	/**
+	* Move helicopter in certain direction.
+	* @param {String} direction
+	*/
+	move: function(direction) {
+		switch(direction) {
+			case "left":
+			this.helicopterCanvasX -= 5;
+			break;
+			case "up":
+			this.helicopterCanvasY -= 5;
+			break;
+			case "right":
+			this.helicopterCanvasX += 5;
+			break;
+			case "down":
+			this.helicopterCanvasY += 5;
+			break;
+		}
+	}
 }
 
 export default Helicopter;

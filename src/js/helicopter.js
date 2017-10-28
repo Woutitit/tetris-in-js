@@ -71,6 +71,40 @@ Helicopter.prototype = {
 			this.helicopterCanvasY += this.ACCELERATION;
 			break;
 		}
+	},
+
+
+	enableControls: function(keysPressed, keyBindings) {
+		// Will trigger when AT LEAST one key is pressed. isPlaying = true means we only need to check for helicopter movement here.
+		if(keysPressed.length > 0) {
+			// Currently we can only assign ONE key to MOVE_UP. Later we should be able to assign more and check for them.
+			if (keysPressed.includes(keyBindings.MOVE_LEFT)) {
+				this.move("left");
+			}
+
+			if (keysPressed.includes(keyBindings.MOVE_UP)) {
+				this.move("up");
+			}
+
+			if (keysPressed.includes(keyBindings.MOVE_RIGHT)) {
+				this.move("right");
+			}
+
+			if (keysPressed.includes(keyBindings.MOVE_DOWN)) {
+				this.move("down");
+			}
+
+			if (keysPressed.includes(keyBindings.SHOOT)) {
+				this.shoot();
+			}
+		}
+	},
+
+
+	shoot: function() {
+		var COOLDOWN = 5; // Shooting cooldown when next bullet can be shot
+		var bullet = this.canvasCtx.fillRect(10, 10, 10, 10);
+		console.log("Shooting");
 	}
 }
 

@@ -1,26 +1,27 @@
+<!DOCTYPE html>
 <html>
 <head>
 
 </head>
-<style>
-* {
-	box-sizing: border-box;
-}
-
-.u--textCenter {
-	text-align: center;
-}
-</style>
 <body>
-	<div id="app">
-		<div class="u--textCenter">
-			<h1>Simple game.</h1>
-			<p>Play this simple game or let the bot play it.</p>
-		</div>
-		<div class="game-canvas-container">
-			<v-canvas id="gameCanvas" width="600" height="150"></v-canvas>
-		</div>
+	<style>
+	* {
+		box-sizing: border-box;
+	}
+
+	.u--textCenter {
+		text-align: center;
+	}
+</style>
+<div id="app">
+	<div class="u--textCenter">
+		<h1>Simple game.</h1>
+		<p>Play this simple game or let the bot play it.</p>
 	</div>
-	<script src="dist/app.js"></script>
+	<div class="game-canvas-container">
+		<v-canvas id="gameCanvas" width="600" height="150"></v-canvas>
+	</div>
+</div>
+<script src="dist/app.js"></script>
 </body>
 </html>

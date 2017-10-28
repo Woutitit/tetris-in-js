@@ -1,3 +1,5 @@
+require("babel-polyfill");
+
 import Vue from "vue"; //Webpack alias for vue/dist/vue.js
 import components from "./components/bootstrap.js";
 

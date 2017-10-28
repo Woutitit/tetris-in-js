@@ -12,6 +12,9 @@ canvas {
 <script>
 	import Intro from "../intro.js";
 	import Helicopter from "../helicopter.js";
+	import KeyBoardEvtPolyfill from "keyboardevent-key-polyfill";
+
+	require('keyboardevent-key-polyfill').polyfill();
 
 	export default {
 		name: "Canvas",
@@ -35,12 +38,11 @@ canvas {
 					MOVE_LEFT: "ArrowLeft",
 					MOVE_UP: "ArrowUp",
 					MOVE_RIGHT: "ArrowRight",
-					MOVE_DOWN: "ArrowDown"
+					MOVE_DOWN: "ArrowDown",
+					SHOOT: " " // This blank means the spacebar
 				},
 
 				keysPressed: [], // Temporarily holds all keys pressed.
-
-				event: null,
 
 				helicopter: null,
 
@@ -85,7 +87,6 @@ canvas {
 				this.dimensions = { WIDTH: this.width, HEIGHT: this.height };
 				this.boundaries = { LEFT: 0, TOP: 0, RIGHT: this.dimensions.HEIGHT, DOWN: this.dimensions.width };
 
-
 				this.helicopter = new Helicopter(this.canvas, this.boundaries, this.spriteSheet, this.spritePos.HELICOPTER.x, this.spritePos.HELICOPTER.y);
 
 				this.startListening();
@@ -98,25 +99,17 @@ canvas {
 			*/
 			update: function() {
 				this.clearCanvas(); // Always clear canvas per frame to not draw any doubles.
+				this.drawBackground(); // Canvas background color.
 
-				this.drawBackground();
-
+				// When game is in intro.
 				if(this.playingIntro) {
 					new Intro(this.canvas, this.dimensions, this.spriteSheet, this.spritePos);
-					// Will this create multiple intro's or only always 1 new intro?
 				}
 
+				// When game is going on.
 				if(this.isPlaying) {
+					this.helicopter.enableControls(this.keysPressed, this.keyBindings);
 					this.helicopter.update();
-
-					// Will trigger when AT LEAST one key is pressed. isPlaying = true means we only need to check for helicopter movement here.
-					if(this.keysPressed.length > 0) {
-						// Currently we can only assign ONE key to MOVE_UP. Later we should be able to assign more and check for them.
-						if (this.keysPressed.includes(this.keyBindings.MOVE_LEFT)) this.helicopter.move("left");
-						if (this.keysPressed.includes(this.keyBindings.MOVE_UP)) this.helicopter.move("up");
-						if (this.keysPressed.includes(this.keyBindings.MOVE_RIGHT)) this.helicopter.move("right");
-						if (this.keysPressed.includes(this.keyBindings.MOVE_DOWN)) this.helicopter.move("down");
-					}
 				}
 
 				requestAnimationFrame(this.update); // Will continously run the "update" method.
@@ -129,7 +122,6 @@ canvas {
 			start: function() {
 				this.isPlaying = true;
 				this.playingIntro = false;
-
 			},
 
 
@@ -167,8 +159,6 @@ canvas {
 			* @param {Event} e
 			*/
 			handleEvent: function(e) {
-				this.event = e;
-
 				switch(e.type) {
 					case "keyup":
 					this.onKeyUp(e.key)

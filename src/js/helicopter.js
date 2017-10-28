@@ -10,6 +10,8 @@ function Helicopter(canvas, spriteSheet, spritePosX, spritePosY) {
 
 	this.helicopterCanvasX = 10;
 	this.helicopterCanvasY = 50;
+
+	this.ACCELERATION = 5;
 }
 
 Helicopter.prototype = {
@@ -49,16 +51,16 @@ Helicopter.prototype = {
 	move: function(direction) {
 		switch(direction) {
 			case "left":
-			this.helicopterCanvasX -= 5;
+			this.helicopterCanvasX -= this.ACCELERATION;
 			break;
 			case "up":
-			this.helicopterCanvasY -= 5;
+			this.helicopterCanvasY -= this.ACCELERATION;
 			break;
 			case "right":
-			this.helicopterCanvasX += 5;
+			this.helicopterCanvasX += this.ACCELERATION;
 			break;
 			case "down":
-			this.helicopterCanvasY += 5;
+			this.helicopterCanvasY += this.ACCELERATION;
 			break;
 		}
 	}

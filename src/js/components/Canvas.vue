@@ -185,9 +185,6 @@ canvas {
 					this.helicopter.move("down");
 					break;
 				}
-
-
-				//TODO: Make "Enter", "Space" en "Up" also start game if game status is not playing.
 			},
 
 

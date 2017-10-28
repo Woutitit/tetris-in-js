@@ -31,18 +31,42 @@ canvas {
 				dimensions: null,
 				boundaries: null,
 
-				keyCodes: {
-					LEFT: 37,
-					UP: 38,
-					RIGHT: 39,
-					DOWN: 40
+				keyBindings: {
+					menu: {
+						START: [
+						"Enter"
+						],
+
+						RESTART: [
+						"Enter"
+						]
+					},
+
+					helicopter: {
+						MOVE_LEFT: [
+						"ArrowLeft"
+						],
+						MOVE_UP: [
+						"ArrowUp"
+						],
+						MOVE_RIGHT: [
+						"ArrowRight"
+						],
+						MOVE_DOWN: [
+						"ArrowDown"
+						],
+					}
 				},
+
+				keysPressed: [], // Temporarily holds all keys pressed.
+
+				event: null,
 
 				helicopter: null,
 
 				playingIntro: true,
 				isPlaying: false,
-				isPaused: false
+				isPaused: false,
 			}
 		},
 
@@ -98,6 +122,9 @@ canvas {
 				// Also the 60 FPS thing from google I think is only important for sprite animations such as walking (?).
 				// WE CAN'T CREATE NEW OBJECTS IN UPDATE METHOD CUZ IT WILL ALWAYS LOSE PROPERTIES DATA IMMEDIATLY. DO IT IN INIT(?).
 				// Only objects we can create in here are objects we won't modify the data of later.
+				// So since we CAN'T create AND use objects in this method we should CREATE a parent objects in the init() that will hold all current enemies.
+				// Then we can CREATE and hold these enemies (in an array for example). And then we can keep track of all of the hitboxes until they are off
+				// the screen.
 				this.clearCanvas(); // Always clear canvas per frame to not draw any doubles.
 
 				this.drawBackground();
@@ -108,7 +135,17 @@ canvas {
 				}
 
 				if(this.isPlaying) {
+					// SO THE GAME WILL NOW SPAWN OTHER HELICOPTERS WHICH IT HAS GOT TO AVOID (OR SHOOT).
+					// ALSO IT WILL SPAWN COINS WHICH WILL GET YOU (EXTRA) SCORE.
+					// HELICOPTERS WILL HAVE RANDOM SPEED ASSIGNED BETWEEN 1 AND 5.
 					this.helicopter.update();
+
+					// Will trigger when AT LEAST one key is pressed.
+					if(this.keysPressed.length > 0) {
+						console.log("LOL");
+					}
+
+
 				}
 
 				requestAnimationFrame(this.update); // Will continously run the "update" method.
@@ -140,6 +177,7 @@ canvas {
 			* Bind revelant mouse / key events.
 			*/
 			startListening: function() {
+				document.addEventListener("keyup", this);
 				document.addEventListener("keydown", this);
 				document.addEventListener("mousedown", this);
 			},
@@ -158,9 +196,14 @@ canvas {
 			* @param {Event} e
 			*/
 			handleEvent: function(e) {
+				this.event = e;
+
 				switch(e.type) {
+					case "keyup":
+					this.onKeyUp(e.key)
+					break;
 					case "keydown":
-					this.onKeyDown(e);
+					this.onKeyDown(e.key)
 					break;
 					case "mousedown":
 					this.onMouseDown(e);
@@ -171,23 +214,17 @@ canvas {
 
 			/**
 			* Handle keydown events.
-			* @param {Event} e
 			*/
-			onKeyDown: function(e) {
-				switch(e.keyCode) {
-					case this.keyCodes.LEFT:
-					this.helicopter.move("left");
-					break;
-					case this.keyCodes.UP:
-					this.helicopter.move("up");
-					break;
-					case this.keyCodes.RIGHT:
-					this.helicopter.move("right");
-					break;
-					case this.keyCodes.DOWN:
-					this.helicopter.move("down");
-					break;
-				}
+			onKeyDown: function(key) {
+				// TODO: Polyfill the event.key
+				// Source: https://github.com/cvan/keyboardevent-key-polyfill
+				this.keysPressed.push(key);
+			},
+
+
+			onKeyUp: function(key) {
+				// Remove the key that triggered this event from keysPressed array.
+				this.keysPressed = this.keysPressed.filter(val => val !== key);
 			},
 
 

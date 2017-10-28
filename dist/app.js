@@ -11701,12 +11701,24 @@ module.exports = function listToStyles (parentId, list) {
 			dimensions: null,
 			boundaries: null,
 
-			keyCodes: {
-				LEFT: 37,
-				UP: 38,
-				RIGHT: 39,
-				DOWN: 40
+			keyBindings: {
+				menu: {
+					START: ["Enter"],
+
+					RESTART: ["Enter"]
+				},
+
+				helicopter: {
+					MOVE_LEFT: ["ArrowLeft"],
+					MOVE_UP: ["ArrowUp"],
+					MOVE_RIGHT: ["ArrowRight"],
+					MOVE_DOWN: ["ArrowDown"]
+				}
 			},
+
+			keysPressed: [], // Temporarily holds all keys pressed.
+
+			event: null,
 
 			helicopter: null,
 
@@ -11763,6 +11775,9 @@ module.exports = function listToStyles (parentId, list) {
 			// Also the 60 FPS thing from google I think is only important for sprite animations such as walking (?).
 			// WE CAN'T CREATE NEW OBJECTS IN UPDATE METHOD CUZ IT WILL ALWAYS LOSE PROPERTIES DATA IMMEDIATLY. DO IT IN INIT(?).
 			// Only objects we can create in here are objects we won't modify the data of later.
+			// So since we CAN'T create AND use objects in this method we should CREATE a parent objects in the init() that will hold all current enemies.
+			// Then we can CREATE and hold these enemies (in an array for example). And then we can keep track of all of the hitboxes until they are off
+			// the screen.
 			this.clearCanvas(); // Always clear canvas per frame to not draw any doubles.
 
 			this.drawBackground();
@@ -11773,7 +11788,15 @@ module.exports = function listToStyles (parentId, list) {
 			}
 
 			if (this.isPlaying) {
+				// SO THE GAME WILL NOW SPAWN OTHER HELICOPTERS WHICH IT HAS GOT TO AVOID (OR SHOOT).
+				// ALSO IT WILL SPAWN COINS WHICH WILL GET YOU (EXTRA) SCORE.
+				// HELICOPTERS WILL HAVE RANDOM SPEED ASSIGNED BETWEEN 1 AND 5.
 				this.helicopter.update();
+
+				// Will trigger when AT LEAST one key is pressed.
+				if (this.keysPressed.length > 0) {
+					console.log("LOL");
+				}
 			}
 
 			requestAnimationFrame(this.update); // Will continously run the "update" method.
@@ -11800,6 +11823,7 @@ module.exports = function listToStyles (parentId, list) {
   * Bind revelant mouse / key events.
   */
 		startListening: function () {
+			document.addEventListener("keyup", this);
 			document.addEventListener("keydown", this);
 			document.addEventListener("mousedown", this);
 		},
@@ -11814,9 +11838,14 @@ module.exports = function listToStyles (parentId, list) {
   * @param {Event} e
   */
 		handleEvent: function (e) {
+			this.event = e;
+
 			switch (e.type) {
+				case "keyup":
+					this.onKeyUp(e.key);
+					break;
 				case "keydown":
-					this.onKeyDown(e);
+					this.onKeyDown(e.key);
 					break;
 				case "mousedown":
 					this.onMouseDown(e);
@@ -11826,23 +11855,16 @@ module.exports = function listToStyles (parentId, list) {
 
 		/**
   * Handle keydown events.
-  * @param {Event} e
   */
-		onKeyDown: function (e) {
-			switch (e.keyCode) {
-				case this.keyCodes.LEFT:
-					this.helicopter.move("left");
-					break;
-				case this.keyCodes.UP:
-					this.helicopter.move("up");
-					break;
-				case this.keyCodes.RIGHT:
-					this.helicopter.move("right");
-					break;
-				case this.keyCodes.DOWN:
-					this.helicopter.move("down");
-					break;
-			}
+		onKeyDown: function (key) {
+			// TODO: Polyfill the event.key
+			// Source: https://github.com/cvan/keyboardevent-key-polyfill
+			this.keysPressed.push(key);
+		},
+
+		onKeyUp: function (key) {
+			// Remove the key that triggered this event from keysPressed array.
+			this.keysPressed = this.keysPressed.filter(val => val !== key);
 		},
 
 		/**
@@ -11930,7 +11952,7 @@ function Helicopter(canvas, canvasBoundaries, spriteSheet, spritePosX, spritePos
 	this.helicopterCanvasX = 10;
 	this.helicopterCanvasY = 50;
 
-	this.ACCELERATION = 5;
+	this.ACCELERATION = 1; // Instead we could also always add + 1 or something with a max speed to make a more smooth movement.
 }
 
 Helicopter.prototype = {
@@ -11960,6 +11982,9 @@ Helicopter.prototype = {
 		// First check if the copter is not at the edges of the canvas yet. If not it can move.
 		// Also if it's less than the acceleration speed from the edge it should go the distance to the edge instead.
 		// So make a new hitbox object and then check if the edges of the hitbox reaches the bounds of the canvas.
+		// We could also make multiple hitbox object. One for the helicopter body, one for the wings, ... 
+		// This way our helicopter has multiple hitboxes and you can target more realistically the shapes of the helicopter.
+		// However if you're okay with just one box around the helicopter that is kind of accurate, then that's also fine.
 
 		switch (direction) {
 			case "left":

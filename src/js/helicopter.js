@@ -12,7 +12,7 @@ function Helicopter(canvas, canvasBoundaries, spriteSheet, spritePosX, spritePos
 	this.helicopterCanvasX = 10;
 	this.helicopterCanvasY = 50;
 
-	this.ACCELERATION = 5;
+	this.ACCELERATION = 1; // Instead we could also always add + 1 or something with a max speed to make a more smooth movement.
 }
 
 Helicopter.prototype = {
@@ -53,6 +53,9 @@ Helicopter.prototype = {
 		// First check if the copter is not at the edges of the canvas yet. If not it can move.
 		// Also if it's less than the acceleration speed from the edge it should go the distance to the edge instead.
 		// So make a new hitbox object and then check if the edges of the hitbox reaches the bounds of the canvas.
+		// We could also make multiple hitbox object. One for the helicopter body, one for the wings, ... 
+		// This way our helicopter has multiple hitboxes and you can target more realistically the shapes of the helicopter.
+		// However if you're okay with just one box around the helicopter that is kind of accurate, then that's also fine.
 
 		switch(direction) {
 			case "left":

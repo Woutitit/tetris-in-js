@@ -17,6 +17,9 @@ function Helicopter(canvas, canvasBoundaries, spriteSheet, spritePosX, spritePos
 	this.ACCELERATION = 3; // Instead we could also always add + 1 or something with a max speed to make a more smooth movement.
 
 	this.bullets = [];
+
+	this.SHOOTING_COOLDOWN_TRESHOLD = 1000;
+	this.shootingStartTime = 0;
 }
 
 Helicopter.prototype = {
@@ -48,10 +51,11 @@ Helicopter.prototype = {
 		this.draw(this.helicopterCanvasX, this.helicopterCanvasY);
 		
 
-		// If bullets on screen, move each bullet.
-		
+		// If bullets present on screen, move each bullet.	
 		if(this.bullets && this.bullets.length > 0) {
-			console.log(this.bullets);
+			this.bullets.forEach((bullet) => {
+				bullet.update();
+			})
 		}
 		
 	},
@@ -119,11 +123,18 @@ Helicopter.prototype = {
 
 
 	shoot: function() {
-		var COOLDOWN = 5; // Shooting cooldown when next bullet can be shot.
-		this.canvasCtx.fillStyle = "#000";
-		var bullet = new Bullet();
-		// Before creating check if max bullets is not exceeded.
-		this.bullets.push(bullet);
+		// First bullet or after cooldown.
+		if(this.shootingStartTime === 0) {
+			this.shootingStartTime = new Date().getTime();
+			this.bullets.push(new Bullet);
+		}
+
+		var shootingCooldownTime = new Date().getTime() - this.shootingStartTime;
+
+		// When bullet is shot, if cooldown is over reset shootingStartTime var to shoot again.
+		if(shootingCooldownTime > this.SHOOTING_COOLDOWN_TRESHOLD) {
+			this.shootingStartTime = 0;
+		}
 	}
 }
 

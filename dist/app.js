@@ -20272,7 +20272,7 @@ process.umask = function() { return 0; };
 "use strict";
 var components = {
 	"v-canvas": __webpack_require__(334).default,
-	"v-game": __webpack_require__(344).default
+	"v-game": __webpack_require__(345).default
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (components);
@@ -20284,7 +20284,7 @@ var components = {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_Canvas_vue__ = __webpack_require__(340);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1ede9e78_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Canvas_vue__ = __webpack_require__(343);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1ede9e78_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Canvas_vue__ = __webpack_require__(344);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
@@ -20966,7 +20966,7 @@ Intro.prototype = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bullet_js__ = __webpack_require__(346);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bullet_js__ = __webpack_require__(343);
 
 
 function Helicopter(canvas, canvasBoundaries, spriteSheet, spritePosX, spritePosY) {
@@ -20986,6 +20986,9 @@ function Helicopter(canvas, canvasBoundaries, spriteSheet, spritePosX, spritePos
 	this.ACCELERATION = 3; // Instead we could also always add + 1 or something with a max speed to make a more smooth movement.
 
 	this.bullets = [];
+
+	this.SHOOTING_COOLDOWN_TRESHOLD = 1000;
+	this.shootingStartTime = 0;
 }
 
 Helicopter.prototype = {
@@ -21006,10 +21009,11 @@ Helicopter.prototype = {
 	update: function () {
 		this.draw(this.helicopterCanvasX, this.helicopterCanvasY);
 
-		// If bullets on screen, move each bullet.
-
+		// If bullets present on screen, move each bullet.	
 		if (this.bullets && this.bullets.length > 0) {
-			console.log(this.bullets);
+			this.bullets.forEach(bullet => {
+				bullet.update();
+			});
 		}
 	},
 
@@ -21073,11 +21077,18 @@ Helicopter.prototype = {
 	},
 
 	shoot: function () {
-		var COOLDOWN = 5; // Shooting cooldown when next bullet can be shot.
-		this.canvasCtx.fillStyle = "#000";
-		var bullet = new __WEBPACK_IMPORTED_MODULE_0__bullet_js__["a" /* default */]();
-		// Before creating check if max bullets is not exceeded.
-		this.bullets.push(bullet);
+		// First bullet or after cooldown.
+		if (this.shootingStartTime === 0) {
+			this.shootingStartTime = new Date().getTime();
+			this.bullets.push(new __WEBPACK_IMPORTED_MODULE_0__bullet_js__["a" /* default */]());
+		}
+
+		var shootingCooldownTime = new Date().getTime() - this.shootingStartTime;
+
+		// When bullet is shot, if cooldown is over reset shootingStartTime var to shoot again.
+		if (shootingCooldownTime > this.SHOOTING_COOLDOWN_TRESHOLD) {
+			this.shootingStartTime = 0;
+		}
 	}
 };
 
@@ -21085,6 +21096,15 @@ Helicopter.prototype = {
 
 /***/ }),
 /* 343 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function Bullet() {}
+
+/* harmony default export */ __webpack_exports__["a"] = (Bullet);
+
+/***/ }),
+/* 344 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21108,12 +21128,12 @@ if (false) {
 }
 
 /***/ }),
-/* 344 */
+/* 345 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4b4acbdc_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Game_vue__ = __webpack_require__(345);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4b4acbdc_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Game_vue__ = __webpack_require__(346);
 var disposed = false
 var normalizeComponent = __webpack_require__(124)
 /* script */
@@ -21159,7 +21179,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 345 */
+/* 346 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21179,15 +21199,6 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-4b4acbdc", esExports)
   }
 }
-
-/***/ }),
-/* 346 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function Bullet() {}
-
-/* harmony default export */ __webpack_exports__["a"] = (Bullet);
 
 /***/ })
 /******/ ]);

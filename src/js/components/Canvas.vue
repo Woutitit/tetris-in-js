@@ -110,6 +110,10 @@ canvas {
 				if(this.isPlaying) {
 					this.helicopter.enableControls(this.keysPressed, this.keyBindings);
 					this.helicopter.update();
+
+					// NOW SPAWN ENEMIES
+
+					// SPAWN POWER UPS
 				}
 
 				requestAnimationFrame(this.update); // Will continously run the "update" method.

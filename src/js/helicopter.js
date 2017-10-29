@@ -47,6 +47,7 @@ Helicopter.prototype = {
 			);
 	},
 
+
 	/**
 	* If used in conjunction with requestAnimationFrame() it will update position of helicopter.
 	*/

@@ -16,6 +16,7 @@ Bullet.prototype = {
 		this.canvasCtx.fillRect(x, y, 4, 4);
 	},
 
+
 	update: function() {
 		this.posX += this.BULLET_SPEED;
 		this.draw(this.posX, this.posY);

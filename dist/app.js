@@ -20768,7 +20768,9 @@ __webpack_require__(125).polyfill();
 
 			playingIntro: true,
 			isPlaying: false,
-			isPaused: false
+			isPaused: false,
+
+			backgroundAudio: null
 		};
 	},
 
@@ -20827,7 +20829,7 @@ __webpack_require__(125).polyfill();
 				this.helicopter.enableControls(this.keysPressed, this.keyBindings);
 				this.helicopter.update();
 
-				// NOW SPAWN ENEMIES
+				// SPAWN ENEMIES
 
 				// SPAWN POWER UPS
 			}
@@ -20841,6 +20843,10 @@ __webpack_require__(125).polyfill();
 		start: function () {
 			this.isPlaying = true;
 			this.playingIntro = false;
+
+			// Start background music.
+			this.backgroundAudio = new Audio("./src/sounds/intro.mp3");
+			this.backgroundAudio.play();
 		},
 
 		clearCanvas: function () {

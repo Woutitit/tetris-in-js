@@ -49,6 +49,8 @@ canvas {
 				playingIntro: true,
 				isPlaying: false,
 				isPaused: false,
+
+				backgroundAudio: null
 			}
 		},
 
@@ -111,7 +113,7 @@ canvas {
 					this.helicopter.enableControls(this.keysPressed, this.keyBindings);
 					this.helicopter.update();
 
-					// NOW SPAWN ENEMIES
+					// SPAWN ENEMIES
 
 					// SPAWN POWER UPS
 				}
@@ -126,6 +128,10 @@ canvas {
 			start: function() {
 				this.isPlaying = true;
 				this.playingIntro = false;
+
+				// Start background music.
+				this.backgroundAudio = new Audio("./src/sounds/intro.mp3");
+				this.backgroundAudio.play();
 			},
 
 

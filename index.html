@@ -9,17 +9,44 @@
 		box-sizing: border-box;
 	}
 
+	html {
+		font-size: 62.5%;
+	}
+
+	body {
+		font-family: monospace;
+	}
+
+	h1 {
+		font-size: 2.8rem;
+	}
+
+	p {
+		font-size: 1.6rem;
+	}
+
+	.title {
+		text-transform: uppercase;
+		color: #F57D2B;
+		letter-spacing: 0.1em;
+	}
+
 	.u--textCenter {
 		text-align: center;
 	}
+
+	.u--mt-20vh {
+		margin-top: 20vh;
+	}
+	
 </style>
 <div id="app">
-	<div class="u--textCenter">
-		<h1>Simple game.</h1>
-		<p>Play this simple game or let the bot play it.</p>
-	</div>
+	<div class="u--textCenter u--mt-20vh">
+		<h1 class="title">Shooting helicopter</h1>
+		<p>Watch a bot learn to play this game.</p>
 	<div class="game-canvas-container">
 		<v-canvas id="gameCanvas" width="600" height="150"></v-canvas>
+	</div>
 	</div>
 </div>
 <script src="dist/app.js"></script>

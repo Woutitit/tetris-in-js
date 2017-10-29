@@ -20980,14 +20980,17 @@ function Helicopter(canvas, canvasBoundaries, spriteSheet, spritePosX, spritePos
 
 	this.dimensions = { WIDTH: 61, HEIGHT: 32 };
 
-	this.helicopterCanvasX = 10;
-	this.helicopterCanvasY = 50;
+	this.posX = 10;
+	this.posY = 50;
+
+	this.GUN_POS_X = this.dimensions.WIDTH;
+	this.GUN_POS_Y = this.dimensions.HEIGHT - 12; // Subtract value because gun is not fully at bottom of helicopter.
 
 	this.ACCELERATION = 3; // Instead we could also always add + 1 or something with a max speed to make a more smooth movement.
 
 	this.bullets = [];
 
-	this.SHOOTING_COOLDOWN_TRESHOLD = 1000;
+	this.SHOOTING_COOLDOWN_TRESHOLD = 100;
 	this.shootingStartTime = 0;
 }
 
@@ -20995,19 +20998,19 @@ Helicopter.prototype = {
 	/**
  * Draw helicopter.
  */
-	draw: function (canvasX, canvasY) {
+	draw: function (posX, posY) {
 
 		var helicopterSourceWidth = this.dimensions.WIDTH;
 		var helicopterSourceHeight = this.dimensions.HEIGHT;
 
-		this.canvasCtx.drawImage(this.spriteSheet, this.spritePosX, this.spritePosY, helicopterSourceWidth, helicopterSourceHeight, canvasX, canvasY, this.dimensions.WIDTH, this.dimensions.HEIGHT);
+		this.canvasCtx.drawImage(this.spriteSheet, this.spritePosX, this.spritePosY, helicopterSourceWidth, helicopterSourceHeight, posX, posY, this.dimensions.WIDTH, this.dimensions.HEIGHT);
 	},
 
 	/**
  * If used in conjunction with requestAnimationFrame() it will update position of helicopter.
  */
 	update: function () {
-		this.draw(this.helicopterCanvasX, this.helicopterCanvasY);
+		this.draw(this.posX, this.posY);
 
 		// If bullets present on screen, move each bullet.	
 		if (this.bullets && this.bullets.length > 0) {
@@ -21031,16 +21034,16 @@ Helicopter.prototype = {
 
 		switch (direction) {
 			case "left":
-				this.helicopterCanvasX -= this.ACCELERATION;
+				this.posX -= this.ACCELERATION;
 				break;
 			case "up":
-				this.helicopterCanvasY -= this.ACCELERATION;
+				this.posY -= this.ACCELERATION;
 				break;
 			case "right":
-				this.helicopterCanvasX += this.ACCELERATION;
+				this.posX += this.ACCELERATION;
 				break;
 			case "down":
-				this.helicopterCanvasY += this.ACCELERATION;
+				this.posY += this.ACCELERATION;
 				break;
 		}
 	},
@@ -21080,7 +21083,7 @@ Helicopter.prototype = {
 		// First bullet or after cooldown.
 		if (this.shootingStartTime === 0) {
 			this.shootingStartTime = new Date().getTime();
-			this.bullets.push(new __WEBPACK_IMPORTED_MODULE_0__bullet_js__["a" /* default */]());
+			this.bullets.push(new __WEBPACK_IMPORTED_MODULE_0__bullet_js__["a" /* default */](this.canvas, this.posX, this.posY, this.GUN_POS_X, this.GUN_POS_Y));
 		}
 
 		var shootingCooldownTime = new Date().getTime() - this.shootingStartTime;
@@ -21099,7 +21102,27 @@ Helicopter.prototype = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Bullet() {}
+function Bullet(canvas, helicopterPosX, helicopterPosY, helicopterGunPosX, helicopterGunPosY) {
+	this.canvas = canvas;
+	this.canvasCtx = this.canvas.getContext("2d");
+
+	this.posX = helicopterPosX + helicopterGunPosX;
+	this.posY = helicopterPosY + helicopterGunPosY;
+
+	this.BULLET_SPEED = 15;
+}
+
+Bullet.prototype = {
+	draw: function (x, y) {
+		this.canvasCtx.fillStyle = "#000";
+		this.canvasCtx.fillRect(x, y, 4, 4);
+	},
+
+	update: function () {
+		this.posX += this.BULLET_SPEED;
+		this.draw(this.posX, this.posY);
+	}
+};
 
 /* harmony default export */ __webpack_exports__["a"] = (Bullet);
 

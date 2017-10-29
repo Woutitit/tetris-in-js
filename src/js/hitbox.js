@@ -1,5 +1,3 @@
-import HitBox from "../hitbox.js";
-
 function HitBox() {
 
 }

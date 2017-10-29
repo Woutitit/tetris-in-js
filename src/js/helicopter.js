@@ -1,3 +1,5 @@
+import Bullet from "./bullet.js";
+
 function Helicopter(canvas, canvasBoundaries, spriteSheet, spritePosX, spritePosY) {
 	this.canvas = canvas;
 	this.canvasCtx = this.canvas.getContext("2d");
@@ -14,7 +16,7 @@ function Helicopter(canvas, canvasBoundaries, spriteSheet, spritePosX, spritePos
 
 	this.ACCELERATION = 3; // Instead we could also always add + 1 or something with a max speed to make a more smooth movement.
 
-	this.bullet = null;
+	this.bullets = [];
 }
 
 Helicopter.prototype = {
@@ -44,6 +46,14 @@ Helicopter.prototype = {
 	*/
 	update: function() {
 		this.draw(this.helicopterCanvasX, this.helicopterCanvasY);
+		
+
+		// If bullets on screen, move each bullet.
+		
+		if(this.bullets && this.bullets.length > 0) {
+			console.log(this.bullets);
+		}
+		
 	},
 
 
@@ -111,9 +121,9 @@ Helicopter.prototype = {
 	shoot: function() {
 		var COOLDOWN = 5; // Shooting cooldown when next bullet can be shot.
 		this.canvasCtx.fillStyle = "#000";
+		var bullet = new Bullet();
 		// Before creating check if max bullets is not exceeded.
-		this.bullet = this.canvasCtx.fillRect(10, 10, 10, 10);
-		console.log("Shooting");
+		this.bullets.push(bullet);
 	}
 }
 

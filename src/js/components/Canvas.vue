@@ -10,8 +10,6 @@ canvas {
 	<canvas :id="id" :width="width" :height="height"></canvas>
 </template>
 <script>
-	import Grid from "../grid.js";
-
 	export default {
 		props: ["id", "width", "height"],
 		data: function() {
@@ -25,14 +23,13 @@ canvas {
 		mounted: function() {
 			this.canvas = document.getElementById(this.id);
 
-			var grid = new Grid(this.canvas, this.WIDTH, this.HEIGHT);
-
-			spawnTetromino();
+			this.spawnTetromino();
 		},
 		methods: {
 			spawnTetromino: function() {
-				//var letters = ["I", "O", "T", "S", "Z", "J", "L"];
-				// var chosen = "L"
+				var letters = ["I", "O", "T", "S", "Z", "J", "L"];
+				var chosenLetter = letters[Math.floor(Math.random() * letters.length)];
+				console.log(chosenLetter);
 				//new Tetromino(choice);
 			}
 		}

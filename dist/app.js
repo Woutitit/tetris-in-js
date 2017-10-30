@@ -20583,8 +20583,6 @@ module.exports = function listToStyles (parentId, list) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__grid_js__ = __webpack_require__(343);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__grid_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__grid_js__);
 //
 //
 //
@@ -20596,8 +20594,6 @@ module.exports = function listToStyles (parentId, list) {
 //
 //
 //
-
-
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 	props: ["id", "width", "height"],
@@ -20612,14 +20608,13 @@ module.exports = function listToStyles (parentId, list) {
 	mounted: function () {
 		this.canvas = document.getElementById(this.id);
 
-		var grid = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["default"](this.canvas, this.WIDTH, this.HEIGHT);
-
-		spawnTetromino();
+		this.spawnTetromino();
 	},
 	methods: {
 		spawnTetromino: function () {
-			//var letters = ["I", "O", "T", "S", "Z", "J", "L"];
-			// var chosen = "L"
+			var letters = ["I", "O", "T", "S", "Z", "J", "L"];
+			var chosenLetter = letters[Math.floor(Math.random() * letters.length)];
+			console.log(chosenLetter);
 			//new Tetromino(choice);
 		}
 	}
@@ -20721,12 +20716,6 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-4b4acbdc", esExports)
   }
 }
-
-/***/ }),
-/* 343 */
-/***/ (function(module, exports) {
-
-throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\Users\\woutb\\Documents\\Code projects\\AI\\Machine learning algorithms\\Flappy bird\\src\\js\\grid.js'\n    at Error (native)");
 
 /***/ })
 /******/ ]);

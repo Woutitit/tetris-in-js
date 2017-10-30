@@ -33,13 +33,15 @@ canvas {
 			this.canvasCtx.fillStyle = "#F8F8F8";
 			this.canvasCtx.fillRect(0, 0, this.WIDTH, this.HEIGHT);
 
-			new Grid(this.canvas, [this.WIDTH, this.HEIGHT]);
-
 			this.spawnTetromino();
+
+			// Always draw grid after tetrominoes so it looks like it's covering the tetrominoes
+			// Or just make tetrominoes overlap grid?
+			new Grid(this.canvas, [this.WIDTH, this.HEIGHT]);
 		},
 		methods: {
 			spawnTetromino: function() {
-				new Tetromino(this.randomLetter());
+				new Tetromino(this.canvas, [this.WIDTH, this.HEIGHT], this.randomLetter());
 			},
 			randomLetter() {
 				return this.LETTERS[Math.floor(Math.random() * this.LETTERS.length)];

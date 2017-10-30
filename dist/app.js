@@ -20584,6 +20584,7 @@ module.exports = function listToStyles (parentId, list) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__grid_js__ = __webpack_require__(343);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__grid_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__grid_js__);
 //
 //
 //
@@ -20611,7 +20612,16 @@ module.exports = function listToStyles (parentId, list) {
 	mounted: function () {
 		this.canvas = document.getElementById(this.id);
 
-		var grid = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.canvas, this.WIDTH, this.HEIGHT);
+		var grid = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["default"](this.canvas, this.WIDTH, this.HEIGHT);
+
+		spawnTetromino();
+	},
+	methods: {
+		spawnTetromino: function () {
+			//var letters = ["I", "O", "T", "S", "Z", "J", "L"];
+			// var chosen = "L"
+			//new Tetromino(choice);
+		}
 	}
 });
 
@@ -20714,47 +20724,9 @@ if (false) {
 
 /***/ }),
 /* 343 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__cell_js__ = __webpack_require__(344);
-
-
-function Grid(canvas, canvasWidth, canvasHeight) {
-	this.canvas = canvas;
-	this.canvasCtx = this.canvas.getContext("2d");
-
-	this.canvasWidth = canvasWidth;
-	this.canvasHeight = canvasHeight;
-
-	this.cellWidth = canvasWidth / 10;
-	this.cellHeight = canvasHeight / 20;
-
-	this.draw();
-}
-
-Grid.prototype = {
-	init: function () {
-		new __WEBPACK_IMPORTED_MODULE_0__cell_js__["a" /* default */](this.cellWidth, this.cellHeight);
-	},
-	draw: function () {
-		this.canvasCtx.fillRect(10, 10, 10, 10);
-	}
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (Grid);
-
-/***/ }),
-/* 344 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function Cell(width, height) {
-	this.width = width;
-	this.height = height;
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Cell);
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\Users\\woutb\\Documents\\Code projects\\AI\\Machine learning algorithms\\Flappy bird\\src\\js\\grid.js'\n    at Error (native)");
 
 /***/ })
 /******/ ]);

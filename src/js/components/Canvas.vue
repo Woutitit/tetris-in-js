@@ -26,6 +26,15 @@ canvas {
 			this.canvas = document.getElementById(this.id);
 
 			var grid = new Grid(this.canvas, this.WIDTH, this.HEIGHT);
+
+			spawnTetromino();
+		},
+		methods: {
+			spawnTetromino: function() {
+				//var letters = ["I", "O", "T", "S", "Z", "J", "L"];
+				// var chosen = "L"
+				//new Tetromino(choice);
+			}
 		}
 	}
 </script>

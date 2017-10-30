@@ -2,8 +2,8 @@ function Tetromino(canvas, canvasDimensions, letter) {
 	this.canvas = canvas;
 	this.canvasCtx = this.canvas.getContext("2d");
 
-	this.cellWidth = 25;
-	this.cellHeight = 25;
+	this.cellWidth = canvasDimensions[0] / 10; // TODO maybe some central place to determine cell width and height so we only need to change it once.
+	this.cellHeight = canvasDimensions[1] / 20;
 
 	this.shape = this.determineShape(letter);
 	this.draw();

@@ -4,4 +4,4 @@ function Cell(width, height) {
 
 }
 
-export default Grid;
+export default Cell;

@@ -1,4 +1,4 @@
-import Cell from "cell.js";
+import Cell from "./cell.js";
 
 function Grid(canvasWidth, canvasHeight) {
 	this.canvasWidth = canvasWidth;
@@ -13,7 +13,7 @@ function Grid(canvasWidth, canvasHeight) {
 
 Grid.prototype = {
 	init: function() {
-		new Cell(cellWidth, cellHeight);
+		new Cell(this.cellWidth, this.cellHeight);
 	}
 }
 

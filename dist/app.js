@@ -20713,7 +20713,7 @@ if (false) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-throw new Error("Cannot find module \"cell.js\"");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__cell_js__ = __webpack_require__(344);
 
 
 function Grid(canvasWidth, canvasHeight) {
@@ -20728,11 +20728,23 @@ function Grid(canvasWidth, canvasHeight) {
 
 Grid.prototype = {
 	init: function () {
-		new __WEBPACK_IMPORTED_MODULE_0_cell_js___default.a(cellWidth, cellHeight);
+		new __WEBPACK_IMPORTED_MODULE_0__cell_js__["a" /* default */](this.cellWidth, this.cellHeight);
 	}
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Grid);
+
+/***/ }),
+/* 344 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function Cell(width, height) {
+	this.width = width;
+	this.height = height;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Cell);
 
 /***/ })
 /******/ ]);

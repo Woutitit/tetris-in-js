@@ -20602,7 +20602,9 @@ module.exports = function listToStyles (parentId, list) {
 			canvas: null,
 
 			WIDTH: this.width,
-			HEIGHT: this.height
+			HEIGHT: this.height,
+
+			LETTERS: ["I", "O", "T", "S", "Z", "J", "L"]
 		};
 	},
 	mounted: function () {
@@ -20612,10 +20614,10 @@ module.exports = function listToStyles (parentId, list) {
 	},
 	methods: {
 		spawnTetromino: function () {
-			var letters = ["I", "O", "T", "S", "Z", "J", "L"];
-			var chosenLetter = letters[Math.floor(Math.random() * letters.length)];
-			console.log(chosenLetter);
-			//new Tetromino(choice);
+			new Tetromino(this.randomLetter());
+		},
+		randomLetter() {
+			return this.LETTERS[Math.floor(Math.random() * this.LETTERS.length)];
 		}
 	}
 });

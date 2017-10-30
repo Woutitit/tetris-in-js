@@ -20713,6 +20713,9 @@ if (false) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+throw new Error("Cannot find module \"cell.js\"");
+
+
 function Grid(canvasWidth, canvasHeight) {
 	this.canvasWidth = canvasWidth;
 	this.canvasHeight = canvasHeight;
@@ -20725,7 +20728,7 @@ function Grid(canvasWidth, canvasHeight) {
 
 Grid.prototype = {
 	init: function () {
-		new Cell(cellWidth, cellHeight);
+		new __WEBPACK_IMPORTED_MODULE_0_cell_js___default.a(cellWidth, cellHeight);
 	}
 };
 

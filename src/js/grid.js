@@ -1,3 +1,5 @@
+import Cell from "cell.js";
+
 function Grid(canvasWidth, canvasHeight) {
 	this.canvasWidth = canvasWidth;
 	this.canvasHeight = canvasHeight;

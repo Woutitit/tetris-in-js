@@ -20583,6 +20583,8 @@ module.exports = function listToStyles (parentId, list) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__grid_js__ = __webpack_require__(343);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tetromino_js__ = __webpack_require__(345);
 //
 //
 //
@@ -20595,11 +20597,15 @@ module.exports = function listToStyles (parentId, list) {
 //
 //
 
+
+
+
 /* harmony default export */ __webpack_exports__["a"] = ({
 	props: ["id", "width", "height"],
 	data: function () {
 		return {
 			canvas: null,
+			canvasCtx: null,
 
 			WIDTH: this.width,
 			HEIGHT: this.height,
@@ -20609,12 +20615,18 @@ module.exports = function listToStyles (parentId, list) {
 	},
 	mounted: function () {
 		this.canvas = document.getElementById(this.id);
+		this.canvasCtx = this.canvas.getContext("2d");
+
+		this.canvasCtx.fillStyle = "#F8F8F8";
+		this.canvasCtx.fillRect(0, 0, this.WIDTH, this.HEIGHT);
+
+		new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.canvas, [this.WIDTH, this.HEIGHT]);
 
 		this.spawnTetromino();
 	},
 	methods: {
 		spawnTetromino: function () {
-			new Tetromino(this.randomLetter());
+			new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.randomLetter());
 		},
 		randomLetter() {
 			return this.LETTERS[Math.floor(Math.random() * this.LETTERS.length)];
@@ -20718,6 +20730,84 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-4b4acbdc", esExports)
   }
 }
+
+/***/ }),
+/* 343 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function Grid(canvas, canvasDimensions) {
+	this.canvas = canvas;
+	this.canvasCtx = this.canvas.getContext("2d");
+
+	this.canvasWidth = canvasDimensions[0];
+	this.canvasHeight = canvasDimensions[1];
+
+	this.GRID_COLOR = "#EEE";
+
+	this.cellWidth = this.canvasWidth / 10; // 10 cells horizontal.
+	this.cellHeight = this.canvasHeight / 20; // 20 cells vertical.
+
+	this.line_horizont;
+
+	this.draw();
+}
+
+Grid.prototype = {
+	draw: function () {
+		this.canvasCtx.strokeStyle = this.GRID_COLOR;
+		this.drawHorizontalLines();
+		this.drawVerticalLines();
+	},
+	drawHorizontalLines: function () {
+		for (var x = this.cellWidth; x < this.canvasWidth; x += this.cellWidth) {
+			this.canvasCtx.moveTo(x, 0);
+			this.canvasCtx.lineTo(x, this.canvasHeight);
+			this.canvasCtx.stroke();
+		}
+	},
+	drawVerticalLines: function () {
+		for (var y = this.cellHeight; y < this.canvasHeight; y += this.cellHeight) {
+			this.canvasCtx.moveTo(0, y);
+			this.canvasCtx.lineTo(this.canvasWidth, y);
+			this.canvasCtx.stroke();
+		}
+	}
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Grid);
+
+/***/ }),
+/* 344 */,
+/* 345 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function Tetromino(letter) {
+		switch (letter) {
+				case "I":
+
+						break;
+				case "O":
+
+						break;
+				case "T":
+
+						break;
+				case "S":
+
+						break;
+				case "Z":
+
+						break;
+				case "J":
+
+						break;
+				case "L":
+		}
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Tetromino);
 
 /***/ })
 /******/ ]);

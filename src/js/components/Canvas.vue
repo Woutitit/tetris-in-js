@@ -10,11 +10,15 @@ canvas {
 	<canvas :id="id" :width="width" :height="height"></canvas>
 </template>
 <script>
+	import Grid from "../grid.js";
+	import Tetromino from "../tetromino.js";
+
 	export default {
 		props: ["id", "width", "height"],
 		data: function() {
 			return {
 				canvas: null,
+				canvasCtx: null,
 
 				WIDTH: this.width,
 				HEIGHT: this.height,
@@ -24,6 +28,12 @@ canvas {
 		},
 		mounted: function() {
 			this.canvas = document.getElementById(this.id);
+			this.canvasCtx = this.canvas.getContext("2d");
+
+			this.canvasCtx.fillStyle = "#F8F8F8";
+			this.canvasCtx.fillRect(0, 0, this.WIDTH, this.HEIGHT);
+
+			new Grid(this.canvas, [this.WIDTH, this.HEIGHT]);
 
 			this.spawnTetromino();
 		},

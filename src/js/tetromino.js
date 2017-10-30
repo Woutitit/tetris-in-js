@@ -1,7 +1,4 @@
 function Tetromino(letter) {
-	this.width = width;
-	this.height = height;
-
 	switch(letter) {
 		case "I":
 

@@ -20583,6 +20583,7 @@ module.exports = function listToStyles (parentId, list) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__grid_js__ = __webpack_require__(343);
 //
 //
 //
@@ -20594,19 +20595,19 @@ module.exports = function listToStyles (parentId, list) {
 //
 //
 //
+
+
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 	props: ["id", "width", "height"],
 	data: function () {
 		return {
 			WIDTH: this.width,
-			HEIGHT: this.height,
-
-			grid: {}
+			HEIGHT: this.height
 		};
 	},
 	mounted: function () {
-		this.grid = new Grid(this.WIDTH, this.HEIGHT);
+		new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.WIDTH, this.HEIGHT);
 	}
 });
 
@@ -20706,6 +20707,29 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-4b4acbdc", esExports)
   }
 }
+
+/***/ }),
+/* 343 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function Grid(canvasWidth, canvasHeight) {
+	this.canvasWidth = canvasWidth;
+	this.canvasHeight = canvasHeight;
+
+	this.cellWidth = canvasWidth / 10;
+	this.cellHeight = canvasHeight / 20;
+
+	this.init();
+}
+
+Grid.prototype = {
+	init: function () {
+		new Cell(cellWidth, cellHeight);
+	}
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Grid);
 
 /***/ })
 /******/ ]);

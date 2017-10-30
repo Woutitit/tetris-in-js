@@ -10,18 +10,18 @@ canvas {
 	<canvas :id="id" :width="width" :height="height"></canvas>
 </template>
 <script>
+	import Grid from "../grid.js";
+
 	export default {
 		props: ["id", "width", "height"],
 		data: function() {
 			return {
 				WIDTH: this.width,
 				HEIGHT: this.height,
-
-				grid: {}
 			}
 		},
 		mounted: function() {
-			this.grid = new Grid(this.WIDTH, this.HEIGHT);
+			new Grid(this.WIDTH, this.HEIGHT);
 		}
 	}
 </script>

@@ -16,12 +16,16 @@ canvas {
 		props: ["id", "width", "height"],
 		data: function() {
 			return {
+				canvas: null,
+
 				WIDTH: this.width,
 				HEIGHT: this.height,
 			}
 		},
 		mounted: function() {
-			new Grid(this.WIDTH, this.HEIGHT);
+			this.canvas = document.getElementById(this.id);
+
+			var grid = new Grid(this.canvas, this.WIDTH, this.HEIGHT);
 		}
 	}
 </script>

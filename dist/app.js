@@ -20602,12 +20602,16 @@ module.exports = function listToStyles (parentId, list) {
 	props: ["id", "width", "height"],
 	data: function () {
 		return {
+			canvas: null,
+
 			WIDTH: this.width,
 			HEIGHT: this.height
 		};
 	},
 	mounted: function () {
-		new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.WIDTH, this.HEIGHT);
+		this.canvas = document.getElementById(this.id);
+
+		var grid = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.canvas, this.WIDTH, this.HEIGHT);
 	}
 });
 
@@ -20716,19 +20720,25 @@ if (false) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__cell_js__ = __webpack_require__(344);
 
 
-function Grid(canvasWidth, canvasHeight) {
+function Grid(canvas, canvasWidth, canvasHeight) {
+	this.canvas = canvas;
+	this.canvasCtx = this.canvas.getContext("2d");
+
 	this.canvasWidth = canvasWidth;
 	this.canvasHeight = canvasHeight;
 
 	this.cellWidth = canvasWidth / 10;
 	this.cellHeight = canvasHeight / 20;
 
-	this.init();
+	this.draw();
 }
 
 Grid.prototype = {
 	init: function () {
 		new __WEBPACK_IMPORTED_MODULE_0__cell_js__["a" /* default */](this.cellWidth, this.cellHeight);
+	},
+	draw: function () {
+		this.canvasCtx.fillRect(10, 10, 10, 10);
 	}
 };
 

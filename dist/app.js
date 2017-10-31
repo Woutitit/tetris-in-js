@@ -20669,10 +20669,11 @@ module.exports = function listToStyles (parentId, list) {
 	},
 	methods: {
 		spawnTetromino: function () {
-			new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.canvas, this.dimensions, this.LETTERS.I, this.cellDimensions);
+			new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.canvas, this.dimensions, this.randomTetromino(), this.cellDimensions);
 		},
-		randomLetter() {
-			return this.LETTERS[Math.floor(Math.random() * this.LETTERS.length)];
+		randomTetromino() {
+			var keys = Object.keys(this.LETTERS);
+			return this.LETTERS[keys[Math.floor(Math.random() * keys.length)]];
 		}
 	}
 });
@@ -20733,7 +20734,8 @@ function Tetromino(canvas, canvasDimensions, letter, cellDimensions) {
 	this.cellWidth = cellDimensions.WIDTH; // TODO maybe some central place to determine cell width and height so we only need to change it once.
 	this.cellHeight = cellDimensions.HEIGHT;
 
-	// x = 4, y = 1 is starting position for every tetromino.
+	this.x = 4;
+	this.y = 1;
 
 	this.drawFirstRow(letter.blocks[0]);
 	this.drawSecondRow(letter.blocks[1]);
@@ -20745,8 +20747,8 @@ Tetromino.prototype = {
 		this.canvasCtx.fillRect(drawPos.x, drawPos.y, this.cellWidth, this.cellHeight);
 	},
 	drawFirstRow: function (blocks) {
-		var x = 4;
-		var y = 1; // Should be -2 later to make it spawn right above the canvas to then drop in.
+		var x = this.x;
+		var y = this.y; // Should be -2 later to make it spawn right above the canvas to then drop in.
 		blocks.forEach(block => {
 			if (block === 1) {
 				this.draw(this.getGridPos(x, y));
@@ -20755,8 +20757,8 @@ Tetromino.prototype = {
 		});
 	},
 	drawSecondRow: function (blocks) {
-		var x = 4;
-		var y = 2; // Should be -1.
+		var x = this.x;
+		var y = this.y * 2; // Should be -1.
 		blocks.forEach(block => {
 			if (block === 1) {
 				this.draw(this.getGridPos(x, y));

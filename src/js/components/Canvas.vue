@@ -104,10 +104,11 @@ canvas {
 		},
 		methods: {
 			spawnTetromino: function() {
-				new Tetromino(this.canvas, this.dimensions, this.LETTERS.I, this.cellDimensions);
+				new Tetromino(this.canvas, this.dimensions, this.randomTetromino(), this.cellDimensions);
 			},
-			randomLetter() {
-				return this.LETTERS[Math.floor(Math.random() * this.LETTERS.length)];
+			randomTetromino() {
+				var keys = Object.keys(this.LETTERS);
+				return this.LETTERS[keys[Math.floor(Math.random() * keys.length)]];
 			}
 		}
 	}

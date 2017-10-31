@@ -20141,7 +20141,7 @@ process.umask = function() { return 0; };
 "use strict";
 var components = {
 	"v-canvas": __webpack_require__(333).default,
-	"v-game": __webpack_require__(341).default
+	"v-game": __webpack_require__(343).default
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (components);
@@ -20153,7 +20153,7 @@ var components = {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_Canvas_vue__ = __webpack_require__(339);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1ede9e78_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Canvas_vue__ = __webpack_require__(340);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1ede9e78_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Canvas_vue__ = __webpack_require__(342);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
@@ -20583,8 +20583,8 @@ module.exports = function listToStyles (parentId, list) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__grid_js__ = __webpack_require__(343);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tetromino_js__ = __webpack_require__(345);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__grid_js__ = __webpack_require__(340);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tetromino_js__ = __webpack_require__(341);
 //
 //
 //
@@ -20607,10 +20607,47 @@ module.exports = function listToStyles (parentId, list) {
 			canvas: null,
 			canvasCtx: null,
 
-			WIDTH: this.width,
-			HEIGHT: this.height,
+			dimensions: {
+				WIDTH: this.width,
+				HEIGHT: this.height
+			},
 
-			LETTERS: ["I", "O", "T", "S", "Z", "J", "L"]
+			// Determines how big one cell of the grid (20x10) is.
+			cellDimensions: {
+				WIDTH: this.width / 10,
+				HEIGHT: this.height / 20
+			},
+
+			LETTERS: {
+				I: {
+					blocks: [[0, 0, 0, 0], [1, 1, 1, 1]],
+					color: "red"
+				},
+				O: {
+					blocks: [[1, 1], [1, 1]],
+					color: "red"
+				},
+				T: {
+					blocks: [[0, 1, 0], [1, 1, 1]],
+					color: "red"
+				},
+				S: {
+					blocks: [[0, 1, 1], [1, 1, 0]],
+					color: "red"
+				},
+				Z: {
+					blocks: [[1, 1, 0], [0, 1, 1]],
+					color: "red"
+				},
+				J: {
+					blocks: [[1, 0, 0], [1, 1, 1]],
+					color: "red"
+				},
+				L: {
+					blocks: [[0, 0, 1], [1, 1, 1]],
+					color: "red"
+				}
+			}
 		};
 	},
 	mounted: function () {
@@ -20618,15 +20655,21 @@ module.exports = function listToStyles (parentId, list) {
 		this.canvasCtx = this.canvas.getContext("2d");
 
 		this.canvasCtx.fillStyle = "#F8F8F8";
-		this.canvasCtx.fillRect(0, 0, this.WIDTH, this.HEIGHT);
-
-		new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.canvas, [this.WIDTH, this.HEIGHT]);
+		this.canvasCtx.fillRect(0, 0, this.dimensions.WIDTH, this.dimensions.HEIGHT);
 
 		this.spawnTetromino();
+
+		// Always draw grid after tetrominoes so it looks like it's covering the tetrominoes
+		// Or just make tetrominoes overlap grid?
+		new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.canvas, this.dimensions, this.cellDimensions);
+
+		document.addEventListener("keydown", function () {
+			console.log("lol");
+		});
 	},
 	methods: {
 		spawnTetromino: function () {
-			new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.randomLetter());
+			new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.canvas, this.dimensions, this.LETTERS.I, this.cellDimensions);
 		},
 		randomLetter() {
 			return this.LETTERS[Math.floor(Math.random() * this.LETTERS.length)];
@@ -20636,6 +20679,84 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ }),
 /* 340 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function Grid(canvas, canvasDimensions, cellDimensions) {
+	this.canvas = canvas;
+	this.canvasCtx = this.canvas.getContext("2d");
+
+	this.canvasWidth = canvasDimensions.WIDTH;
+	this.canvasHeight = canvasDimensions.HEIGHT;
+
+	this.GRID_COLOR = "#EEE";
+
+	this.cellWidth = cellDimensions.WIDTH; // 10 cells horizontal.
+	this.cellHeight = cellDimensions.HEIGHT; // 20 cells vertical.
+
+	this.draw();
+}
+
+Grid.prototype = {
+	draw: function () {
+		this.canvasCtx.strokeStyle = this.GRID_COLOR;
+		this.drawHorizontalLines();
+		this.drawVerticalLines();
+	},
+	drawHorizontalLines: function () {
+		for (var x = this.cellWidth; x < this.canvasWidth; x += this.cellWidth) {
+			this.canvasCtx.moveTo(x, 0);
+			this.canvasCtx.lineTo(x, this.canvasHeight);
+			this.canvasCtx.stroke();
+		}
+	},
+	drawVerticalLines: function () {
+		for (var y = this.cellHeight; y < this.canvasHeight; y += this.cellHeight) {
+			this.canvasCtx.moveTo(0, y);
+			this.canvasCtx.lineTo(this.canvasWidth, y);
+			this.canvasCtx.stroke();
+		}
+	}
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Grid);
+
+/***/ }),
+/* 341 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function Tetromino(canvas, canvasDimensions, letter, cellDimensions) {
+	this.canvas = canvas;
+	this.canvasCtx = this.canvas.getContext("2d");
+
+	this.cellWidth = cellDimensions[0]; // TODO maybe some central place to determine cell width and height so we only need to change it once.
+	this.cellHeight = cellDimensions[1];
+
+	this.shape = this.determineShape(letter.blocks);
+	this.draw();
+}
+
+Tetromino.prototype = {
+	determineShape: function (blocks) {
+		blocks[0].forEach(function (block) {});
+
+		blocks[1].forEach(function (block) {});
+	},
+	draw: function () {
+		this.canvasCtx.fillStyle = "#8ab7ff";
+		/*
+  this.shape.forEach((coordinate) => {
+  	this.canvasCtx.fillRect(coordinate[0], coordinate[1], this.cellWidth, this.cellHeight);
+  });
+  */
+	}
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Tetromino);
+
+/***/ }),
+/* 342 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20659,12 +20780,12 @@ if (false) {
 }
 
 /***/ }),
-/* 341 */
+/* 343 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4b4acbdc_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Game_vue__ = __webpack_require__(342);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4b4acbdc_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Game_vue__ = __webpack_require__(344);
 var disposed = false
 var normalizeComponent = __webpack_require__(124)
 /* script */
@@ -20710,7 +20831,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 342 */
+/* 344 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20730,84 +20851,6 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-4b4acbdc", esExports)
   }
 }
-
-/***/ }),
-/* 343 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function Grid(canvas, canvasDimensions) {
-	this.canvas = canvas;
-	this.canvasCtx = this.canvas.getContext("2d");
-
-	this.canvasWidth = canvasDimensions[0];
-	this.canvasHeight = canvasDimensions[1];
-
-	this.GRID_COLOR = "#EEE";
-
-	this.cellWidth = this.canvasWidth / 10; // 10 cells horizontal.
-	this.cellHeight = this.canvasHeight / 20; // 20 cells vertical.
-
-	this.line_horizont;
-
-	this.draw();
-}
-
-Grid.prototype = {
-	draw: function () {
-		this.canvasCtx.strokeStyle = this.GRID_COLOR;
-		this.drawHorizontalLines();
-		this.drawVerticalLines();
-	},
-	drawHorizontalLines: function () {
-		for (var x = this.cellWidth; x < this.canvasWidth; x += this.cellWidth) {
-			this.canvasCtx.moveTo(x, 0);
-			this.canvasCtx.lineTo(x, this.canvasHeight);
-			this.canvasCtx.stroke();
-		}
-	},
-	drawVerticalLines: function () {
-		for (var y = this.cellHeight; y < this.canvasHeight; y += this.cellHeight) {
-			this.canvasCtx.moveTo(0, y);
-			this.canvasCtx.lineTo(this.canvasWidth, y);
-			this.canvasCtx.stroke();
-		}
-	}
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (Grid);
-
-/***/ }),
-/* 344 */,
-/* 345 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function Tetromino(letter) {
-		switch (letter) {
-				case "I":
-
-						break;
-				case "O":
-
-						break;
-				case "T":
-
-						break;
-				case "S":
-
-						break;
-				case "Z":
-
-						break;
-				case "J":
-
-						break;
-				case "L":
-		}
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Tetromino);
 
 /***/ })
 /******/ ]);

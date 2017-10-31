@@ -14,11 +14,10 @@ Tetromino.prototype = {
 	determineShape: function(blocks) {
 		blocks[0].forEach(function(block) {
 
-
 		});
 
 		blocks[1].forEach(function(block) {
-
+	
 
 		});
 	},

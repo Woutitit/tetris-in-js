@@ -1,16 +1,14 @@
-function Grid(canvas, canvasDimensions) {
+function Grid(canvas, canvasDimensions, cellDimensions) {
 	this.canvas = canvas;
 	this.canvasCtx = this.canvas.getContext("2d");
 
-	this.canvasWidth = canvasDimensions[0];
-	this.canvasHeight = canvasDimensions[1];
+	this.canvasWidth = canvasDimensions.WIDTH;
+	this.canvasHeight = canvasDimensions.HEIGHT;
 
 	this.GRID_COLOR = "#EEE";
 
-	this.cellWidth = this.canvasWidth / 10; // 10 cells horizontal.
-	this.cellHeight = this.canvasHeight / 20; // 20 cells vertical.
-
-	this.line_horizont
+	this.cellWidth = cellDimensions.WIDTH // 10 cells horizontal.
+	this.cellHeight = cellDimensions.HEIGHT // 20 cells vertical.
 
 	this.draw();
 

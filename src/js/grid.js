@@ -33,20 +33,44 @@ function Grid(colSpan, rowSpan) {
 		]
 	--------------------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------------------*/
+	this.COL_SPAN;
+	this.ROW_SPAN;
+
 	this.playingField = [];
 
 	this.init(colSpan, rowSpan);	// Intializes backend and frontend playing field.
 }
 
 Grid.prototype = {
-	init: function(colSpan, rowSpan) {
-		this.playingField = Array(colSpan).fill().map(() => Array(rowSpan).fill(0));
+	/**
+	* Initialize playing field by creating and drawing initial grid.
+	*/
+	init: function() {
+		this.playingField = create(this.COL_SPAN, this.ROW_SPAN);
 
-		console.log(this.playingField);
-
-		// Draw the canvas according to the backend.
-		//this.update();
+		this.draw();
 	},
+
+
+	/**
+	* Create playing field backend.
+	*/
+	create: function(colSpan, rowSpan) {
+		return Array(colSpan).fill().map(() => Array(rowSpan).fill(0));
+	},
+
+
+	/**
+	* Draw playing field.
+	*/
+	draw: function() {
+
+	},
+
+
+	/**
+	* Update playing field.
+	*/
 	update: function() {
 		
 	}

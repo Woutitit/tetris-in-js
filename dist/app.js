@@ -20612,7 +20612,7 @@ module.exports = function listToStyles (parentId, list) {
 		this.canvas = document.getElementById(this.id);
 		this.canvasCtx = this.canvas.getContext("2d");
 
-		this.grid = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](16, 10);
+		this.grid = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](16, 10, this.canvas);
 
 		// Spawn new tetromino on grid.
 		// new Tetromino();
@@ -20628,7 +20628,7 @@ module.exports = function listToStyles (parentId, list) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Grid(colSpan, rowSpan) {
+function Grid(colSpan, rowSpan, canvas) {
 	/*--------------------------------------------------------------------------------------------
  HOW THE GRID WORKS.
  ----------------------------------------------------------------------------------------------
@@ -20663,10 +20663,13 @@ function Grid(colSpan, rowSpan) {
  	]
  --------------------------------------------------------------------------------------------
  --------------------------------------------------------------------------------------------*/
-	this.COL_SPAN;
-	this.ROW_SPAN;
+	this.COL_SPAN = colSpan;
+	this.ROW_SPAN = rowSpan;
 
 	this.playingField = [];
+
+	this.canvas = canvas;
+	this.canvasCtx = canvas.getContext("2d");
 
 	this.init(colSpan, rowSpan); // Intializes backend and frontend playing field.
 }
@@ -20676,9 +20679,9 @@ Grid.prototype = {
  * Initialize playing field by creating and drawing initial grid.
  */
 	init: function () {
-		this.playingField = create(this.COL_SPAN, this.ROW_SPAN);
+		this.playingField = this.create(this.COL_SPAN, this.ROW_SPAN);
 
-		this.draw();
+		this.drawBackground();
 	},
 
 	/**
@@ -20691,7 +20694,24 @@ Grid.prototype = {
 	/**
  * Draw playing field.
  */
-	draw: function () {},
+	drawBackground: function () {
+		this.canvasCtx.fillStyle = "#EEE";
+
+		var h = 0;
+
+		for (var i = 0; i < this.playingField.length; i++) {
+			var row = this.playingField[i];
+
+			var w = 0;
+
+			for (var j = 0; j < row.length; j++) {
+				this.canvasCtx.fillRect(w, h, 10, 10);
+				w += 10;
+			}
+
+			h += 10;
+		}
+	},
 
 	/**
  * Update playing field.

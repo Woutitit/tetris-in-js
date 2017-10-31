@@ -25,7 +25,7 @@ canvas {
 			this.canvas = document.getElementById(this.id);
 			this.canvasCtx = this.canvas.getContext("2d");
 
-			this.grid = new Grid(16, 10);
+			this.grid = new Grid(16, 10, this.canvas);
 
 			// Spawn new tetromino on grid.
 			// new Tetromino();

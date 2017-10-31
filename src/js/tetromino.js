@@ -2,10 +2,10 @@ function Tetromino(canvas, canvasDimensions, letter, cellDimensions) {
 	this.canvas = canvas;
 	this.canvasCtx = this.canvas.getContext("2d");
 
-	this.cellWidth = cellDimensions.WIDTH; // TODO maybe some central place to determine cell width and height so we only need to change it once.
+	this.cellWidth = cellDimensions.WIDTH;
 	this.cellHeight = cellDimensions.HEIGHT;
 
-	this.x = 4;
+	this.x = 4; // Start position on grid is always x = 4, y = 1.
 	this.y = 1;
 
 	this.drawFirstRow(letter.blocks[0]);

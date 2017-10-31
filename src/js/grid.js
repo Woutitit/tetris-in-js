@@ -1,39 +1,56 @@
-function Grid(canvas, canvasDimensions, cellDimensions) {
-	this.canvas = canvas;
-	this.canvasCtx = this.canvas.getContext("2d");
+function Grid(colSpan, rowSpan) {
+	/*--------------------------------------------------------------------------------------------
+	HOW THE GRID WORKS.
+	----------------------------------------------------------------------------------------------
+	* On the backend the grid is a multidimensional array (or matrix).
+	* 0 means a free space.
+	* 1 means occupied space.
 
-	this.canvasWidth = canvasDimensions.WIDTH;
-	this.canvasHeight = canvasDimensions.HEIGHT;
+	This grid matrix will be updated everytime a tetromino spawns, moves, gets destroyed.
+	This way we can easily keep track of collision, when to destroy a row and such.
 
-	this.GRID_COLOR = "#EEE";
+	IMPORTANT: We can use THIS grid in our neural network as state like outlace did.
 
-	this.cellWidth = cellDimensions.WIDTH // 10 cells horizontal.
-	this.cellHeight = cellDimensions.HEIGHT // 20 cells vertical.
+	This is how a playing field of 10x16 would look like:
 
-	this.draw();
+	 var grid = [
+		[0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0]
+		]
+	--------------------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------------------*/
+	this.playingField = [];
 
+	this.init(colSpan, rowSpan);	// Intializes backend and frontend playing field.
 }
 
 Grid.prototype = {
-	draw: function() {
-		this.canvasCtx.strokeStyle = this.GRID_COLOR;
-		this.drawHorizontalLines();
-		this.drawVerticalLines()
+	init: function(colSpan, rowSpan) {
+		this.playingField = Array(colSpan).fill().map(() => Array(rowSpan).fill(0));
+
+		console.log(this.playingField);
+
+		// Draw the canvas according to the backend.
+		//this.update();
 	},
-	drawHorizontalLines: function() {
-		for(var x = this.cellWidth; x < this.canvasWidth; x += this.cellWidth) {
-			this.canvasCtx.moveTo(x, 0);
-			this.canvasCtx.lineTo(x, this.canvasHeight);
-			this.canvasCtx.stroke();
-		}
-	},
-	drawVerticalLines: function() {
-		for(var y = this.cellHeight; y < this.canvasHeight; y += this.cellHeight) {
-			this.canvasCtx.moveTo(0, y);
-			this.canvasCtx.lineTo(this.canvasWidth, y);
-			this.canvasCtx.stroke();
-		}
+	update: function() {
+		
 	}
 }
 
 export default Grid;
+

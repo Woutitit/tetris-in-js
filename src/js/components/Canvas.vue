@@ -19,97 +19,21 @@ canvas {
 			return {
 				canvas: null,
 				canvasCtx: null,
-
-				dimensions: { 
-					WIDTH: this.width,
-					HEIGHT: this.height
-				},
-
-				// Determines how big one cell of the grid (20 x 10) is.
-				cellDimensions: { 
-					WIDTH: this.width / 10,
-					HEIGHT: this.height / 20,
-				},
-
-				LETTERS: {
-					I: { 
-						blocks: [ 
-						[0, 0, 0, 0],
-						[1, 1, 1, 1]
-						], 
-						color: "red"
-					},
-					O: {
-						blocks: [
-						[1, 1],
-						[1, 1]
-						], 
-						color: "red"
-					},
-					T: { 
-						blocks: [
-						[0, 1, 0], 
-						[1, 1, 1]
-						], 
-						color: "red" 
-					},
-					S: { 
-						blocks: [
-						[0, 1, 1], 
-						[1, 1, 0]
-						],
-						color: "red"
-					},
-					Z: {
-						blocks: [
-						[1, 1, 0],
-						[0, 1, 1]
-						], 
-						color: "red"
-					},
-					J: {
-						blocks: [
-						[1, 0, 0], 
-						[1, 1, 1]
-						], 
-						color: "red"
-					},
-					L: { 
-						blocks: [
-						[0, 0, 1], 
-						[1, 1, 1]
-						], 
-						color: "red"
-					}
-				}
 			}
 		},
 		mounted: function() {
 			this.canvas = document.getElementById(this.id);
 			this.canvasCtx = this.canvas.getContext("2d");
 
-			this.canvasCtx.fillStyle = "#F8F8F8";
-			this.canvasCtx.fillRect(0, 0, this.dimensions.WIDTH, this.dimensions.HEIGHT);
+			this.grid = new Grid(16, 10);
 
-			this.spawnTetromino();
+			// Spawn new tetromino on grid.
+			// new Tetromino();
 
-			// Always draw grid after tetrominoes so it looks like it's covering the tetrominoes
-			// Or just make tetrominoes overlap grid?
-			new Grid(this.canvas, this.dimensions, this.cellDimensions);
-
-			document.addEventListener("keydown", function() {
-				console.log("lol");
-
-			});
+			// We have to update the grid everytime we make a succesful move/spawn somethinng or destroy a row.
+			// this.grid.update();
 		},
 		methods: {
-			spawnTetromino: function() {
-				new Tetromino(this.canvas, this.dimensions, this.randomTetromino(), this.cellDimensions);
-			},
-			randomTetromino() {
-				var keys = Object.keys(this.LETTERS);
-				return this.LETTERS[keys[Math.floor(Math.random() * keys.length)]];
-			}
 		}
 	}
 </script>

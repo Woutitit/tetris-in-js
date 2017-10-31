@@ -20605,77 +20605,22 @@ module.exports = function listToStyles (parentId, list) {
 	data: function () {
 		return {
 			canvas: null,
-			canvasCtx: null,
-
-			dimensions: {
-				WIDTH: this.width,
-				HEIGHT: this.height
-			},
-
-			// Determines how big one cell of the grid (20 x 10) is.
-			cellDimensions: {
-				WIDTH: this.width / 10,
-				HEIGHT: this.height / 20
-			},
-
-			LETTERS: {
-				I: {
-					blocks: [[0, 0, 0, 0], [1, 1, 1, 1]],
-					color: "red"
-				},
-				O: {
-					blocks: [[1, 1], [1, 1]],
-					color: "red"
-				},
-				T: {
-					blocks: [[0, 1, 0], [1, 1, 1]],
-					color: "red"
-				},
-				S: {
-					blocks: [[0, 1, 1], [1, 1, 0]],
-					color: "red"
-				},
-				Z: {
-					blocks: [[1, 1, 0], [0, 1, 1]],
-					color: "red"
-				},
-				J: {
-					blocks: [[1, 0, 0], [1, 1, 1]],
-					color: "red"
-				},
-				L: {
-					blocks: [[0, 0, 1], [1, 1, 1]],
-					color: "red"
-				}
-			}
+			canvasCtx: null
 		};
 	},
 	mounted: function () {
 		this.canvas = document.getElementById(this.id);
 		this.canvasCtx = this.canvas.getContext("2d");
 
-		this.canvasCtx.fillStyle = "#F8F8F8";
-		this.canvasCtx.fillRect(0, 0, this.dimensions.WIDTH, this.dimensions.HEIGHT);
+		this.grid = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](16, 10);
 
-		this.spawnTetromino();
+		// Spawn new tetromino on grid.
+		// new Tetromino();
 
-		// Always draw grid after tetrominoes so it looks like it's covering the tetrominoes
-		// Or just make tetrominoes overlap grid?
-		new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.canvas, this.dimensions, this.cellDimensions);
-
-		document.addEventListener("keydown", function () {
-			console.log("lol");
-		});
+		// We have to update the grid everytime we make a succesful move/spawn somethinng or destroy a row.
+		// this.grid.update();
 	},
-	methods: {
-		spawnTetromino: function () {
-			new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.canvas, this.dimensions, this.randomTetromino(), this.cellDimensions);
-		},
-		randomTetromino() {
-			var keys = Object.keys(this.LETTERS);
-			return this.LETTERS[keys[Math.floor(Math.random() * keys.length)]];
-		}
-	}
+	methods: {}
 });
 
 /***/ }),
@@ -20683,41 +20628,56 @@ module.exports = function listToStyles (parentId, list) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Grid(canvas, canvasDimensions, cellDimensions) {
-	this.canvas = canvas;
-	this.canvasCtx = this.canvas.getContext("2d");
+function Grid(colSpan, rowSpan) {
+	/*--------------------------------------------------------------------------------------------
+ HOW THE GRID WORKS.
+ ----------------------------------------------------------------------------------------------
+ * On the backend the grid is a multidimensional array (or matrix).
+ * 0 means a free space.
+ * 1 means occupied space.
+ 
+ This grid matrix will be updated everytime a tetromino spawns, moves, gets destroyed.
+ This way we can easily keep track of collision, when to destroy a row and such.
+ 
+ IMPORTANT: We can use THIS grid in our neural network as state like outlace did.
+ 
+ This is how a playing field of 10x16 would look like:
+ 
+  var grid = [
+ 	[0,0,0,0,0,0,0,0,0,0],
+ 	[0,0,0,0,0,0,0,0,0,0],
+ 	[0,0,0,0,0,0,0,0,0,0],
+ 	[0,0,0,0,0,0,0,0,0,0],
+ 	[0,0,0,0,0,0,0,0,0,0],
+ 	[0,0,0,0,0,0,0,0,0,0],
+ 	[0,0,0,0,0,0,0,0,0,0],
+ 	[0,0,0,0,0,0,0,0,0,0],
+ 	[0,0,0,0,0,0,0,0,0,0],
+ 	[0,0,0,0,0,0,0,0,0,0],
+ 	[0,0,0,0,0,0,0,0,0,0],
+ 	[0,0,0,0,0,0,0,0,0,0],
+ 	[0,0,0,0,0,0,0,0,0,0],
+ 	[0,0,0,0,0,0,0,0,0,0],
+ 	[0,0,0,0,0,0,0,0,0,0],
+ 	[0,0,0,0,0,0,0,0,0,0]
+ 	]
+ --------------------------------------------------------------------------------------------
+ --------------------------------------------------------------------------------------------*/
+	this.playingField = [];
 
-	this.canvasWidth = canvasDimensions.WIDTH;
-	this.canvasHeight = canvasDimensions.HEIGHT;
-
-	this.GRID_COLOR = "#EEE";
-
-	this.cellWidth = cellDimensions.WIDTH; // 10 cells horizontal.
-	this.cellHeight = cellDimensions.HEIGHT; // 20 cells vertical.
-
-	this.draw();
+	this.init(colSpan, rowSpan); // Intializes backend and frontend playing field.
 }
 
 Grid.prototype = {
-	draw: function () {
-		this.canvasCtx.strokeStyle = this.GRID_COLOR;
-		this.drawHorizontalLines();
-		this.drawVerticalLines();
+	init: function (colSpan, rowSpan) {
+		this.playingField = Array(colSpan).fill().map(() => Array(rowSpan).fill(0));
+
+		console.log(this.playingField);
+
+		// Draw the canvas according to the backend.
+		//this.update();
 	},
-	drawHorizontalLines: function () {
-		for (var x = this.cellWidth; x < this.canvasWidth; x += this.cellWidth) {
-			this.canvasCtx.moveTo(x, 0);
-			this.canvasCtx.lineTo(x, this.canvasHeight);
-			this.canvasCtx.stroke();
-		}
-	},
-	drawVerticalLines: function () {
-		for (var y = this.cellHeight; y < this.canvasHeight; y += this.cellHeight) {
-			this.canvasCtx.moveTo(0, y);
-			this.canvasCtx.lineTo(this.canvasWidth, y);
-			this.canvasCtx.stroke();
-		}
-	}
+	update: function () {}
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Grid);
@@ -20731,10 +20691,10 @@ function Tetromino(canvas, canvasDimensions, letter, cellDimensions) {
 	this.canvas = canvas;
 	this.canvasCtx = this.canvas.getContext("2d");
 
-	this.cellWidth = cellDimensions.WIDTH; // TODO maybe some central place to determine cell width and height so we only need to change it once.
+	this.cellWidth = cellDimensions.WIDTH;
 	this.cellHeight = cellDimensions.HEIGHT;
 
-	this.x = 4;
+	this.x = 4; // Start position on grid is always x = 4, y = 1.
 	this.y = 1;
 
 	this.drawFirstRow(letter.blocks[0]);
@@ -20774,7 +20734,7 @@ Tetromino.prototype = {
 	}
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (Tetromino);
+/* unused harmony default export */ var _unused_webpack_default_export = (Tetromino);
 
 /***/ }),
 /* 342 */

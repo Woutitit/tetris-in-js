@@ -25,7 +25,7 @@ canvas {
 					HEIGHT: this.height
 				},
 
-				// Determines how big one cell of the grid (20x10) is.
+				// Determines how big one cell of the grid (20 x 10) is.
 				cellDimensions: { 
 					WIDTH: this.width / 10,
 					HEIGHT: this.height / 20,

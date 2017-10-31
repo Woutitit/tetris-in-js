@@ -1,4 +1,4 @@
-function Grid(colSpan, rowSpan, canvas) {
+function Grid(colSpan, rowSpan, canvas, celSpan) {
 	/*--------------------------------------------------------------------------------------------
 	HOW THE GRID WORKS.
 	----------------------------------------------------------------------------------------------
@@ -36,12 +36,14 @@ function Grid(colSpan, rowSpan, canvas) {
 	this.COL_SPAN = colSpan;
 	this.ROW_SPAN = rowSpan;
 
+	this.CELL_SPAN = celSpan;
+
 	this.playingField = [];
 
 	this.canvas = canvas;
 	this.canvasCtx = canvas.getContext("2d");
 
-	this.init(colSpan, rowSpan);	// Intializes backend and frontend playing field.
+	this.init();	// Intializes backend and frontend playing field.
 }
 
 Grid.prototype = {
@@ -50,6 +52,7 @@ Grid.prototype = {
 	*/
 	init: function() {
 		this.playingField = this.create(this.COL_SPAN, this.ROW_SPAN);
+		console.log(this.playingField);
 
 		this.drawBackground();
 	},
@@ -59,7 +62,7 @@ Grid.prototype = {
 	* Create playing field backend.
 	*/
 	create: function(colSpan, rowSpan) {
-		return Array(colSpan).fill().map(() => Array(rowSpan).fill(0));
+		return Array(rowSpan).fill().map(() => Array(colSpan).fill(0));
 	},
 
 
@@ -67,23 +70,20 @@ Grid.prototype = {
 	* Draw playing field.
 	*/
 	drawBackground: function() {
-		this.canvasCtx.fillStyle = "#EEE";
-
-		var h = 0;
+		this.canvasCtx.fillRect = "#EEE";
+		var y = 0;
 
 		for(var i = 0; i < this.playingField.length; i++) {
 			var row = this.playingField[i];
 
-			var w = 0;
-			
-
+			var x = 0;
 
 			for(var j = 0; j < row.length; j++) {
-				this.canvasCtx.fillRect(w, h, 10, 10);
-				w += 10
+				this.canvasCtx.fillRect(x, y, this.CELL_SPAN, this.CELL_SPAN);
+				x += this.CELL_SPAN;
 			}
 
-			h += 10;
+			y += this.CELL_SPAN;
 		}
 	},
 

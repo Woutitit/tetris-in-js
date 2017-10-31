@@ -20601,18 +20601,36 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-	props: ["id", "width", "height"],
+	props: ["id", "size"],
 	data: function () {
 		return {
 			canvas: null,
-			canvasCtx: null
+			canvasCtx: null,
+
+			COLS: 10,
+			ROWS: 16,
+
+			CELL_WIDTH: 0,
+			CELL_HEIGHT: 0,
+
+			CANVAS_WIDTH: 0,
+			CANVAS_HEIGHT: 0,
+
+			grid: null
 		};
+	},
+	created() {
+		// Note: we need to use "created()" to be able t assign values to width and height. Otherwise canvas doesn't pick them up.
+		this.CELL_DIMENSION = this.COLS * this.size; // Cell dimensions are equal to column amount times size.
+
+		this.CANVAS_WIDTH = this.CELL_DIMENSION * this.COLS;
+		this.CANVAS_HEIGHT = this.CELL_DIMENSION * this.ROWS;
 	},
 	mounted: function () {
 		this.canvas = document.getElementById(this.id);
 		this.canvasCtx = this.canvas.getContext("2d");
 
-		this.grid = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](16, 10, this.canvas);
+		this.grid = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.COLS, this.ROWS, this.canvas, this.CELL_DIMENSION);
 
 		// Spawn new tetromino on grid.
 		// new Tetromino();
@@ -20628,7 +20646,7 @@ module.exports = function listToStyles (parentId, list) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Grid(colSpan, rowSpan, canvas) {
+function Grid(colSpan, rowSpan, canvas, celSpan) {
 	/*--------------------------------------------------------------------------------------------
  HOW THE GRID WORKS.
  ----------------------------------------------------------------------------------------------
@@ -20666,12 +20684,14 @@ function Grid(colSpan, rowSpan, canvas) {
 	this.COL_SPAN = colSpan;
 	this.ROW_SPAN = rowSpan;
 
+	this.CELL_SPAN = celSpan;
+
 	this.playingField = [];
 
 	this.canvas = canvas;
 	this.canvasCtx = canvas.getContext("2d");
 
-	this.init(colSpan, rowSpan); // Intializes backend and frontend playing field.
+	this.init(); // Intializes backend and frontend playing field.
 }
 
 Grid.prototype = {
@@ -20680,6 +20700,7 @@ Grid.prototype = {
  */
 	init: function () {
 		this.playingField = this.create(this.COL_SPAN, this.ROW_SPAN);
+		console.log(this.playingField);
 
 		this.drawBackground();
 	},
@@ -20688,28 +20709,27 @@ Grid.prototype = {
  * Create playing field backend.
  */
 	create: function (colSpan, rowSpan) {
-		return Array(colSpan).fill().map(() => Array(rowSpan).fill(0));
+		return Array(rowSpan).fill().map(() => Array(colSpan).fill(0));
 	},
 
 	/**
  * Draw playing field.
  */
 	drawBackground: function () {
-		this.canvasCtx.fillStyle = "#EEE";
-
-		var h = 0;
+		this.canvasCtx.fillRect = "#EEE";
+		var y = 0;
 
 		for (var i = 0; i < this.playingField.length; i++) {
 			var row = this.playingField[i];
 
-			var w = 0;
+			var x = 0;
 
 			for (var j = 0; j < row.length; j++) {
-				this.canvasCtx.fillRect(w, h, 10, 10);
-				w += 10;
+				this.canvasCtx.fillRect(x, y, this.CELL_SPAN, this.CELL_SPAN);
+				x += this.CELL_SPAN;
 			}
 
-			h += 10;
+			y += this.CELL_SPAN;
 		}
 	},
 
@@ -20785,7 +20805,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("canvas", {
-    attrs: { id: _vm.id, width: _vm.width, height: _vm.height }
+    attrs: { id: _vm.id, width: _vm.CANVAS_WIDTH, height: _vm.CANVAS_HEIGHT }
   })
 }
 var staticRenderFns = []

@@ -47,7 +47,7 @@ Tetromino.prototype = {
 
 	spawn: function() {
 		this.determineSpawnCoordinates();
-		this.grid.update("draw", this.coordinates, this.color);
+		this.grid.occupyCells(this.coordinates);
 	},
 
 

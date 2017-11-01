@@ -90,8 +90,6 @@ Grid.prototype = {
 			this.playingField[y][x] = activation;
 		}
 		*/
-
-		// Coordinates of all occupied cells organized by color.
 		Object.keys(this.occupiedCells).forEach((key, index) => {
 			var color = key;
 
@@ -115,6 +113,13 @@ Grid.prototype = {
 		// If it was down it would be [0 + 1][1] to check if the move is valid.
 		// Also when a move is valid (so if this return true) we should first use the current coordinates to make these 1's to 0's.
 		// And THEN we can increase the coordinates and make these NEW coordinates 1's.
+	},
+
+
+	occupyCells: function(coordinates) {
+		coordinates.forEach((coordinate) => {
+			this.occupiedCells.purple.push(coordinate);
+		})
 	}
 }
 

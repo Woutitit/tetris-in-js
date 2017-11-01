@@ -52,15 +52,41 @@ canvas {
 
 			// We have to update the grid everytime we make a succesful move/spawn something or destroy a row.
 			// this.grid.update();
-			document.addEventListener("keydown", () => {
-				this.currTetromino.move();
-				console.log(this.grid.playingField);
-			});
+			this.startListening();
 		},
 		methods: {
+			startListening: function() {
+				document.addEventListener("keydown", this);
+			},
+
+
 			handleEvent: function(event) {
+				switch(event.type) {
+					case "keydown":
+					this.onKeyDown(event.key);
+					break;
+				}
+			},
 
+			onKeyDown: function(key) {
+				switch(key) {
+					case "ArrowLeft":
+					this.currTetromino.move("left");
+					break;
 
+					case "ArrowUp":
+					// Here we should change position of the tetromino.
+					break;
+
+					case "ArrowRight":
+					this.currTetromino.move("right");
+					break;
+
+					case "ArrowDown":
+					this.currTetromino.move("down");
+					break;
+				}
+				console.log(this.grid.playingField);
 			}
 		}
 	}

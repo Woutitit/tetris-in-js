@@ -51,11 +51,31 @@ Tetromino.prototype = {
 	},
 
 
-	move: function() {
+	move: function(direction) {
+		var increment = 0;
+		var axis = 0; // 0 means x-axis movement. 1 means y-axis movement.
+
+		switch(direction) {
+			case "left":
+			increment = -1;
+			axis = 0;
+			break;
+
+			case "right":
+			increment = 1;
+			axis = 0;
+			break;
+
+			case "down":
+			increment = 1;
+			axis = 1;
+			break;
+		}
+
 		for(var i = 0; i < this.coordinates.length; i++) {
 			// The color should be the same as he background color.
 			this.grid.update("undraw", this.coordinates, this.color);
-			this.coordinates[i][1] += 1; // When push down add 1 to all y coordinates to move them one cell down.
+			this.coordinates[i][axis] += increment; // When push down add 1 to all y coordinates to move them one cell down.
 			// TODO: First undraw the current y coordinates and make them 0;
 			this.grid.update("draw", this.coordinates, this.color);
 		}

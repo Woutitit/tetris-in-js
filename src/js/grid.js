@@ -44,9 +44,11 @@ function Grid(colSpan, rowSpan, canvas, celSpan) {
 	this.canvas = canvas;
 	this.canvasCtx = canvas.getContext("2d");
 
-	// Here we simply holds all occupied coordinates and their respective coordinates.
-	// We don't have to remember the shapes so we can just store all coordinates per color.
-	this.tetrominoes = {}
+	// Holds coordinates of ALL occupied cells organized by color.
+	this.occupiedCells = {
+		orange: [ [1, 2] ],
+		purple: [ [1, 3], [5, 4] ]
+	}; 
 
 	this.currTetromino; // Holds tetromino we can control.
 
@@ -76,7 +78,10 @@ Grid.prototype = {
 	update: function(task, coordinates, color) {
 		// Check whether to draw or undraw the coordinates. Undraw is represented by 0 and draw by 1.
 		// Also use this for color whether to use tetromino color or grid background color for the coordinate.
+		/*
 		var activation = (task == "draw" ? 1 : 0);  
+
+		// So we have the playing field
 
 		for(var i = 0; i < coordinates.length; i++) {
 			var x = coordinates[i][0];
@@ -84,6 +89,24 @@ Grid.prototype = {
 			// TODO: now also draw this out.
 			this.playingField[y][x] = activation;
 		}
+		*/
+
+		// Coordinates of all occupied cells organized by color.
+		Object.keys(this.occupiedCells).forEach((key, index) => {
+			var color = key;
+
+			for(var i = 0; i < this.occupiedCells[color].length; i++) {
+				var x = this.occupiedCells[color][i][0];
+				var y = this.occupiedCells[color][i][1];
+
+				this.playingField[y][x] = 1; // The cell at this coordinate gets a 1.
+				// TODO: Now also draw this cell with the respective color.
+			}
+		});
+
+		// When a tetromino spawns. Hold its coordinates apart for collision detection.
+		// However also push its coordinates to the coordinates object.
+		// When it moves we should then always DESTROY the coordinates from the coordinates object and PUSH the new coordinates.
 	},
 
 	checkCollision: function() {

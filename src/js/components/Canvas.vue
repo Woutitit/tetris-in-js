@@ -49,13 +49,22 @@ canvas {
 
 			// Spawn new tetromino on grid.
 			this.currTetromino = new Tetromino(this.grid);
-			console.log(this.grid.playingField);
 
 			// We have to update the grid everytime we make a succesful move/spawn something or destroy a row.
 			// this.grid.update();
 			this.startListening();
+
+			// Now what we have to do is move down the tetromino with a set Interval.
+			this.update();
+
+			// Anyway we can just run requestAnimationFrame the whole time and it will on its own pick up the things to draw.
 		},
 		methods: {
+			update: function() {
+				this.grid.update(); // Continously redraw the grid and fill all 0's with 1's based on the coordinates.
+				requestAnimationFrame(this.update);
+			},
+
 			startListening: function() {
 				document.addEventListener("keydown", this);
 			},
@@ -76,7 +85,7 @@ canvas {
 					break;
 
 					case "ArrowUp":
-					// Here we should change position of the tetromino.
+					this.currTetromino.rotate();
 					break;
 
 					case "ArrowRight":

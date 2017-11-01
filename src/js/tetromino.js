@@ -79,6 +79,10 @@ Tetromino.prototype = {
 			// TODO: First undraw the current y coordinates and make them 0;
 			this.grid.update("draw", this.coordinates, this.color);
 		}
+	},
+
+	rotate: function() {
+		console.log("lol");
 	}
 }
 

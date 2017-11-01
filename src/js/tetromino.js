@@ -8,17 +8,10 @@ function Tetromino(grid) {
 
 	this.grid = grid;
 
-	/*
-	LETTERS: {
-		L: {
-			color:
-			shape: [[]]
-		}
-	}
-	*/
+	this.dropInterval = 0;
+	this.DROP_SPEED = 1000;
 
 	this.init();
-	
 }
 
 
@@ -73,16 +66,27 @@ Tetromino.prototype = {
 		}
 
 		for(var i = 0; i < this.coordinates.length; i++) {
-			// The color should be the same as he background color.
-			this.grid.update("undraw", this.coordinates, this.color);
+			this.grid.deoccupyCells(this.coordinates);
 			this.coordinates[i][axis] += increment; // When push down add 1 to all y coordinates to move them one cell down.
-			// TODO: First undraw the current y coordinates and make them 0;
-			this.grid.update("draw", this.coordinates, this.color);
+			this.grid.occupyCells(this.coordinates);
 		}
 	},
 
+
 	rotate: function() {
 		console.log("lol");
+	},
+
+
+	drop: function() {
+		if(this.dropInterval === 0) {
+			this.dropInterval = new Date().getTime();
+		}
+
+		if(new Date().getTime() - this.dropInterval > this.DROP_SPEED) {
+			this.move("down");
+			this.dropInterval = 0;
+		}
 	}
 }
 

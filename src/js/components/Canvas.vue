@@ -30,7 +30,9 @@ canvas {
 				CANVAS_HEIGHT: 0,
 
 				grid: null,
-				currTetromino: null
+				currTetromino: null,
+
+				interval: 0
 			}
 		},
 		created() {
@@ -47,8 +49,6 @@ canvas {
 
 			this.grid = new Grid(this.COLS, this.ROWS, this.canvas, this.CELL_DIMENSION);
 
-			// Spawn new tetromino on grid.
-			this.currTetromino = new Tetromino(this.grid);
 
 			// We have to update the grid everytime we make a succesful move/spawn something or destroy a row.
 			// this.grid.update();
@@ -62,6 +62,14 @@ canvas {
 		methods: {
 			update: function() {
 				this.grid.update(); // Continously redraw the grid and fill all 0's with 1's based on the coordinates.
+
+				// If no tetromino is dropping at the moment.
+				if(!this.currTetromino) {
+					// Spawn new tetromino on grid.
+					this.currTetromino = new Tetromino(this.grid);
+				}
+
+				this.currTetromino.drop(); // Make tetromino continously drop.
 				requestAnimationFrame(this.update);
 			},
 
@@ -96,7 +104,6 @@ canvas {
 					this.currTetromino.move("down");
 					break;
 				}
-				console.log(this.grid.playingField);
 			}
 		}
 	}

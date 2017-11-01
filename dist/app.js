@@ -20617,7 +20617,9 @@ module.exports = function listToStyles (parentId, list) {
 			CANVAS_HEIGHT: 0,
 
 			grid: null,
-			currTetromino: null
+			currTetromino: null,
+
+			interval: 0
 		};
 	},
 	created() {
@@ -20633,9 +20635,6 @@ module.exports = function listToStyles (parentId, list) {
 
 		this.grid = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.COLS, this.ROWS, this.canvas, this.CELL_DIMENSION);
 
-		// Spawn new tetromino on grid.
-		this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid);
-
 		// We have to update the grid everytime we make a succesful move/spawn something or destroy a row.
 		// this.grid.update();
 		this.startListening();
@@ -20648,6 +20647,14 @@ module.exports = function listToStyles (parentId, list) {
 	methods: {
 		update: function () {
 			this.grid.update(); // Continously redraw the grid and fill all 0's with 1's based on the coordinates.
+
+			// If no tetromino is dropping at the moment.
+			if (!this.currTetromino) {
+				// Spawn new tetromino on grid.
+				this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid);
+			}
+
+			this.currTetromino.drop(); // Make tetromino continously drop.
 			requestAnimationFrame(this.update);
 		},
 
@@ -20681,7 +20688,6 @@ module.exports = function listToStyles (parentId, list) {
 					this.currTetromino.move("down");
 					break;
 			}
-			console.log(this.grid.playingField);
 		}
 	}
 });
@@ -20738,9 +20744,9 @@ function Grid(colSpan, rowSpan, canvas, celSpan) {
 	this.canvasCtx = canvas.getContext("2d");
 
 	// Holds coordinates of ALL occupied cells organized by color.
+	// We should generate this array based on all possible color rather than setting it manually.
 	this.occupiedCells = {
-		orange: [[1, 2]],
-		purple: [[1, 3], [5, 4]]
+		purple: []
 	};
 
 	this.currTetromino; // Holds tetromino we can control.
@@ -20765,19 +20771,15 @@ Grid.prototype = {
 		return Array(rowSpan + 2).fill().map(() => Array(colSpan).fill(0));
 	},
 
-	update: function (task, coordinates, color) {
-		// Check whether to draw or undraw the coordinates. Undraw is represented by 0 and draw by 1.
-		// Also use this for color whether to use tetromino color or grid background color for the coordinate.
-		/*
-  var activation = (task == "draw" ? 1 : 0);  
-  		// So we have the playing field
-  		for(var i = 0; i < coordinates.length; i++) {
-  	var x = coordinates[i][0];
-  	var y = coordinates[i][1];
-  	// TODO: now also draw this out.
-  	this.playingField[y][x] = activation;
-  }
-  */
+	/**
+ * Redraws grid filling every occupied cell (setting the cell with those coordinates to 1).
+ * Thi does NOT draw 0's yet.
+ */
+	update: function () {
+		// Every update we draw the playing field with 0's first and then fill them up according to the coordinates.
+		// This might be slow. Is there a better way?
+		this.playingField = this.create(this.COL_SPAN, this.ROW_SPAN);
+
 		Object.keys(this.occupiedCells).forEach((key, index) => {
 			var color = key;
 
@@ -20789,10 +20791,6 @@ Grid.prototype = {
 				// TODO: Now also draw this cell with the respective color.
 			}
 		});
-
-		// When a tetromino spawns. Hold its coordinates apart for collision detection.
-		// However also push its coordinates to the coordinates object.
-		// When it moves we should then always DESTROY the coordinates from the coordinates object and PUSH the new coordinates.
 	},
 
 	checkCollision: function () {
@@ -20803,10 +20801,22 @@ Grid.prototype = {
 		// And THEN we can increase the coordinates and make these NEW coordinates 1's.
 	},
 
+	/**
+ * Pushes coordinates that also should be occupied to the global occupiedCells object.
+ */
 	occupyCells: function (coordinates) {
 		coordinates.forEach(coordinate => {
 			this.occupiedCells.purple.push(coordinate);
 		});
+	},
+
+	/**
+ * Removes coordinates that should no longer be occupied from the global occupiedCells object.
+ */
+	deoccupyCells: function (coordinates) {
+		for (var i = 0; i < coordinates.length; i++) {
+			this.occupiedCells.purple.pop();
+		}
 	}
 };
 
@@ -20827,14 +20837,8 @@ function Tetromino(grid) {
 
 	this.grid = grid;
 
-	/*
- LETTERS: {
- 	L: {
- 		color:
- 		shape: [[]]
- 	}
- }
- */
+	this.dropInterval = 0;
+	this.DROP_SPEED = 1000;
 
 	this.init();
 }
@@ -20887,16 +20891,25 @@ Tetromino.prototype = {
 		}
 
 		for (var i = 0; i < this.coordinates.length; i++) {
-			// The color should be the same as he background color.
-			this.grid.update("undraw", this.coordinates, this.color);
+			this.grid.deoccupyCells(this.coordinates);
 			this.coordinates[i][axis] += increment; // When push down add 1 to all y coordinates to move them one cell down.
-			// TODO: First undraw the current y coordinates and make them 0;
-			this.grid.update("draw", this.coordinates, this.color);
+			this.grid.occupyCells(this.coordinates);
 		}
 	},
 
 	rotate: function () {
 		console.log("lol");
+	},
+
+	drop: function () {
+		if (this.dropInterval === 0) {
+			this.dropInterval = new Date().getTime();
+		}
+
+		if (new Date().getTime() - this.dropInterval > this.DROP_SPEED) {
+			this.move("down");
+			this.dropInterval = 0;
+		}
 	}
 };
 

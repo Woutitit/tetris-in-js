@@ -45,9 +45,9 @@ function Grid(colSpan, rowSpan, canvas, celSpan) {
 	this.canvasCtx = canvas.getContext("2d");
 
 	// Holds coordinates of ALL occupied cells organized by color.
+	// We should generate this array based on all possible color rather than setting it manually.
 	this.occupiedCells = {
-		orange: [ [1, 2] ],
-		purple: [ [1, 3], [5, 4] ]
+		purple: []
 	}; 
 
 	this.currTetromino; // Holds tetromino we can control.
@@ -75,21 +75,15 @@ Grid.prototype = {
 	},
 
 
-	update: function(task, coordinates, color) {
-		// Check whether to draw or undraw the coordinates. Undraw is represented by 0 and draw by 1.
-		// Also use this for color whether to use tetromino color or grid background color for the coordinate.
-		/*
-		var activation = (task == "draw" ? 1 : 0);  
+	/**
+	* Redraws grid filling every occupied cell (setting the cell with those coordinates to 1).
+	* Thi does NOT draw 0's yet.
+	*/
+	update: function() {
+		// Every update we draw the playing field with 0's first and then fill them up according to the coordinates.
+		// This might be slow. Is there a better way?
+		this.playingField = this.create(this.COL_SPAN, this.ROW_SPAN);
 
-		// So we have the playing field
-
-		for(var i = 0; i < coordinates.length; i++) {
-			var x = coordinates[i][0];
-			var y = coordinates[i][1];
-			// TODO: now also draw this out.
-			this.playingField[y][x] = activation;
-		}
-		*/
 		Object.keys(this.occupiedCells).forEach((key, index) => {
 			var color = key;
 
@@ -101,11 +95,8 @@ Grid.prototype = {
 				// TODO: Now also draw this cell with the respective color.
 			}
 		});
-
-		// When a tetromino spawns. Hold its coordinates apart for collision detection.
-		// However also push its coordinates to the coordinates object.
-		// When it moves we should then always DESTROY the coordinates from the coordinates object and PUSH the new coordinates.
 	},
+
 
 	checkCollision: function() {
 		// So for example when clicked "Left" we should check if any coordinates + 1 (to the left) matches any coordinates already on field.
@@ -116,10 +107,23 @@ Grid.prototype = {
 	},
 
 
+	/**
+	* Pushes coordinates that also should be occupied to the global occupiedCells object.
+	*/
 	occupyCells: function(coordinates) {
 		coordinates.forEach((coordinate) => {
 			this.occupiedCells.purple.push(coordinate);
-		})
+		});
+	},
+
+
+	/**
+	* Removes coordinates that should no longer be occupied from the global occupiedCells object.
+	*/
+	deoccupyCells: function(coordinates) {
+		for(var i = 0; i < coordinates.length; i++) {
+			this.occupiedCells.purple.pop();
+		}
 	}
 }
 

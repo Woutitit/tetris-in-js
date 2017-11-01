@@ -20701,6 +20701,9 @@ function Grid(colSpan, rowSpan, canvas, celSpan) {
 		purple: [[4, 1], [4, 2], [4, 3], [4, 4]]
 	};
 
+	this.currTetromino; // Holds tetromino we can control.
+
+
 	this.init(); // Intializes backend and frontend playing field.
 }
 
@@ -20729,24 +20732,12 @@ Grid.prototype = {
 			color: "orange",
 			shape: [[0, 0, 0, 0], [1, 1, 1, 1]],
 			coordinates: []
-		};
 
-		var startY = 1;
+			// This is just to initialize the tetromino. Once we know the starting coordinates we can simply use the coordinates + color
+			// to color these particular fields.
 
-		// This is just to initialize the tetromino. Once we know the starting coordinates we can simply use the coordinates + color
-		// to color these particular fields.
-		for (var i = 0; i < currTetromino.shape.length; i++) {
-			var startX = 3;
-			for (var j = 0; j < currTetromino.shape[i].length; j++) {
-				if (currTetromino.shape[i][j] === 1) {
-					currTetromino.coordinates.push([startX, startY]);
-				}
-				startX++;
-			}
-			startY++;
-		}
 
-		for (var i = 0; i < currTetromino.coordinates.length; i++) {
+		};for (var i = 0; i < currTetromino.coordinates.length; i++) {
 			var x = currTetromino.coordinates[i][0];
 			var y = currTetromino.coordinates[i][1];
 			// I guess here we already have drawn all the good 1's. So we just have to draw here.
@@ -20759,6 +20750,12 @@ Grid.prototype = {
  */
 	create: function (colSpan, rowSpan) {
 		return Array(rowSpan).fill().map(() => Array(colSpan).fill(0));
+	},
+
+	spawnTetromino: function (tetromino) {
+		this.currTetromino = tetromino;
+
+		console.log(tetromino);
 	}
 };
 
@@ -20772,6 +20769,8 @@ Grid.prototype = {
 function Tetromino() {
 	this.COLOR = "orange"; // TODO: Make color based on shape.
 	this.SHAPE = [[0, 0, 0, 0], [1, 1, 1, 1]];
+	this.SPAWN_POS_X = 3;
+	this.SPAWN_POS_Y = 0;
 
 	this.coordinates = [];
 
@@ -20783,9 +20782,30 @@ function Tetromino() {
  	}
  }
  */
+
+	this.init();
 }
 
-Tetromino.prototype = {};
+Tetromino.prototype = {
+	init: function () {
+		this.determineSpawnCoordinates(this.SPAWN_POS_X, this.SPAWN_POS_Y);
+	},
+	determineSpawnCoordinates: function (spawnPosX, spawnPosY) {
+		var spawnY = spawnPosY;
+
+		for (var i = 0; i < this.SHAPE.length; i++) {
+			var spawnX = spawnPosX;
+
+			for (var j = 0; j < this.SHAPE[i].length; j++) {
+				if (this.SHAPE[i][j] === 1) {
+					this.coordinates.push([spawnX, spawnY]);
+				}
+				spawnX++;
+			}
+			spawnY++;
+		}
+	}
+};
 
 /* harmony default export */ __webpack_exports__["a"] = (Tetromino);
 

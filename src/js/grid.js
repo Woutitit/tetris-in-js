@@ -61,6 +61,8 @@ function Grid(colSpan, rowSpan, canvas, celSpan) {
 		]
 	}
 
+	this.currTetromino; // Holds tetromino we can control.
+
 
 	this.init();	// Intializes backend and frontend playing field.
 }
@@ -96,20 +98,11 @@ Grid.prototype = {
 		}
 
 		
-		var startY = 1;
+		
 
 		// This is just to initialize the tetromino. Once we know the starting coordinates we can simply use the coordinates + color
 		// to color these particular fields.
-		for(var i = 0; i < currTetromino.shape.length; i++) {
-			var startX = 3;
-			for(var j = 0; j < currTetromino.shape[i].length; j++) {
-				if (currTetromino.shape[i][j] === 1) {
-					currTetromino.coordinates.push([startX, startY]);
-				}
-				startX++;
-			}
-			startY++;
-		}
+		
 
 		for(var i = 0; i < currTetromino.coordinates.length; i++) {
 				var x = currTetromino.coordinates[i][0];
@@ -125,6 +118,14 @@ Grid.prototype = {
 	*/
 	create: function(colSpan, rowSpan) {
 		return Array(rowSpan).fill().map(() => Array(colSpan).fill(0));
+	},
+
+
+	spawnTetromino: function(tetromino) {
+		this.currTetromino = tetromino;
+
+		console.log(tetromino);
+		
 	}
 }
 

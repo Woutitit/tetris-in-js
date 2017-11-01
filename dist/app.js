@@ -20633,12 +20633,14 @@ module.exports = function listToStyles (parentId, list) {
 		this.grid = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.COLS, this.ROWS, this.canvas, this.CELL_DIMENSION);
 
 		// Spawn new tetromino on grid.
-		// new Tetromino();
+		//this.grid.spawnTetromino(new Tetromino());
 
 		// We have to update the grid everytime we make a succesful move/spawn somethinng or destroy a row.
 		// this.grid.update();
 	},
-	methods: {}
+	methods: {
+		handleEvent: function (event) {}
+	}
 });
 
 /***/ }),
@@ -20687,9 +20689,17 @@ function Grid(colSpan, rowSpan, canvas, celSpan) {
 	this.CELL_SPAN = celSpan;
 
 	this.playingField = [];
+	this.SPAWN_POS = 3; // Default spawn position for tetromino.
 
 	this.canvas = canvas;
 	this.canvasCtx = canvas.getContext("2d");
+
+	// Here we simply holds all occupied coordinates and their respective coordinates
+	// We don't have to remember the shapes so we can just store all coordinates per color.
+	this.tetrominoes = {
+		orange: [[3, 1], [3, 2], [3, 3], [3, 4]],
+		purple: [[4, 1], [4, 2], [4, 3], [4, 4]]
+	};
 
 	this.init(); // Intializes backend and frontend playing field.
 }
@@ -20700,9 +20710,50 @@ Grid.prototype = {
  */
 	init: function () {
 		this.playingField = this.create(this.COL_SPAN, this.ROW_SPAN);
-		console.log(this.playingField);
+		// So we should store currTetromino and when it has landed we should push it to the tetrominoes variable that holds all landed tetrominoes' coordinates
+		// and colors.
 
-		this.drawBackground();
+		Object.keys(this.tetrominoes).forEach((key, index) => {
+			var coordinates = this.tetrominoes[key];
+			var color = key; // We can use this to draw this coordinate this particular color.
+
+			for (var i = 0; i < coordinates.length; i++) {
+				var x = coordinates[i][0];
+				var y = coordinates[i][1];
+				// I guess here we already have drawn all the good 1's. So we just have to draw here.
+				this.playingField[y][x] = 1;
+			}
+		});
+
+		var currTetromino = {
+			color: "orange",
+			shape: [[0, 0, 0, 0], [1, 1, 1, 1]],
+			coordinates: []
+		};
+
+		var startY = 1;
+
+		// This is just to initialize the tetromino. Once we know the starting coordinates we can simply use the coordinates + color
+		// to color these particular fields.
+		for (var i = 0; i < currTetromino.shape.length; i++) {
+			var startX = 3;
+			for (var j = 0; j < currTetromino.shape[i].length; j++) {
+				if (currTetromino.shape[i][j] === 1) {
+					currTetromino.coordinates.push([startX, startY]);
+				}
+				startX++;
+			}
+			startY++;
+		}
+
+		for (var i = 0; i < currTetromino.coordinates.length; i++) {
+			var x = currTetromino.coordinates[i][0];
+			var y = currTetromino.coordinates[i][1];
+			// I guess here we already have drawn all the good 1's. So we just have to draw here.
+			this.playingField[y][x] = 1;
+		}
+
+		console.log(this.playingField);
 	},
 
 	/**
@@ -20710,33 +20761,7 @@ Grid.prototype = {
  */
 	create: function (colSpan, rowSpan) {
 		return Array(rowSpan).fill().map(() => Array(colSpan).fill(0));
-	},
-
-	/**
- * Draw playing field.
- */
-	drawBackground: function () {
-		this.canvasCtx.fillRect = "#EEE";
-		var y = 0;
-
-		for (var i = 0; i < this.playingField.length; i++) {
-			var row = this.playingField[i];
-
-			var x = 0;
-
-			for (var j = 0; j < row.length; j++) {
-				this.canvasCtx.fillRect(x, y, this.CELL_SPAN, this.CELL_SPAN);
-				x += this.CELL_SPAN;
-			}
-
-			y += this.CELL_SPAN;
-		}
-	},
-
-	/**
- * Update playing field.
- */
-	update: function () {}
+	}
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Grid);
@@ -20746,52 +20771,9 @@ Grid.prototype = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Tetromino(canvas, canvasDimensions, letter, cellDimensions) {
-	this.canvas = canvas;
-	this.canvasCtx = this.canvas.getContext("2d");
+function Tetromino() {}
 
-	this.cellWidth = cellDimensions.WIDTH;
-	this.cellHeight = cellDimensions.HEIGHT;
-
-	this.x = 4; // Start position on grid is always x = 4, y = 1.
-	this.y = 1;
-
-	this.drawFirstRow(letter.blocks[0]);
-	this.drawSecondRow(letter.blocks[1]);
-}
-
-Tetromino.prototype = {
-	draw: function (drawPos) {
-		this.canvasCtx.fillStyle = "#000";
-		this.canvasCtx.fillRect(drawPos.x, drawPos.y, this.cellWidth, this.cellHeight);
-	},
-	drawFirstRow: function (blocks) {
-		var x = this.x;
-		var y = this.y; // Should be -2 later to make it spawn right above the canvas to then drop in.
-		blocks.forEach(block => {
-			if (block === 1) {
-				this.draw(this.getGridPos(x, y));
-			}
-			x += 1;
-		});
-	},
-	drawSecondRow: function (blocks) {
-		var x = this.x;
-		var y = this.y * 2; // Should be -1.
-		blocks.forEach(block => {
-			if (block === 1) {
-				this.draw(this.getGridPos(x, y));
-			}
-			x += 1;
-		});
-	},
-	getGridPos: function (x, y) {
-		return {
-			x: this.cellWidth * (x - 1),
-			y: this.cellHeight * (y - 1)
-		};
-	}
-};
+Tetromino.prototype = {};
 
 /* unused harmony default export */ var _unused_webpack_default_export = (Tetromino);
 

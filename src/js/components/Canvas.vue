@@ -70,8 +70,10 @@ canvas {
 				}
 
 				this.currTetromino.drop(); // Make tetromino continously drop.
+				
 				requestAnimationFrame(this.update);
 			},
+
 
 			startListening: function() {
 				document.addEventListener("keydown", this);
@@ -85,6 +87,7 @@ canvas {
 					break;
 				}
 			},
+
 
 			onKeyDown: function(key) {
 				switch(key) {

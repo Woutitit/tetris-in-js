@@ -124,6 +124,12 @@ Grid.prototype = {
 		for(var i = 0; i < coordinates.length; i++) {
 			this.occupiedCells.purple.pop();
 		}
+	},
+
+	removeLine: function() {
+		// For removing lines we need better than pop.
+		// However we can find out the x coordinate of which cells to remove.
+		// And then remove all "occupiedCells" which, at position [0] (so x), have that x coordinate.
 	}
 }
 

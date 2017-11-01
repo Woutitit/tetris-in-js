@@ -20616,7 +20616,8 @@ module.exports = function listToStyles (parentId, list) {
 			CANVAS_WIDTH: 0,
 			CANVAS_HEIGHT: 0,
 
-			grid: null
+			grid: null,
+			currTetromino: null
 		};
 	},
 	created() {
@@ -20633,10 +20634,15 @@ module.exports = function listToStyles (parentId, list) {
 		this.grid = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.COLS, this.ROWS, this.canvas, this.CELL_DIMENSION);
 
 		// Spawn new tetromino on grid.
-		this.grid.spawnTetromino(new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */]());
+		this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid);
 
-		// We have to update the grid everytime we make a succesful move/spawn somethinng or destroy a row.
+		console.log(this.grid.playingField);
+
+		// We have to update the grid everytime we make a succesful move/spawn something or destroy a row.
 		// this.grid.update();
+		document.addEventListener("keydown", () => {
+			this.currTetromino.move();
+		});
 	},
 	methods: {
 		handleEvent: function (event) {}
@@ -20726,7 +20732,6 @@ Grid.prototype = {
 			// TODO: now also draw this out.
 			this.playingField[y][x] = 1;
 		}
-		console.log(this.playingField);
 	},
 
 	spawnTetromino: function (tetromino) {
@@ -20754,13 +20759,15 @@ Grid.prototype = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Tetromino() {
+function Tetromino(grid) {
 	this.COLOR = "orange"; // TODO: Make color based on shape.
 	this.SHAPE = [[0, 0, 0, 0], [1, 1, 1, 1]];
 	this.SPAWN_POS_X = 3;
 	this.SPAWN_POS_Y = 0;
 
 	this.coordinates = [];
+
+	this.grid = grid;
 
 	/*
  LETTERS: {
@@ -20776,13 +20783,14 @@ function Tetromino() {
 
 Tetromino.prototype = {
 	init: function () {
-		this.determineSpawnCoordinates(this.SPAWN_POS_X, this.SPAWN_POS_Y);
+		this.spawn();
 	},
-	determineSpawnCoordinates: function (spawnPosX, spawnPosY) {
-		var spawnY = spawnPosY;
+
+	determineSpawnCoordinates: function () {
+		var spawnY = this.SPAWN_POS_Y;
 
 		for (var i = 0; i < this.SHAPE.length; i++) {
-			var spawnX = spawnPosX;
+			var spawnX = this.SPAWN_POS_X;
 
 			for (var j = 0; j < this.SHAPE[i].length; j++) {
 				if (this.SHAPE[i][j] === 1) {
@@ -20791,6 +20799,19 @@ Tetromino.prototype = {
 				spawnX++;
 			}
 			spawnY++;
+		}
+	},
+
+	spawn: function () {
+		this.determineSpawnCoordinates();
+		this.grid.update(this.coordinates, this.color);
+	},
+
+	move: function () {
+		for (var i = 0; i < this.coordinates.length; i++) {
+			this.coordinates[i][1] += 1; // When push down add 1 to all y coordinates to move them one cell down.
+			// TODO: First undraw the current y coordinates and make them 0;
+			this.grid.update(this.coordinates, this.color);
 		}
 	}
 };

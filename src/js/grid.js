@@ -79,7 +79,6 @@ Grid.prototype = {
 			// TODO: now also draw this out.
 			this.playingField[y][x] = 1;
 		}
-		console.log(this.playingField);
 	},
 
 

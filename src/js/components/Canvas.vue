@@ -49,6 +49,7 @@ canvas {
 
 			// Spawn new tetromino on grid.
 			this.currTetromino = new Tetromino(this.grid);
+			console.log(this.grid.playingField);
 
 			// We have to update the grid everytime we make a succesful move/spawn something or destroy a row.
 			// this.grid.update();

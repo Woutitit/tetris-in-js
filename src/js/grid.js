@@ -68,12 +68,13 @@ Grid.prototype = {
 	* Create playing field backend.
 	*/
 	create: function(colSpan, rowSpan) {
-		return Array(rowSpan).fill().map(() => Array(colSpan).fill(0));
+		// Note: we add + 2 to the backend grid so that our tetrominoes spawn off canvas before they come in the field.
+		return Array(rowSpan + 2).fill().map(() => Array(colSpan).fill(0));
 	},
 
 
 	update: function(task, coordinates, color) {
-		// Check whether to draw the coordinates 0 or 1.
+		// Check whether to draw or undraw the coordinates. Undraw is represented by 0 and draw by 1.
 		// Also use this for color whether to use tetromino color or grid background color for the coordinate.
 		var activation = (task == "draw" ? 1 : 0);  
 
@@ -83,16 +84,6 @@ Grid.prototype = {
 			// TODO: now also draw this out.
 			this.playingField[y][x] = activation;
 		}
-	},
-
-
-	spawnTetromino: function(tetromino) {
-		this.currTetromino = tetromino;
-
-		this.update(this.currTetromino.coordinates, this.currTetromino.color);
-
-		// When landed push hold the landing coordinates and the colors of it.
-		// this.tetrominoes[this.currTetromino.color].push(this.currTetromino.coordinates);
 	},
 
 	checkCollision: function() {

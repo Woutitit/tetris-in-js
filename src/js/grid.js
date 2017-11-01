@@ -72,12 +72,16 @@ Grid.prototype = {
 	},
 
 
-	update: function(coordinates, color) {
+	update: function(task, coordinates, color) {
+		// Check whether to draw the coordinates 0 or 1.
+		// Also use this for color whether to use tetromino color or grid background color for the coordinate.
+		var activation = (task == "draw" ? 1 : 0);  
+
 		for(var i = 0; i < coordinates.length; i++) {
 			var x = coordinates[i][0];
 			var y = coordinates[i][1];
 			// TODO: now also draw this out.
-			this.playingField[y][x] = 1;
+			this.playingField[y][x] = activation;
 		}
 	},
 

@@ -20636,12 +20636,11 @@ module.exports = function listToStyles (parentId, list) {
 		// Spawn new tetromino on grid.
 		this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid);
 
-		console.log(this.grid.playingField);
-
 		// We have to update the grid everytime we make a succesful move/spawn something or destroy a row.
 		// this.grid.update();
 		document.addEventListener("keydown", () => {
 			this.currTetromino.move();
+			console.log(this.grid.playingField);
 		});
 	},
 	methods: {
@@ -20725,12 +20724,16 @@ Grid.prototype = {
 		return Array(rowSpan).fill().map(() => Array(colSpan).fill(0));
 	},
 
-	update: function (coordinates, color) {
+	update: function (task, coordinates, color) {
+		// Check whether to draw the coordinates 0 or 1.
+		// Also use this for color whether to use tetromino color or grid background color for the coordinate.
+		var activation = task == "draw" ? 1 : 0;
+
 		for (var i = 0; i < coordinates.length; i++) {
 			var x = coordinates[i][0];
 			var y = coordinates[i][1];
 			// TODO: now also draw this out.
-			this.playingField[y][x] = 1;
+			this.playingField[y][x] = activation;
 		}
 	},
 
@@ -20804,14 +20807,16 @@ Tetromino.prototype = {
 
 	spawn: function () {
 		this.determineSpawnCoordinates();
-		this.grid.update(this.coordinates, this.color);
+		this.grid.update("draw", this.coordinates, this.color);
 	},
 
 	move: function () {
 		for (var i = 0; i < this.coordinates.length; i++) {
+			// The color should be the same as he background color.
+			this.grid.update("undraw", this.coordinates, this.color);
 			this.coordinates[i][1] += 1; // When push down add 1 to all y coordinates to move them one cell down.
 			// TODO: First undraw the current y coordinates and make them 0;
-			this.grid.update(this.coordinates, this.color);
+			this.grid.update("draw", this.coordinates, this.color);
 		}
 	}
 };

@@ -47,15 +47,17 @@ Tetromino.prototype = {
 
 	spawn: function() {
 		this.determineSpawnCoordinates();
-		this.grid.update(this.coordinates, this.color);
+		this.grid.update("draw", this.coordinates, this.color);
 	},
 
 
 	move: function() {
 		for(var i = 0; i < this.coordinates.length; i++) {
+			// The color should be the same as he background color.
+			this.grid.update("undraw", this.coordinates, this.color);
 			this.coordinates[i][1] += 1; // When push down add 1 to all y coordinates to move them one cell down.
 			// TODO: First undraw the current y coordinates and make them 0;
-			this.grid.update(this.coordinates, this.color);
+			this.grid.update("draw", this.coordinates, this.color);
 		}
 	}
 }

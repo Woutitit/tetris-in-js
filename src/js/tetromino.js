@@ -44,66 +44,23 @@ Tetromino.prototype = {
 	},
 
 
+	// TODO MAKE THE NEW POSITION BASED ON MOVEMENT
+	// THIS ONLY WORKS FOR DOWN MOVEMENT YET.
+	// ALSO MAKE THE LAST ROW AND 2 COLUMNS LEFT AND RIGHT FULL WITH 1's.
+	// THIS WAY WE CAN DETECT WHEN IT HITS A WALL AS WELL.
 	move: function(direction) {
-		switch(direction) {
-			case "left":
-			this.nextPos(direction);
-			break;
-
-			case "right":
-			this.nextPos(direction);
-			break;
-
-			case "down":
-			this.nextPos(direction);
-			break;
-		}
-	},
-
-
-	/**
-	* Make tetromino go to the next position granted that position is empty.
-	*/
-	nextPos: function(direction) {
-		// For each coordinate pair:
-		// Increment (if necessary) the coordinates (according to which move is made) by 1. 
-		// Check on the playingfield if the position at this coordinate is occupied.
-		// If yes => We don't need to continue looping so stop it by doing "return". The move will have done nothing because the next pos is invalid.
-		// If there has not been a "return" it means that all next move spaces are empty => So update the global coordinates.
-		// Also push these new coordinates to the grid's occupiedCells object.
-		// The grid's update method will pick up the new coordinates.
-		var increment = 0;
-		var axis = "";
-
-		switch(direction) {
-			case "left":
-			increment = -1;
-			axis = "x";
-			break;
-
-			case "right":
-			increment = 1;
-			axis = "x";
-			break;
-
-			case "down":
-			increment = 1;
-			axis = "y";
-			break;
-		}
-
-		// TODO MAKE THE NEW POSITION BASED ON MOVEMENT
-		// THIS ONLY WORKS FOR DOWN MOVEMENT YET.
-		// ALSO MAKE THE LAST ROW AND 2 COLUMNS LEFT AND RIGHT FULL WITH 1's.
-		// THIS WAY WE CAN DETECT WHEN IT HITS A WALL AS WELL.
-	
 		var oldCoordinates = this.coordinates;
 		var newCoordinates = [];
 
 		for(var i = 0; i < oldCoordinates.length; i++) {
-			var newX = oldCoordinates[i][0]
-			var newY = oldCoordinates[i][1] + 1;
+			var newX = oldCoordinates[i][0];
+			var newY = oldCoordinates[i][1];
 
+			if(direction === "left") newX--;
+			if(direction === "right") newX++;
+			if(direction === "down") newY++;
+
+			// Collision detection.
 			if(this.grid.playingField[newY][newX] === 1) {
 				return;
 			} else {
@@ -117,6 +74,15 @@ Tetromino.prototype = {
 		// Now unassign the old coordinates and assign the newly occupied cells.
 		this.grid.deoccupyCells(oldCoordinates);
 		this.grid.occupyCells(this.coordinates);
+		console.log(this.grid.playingField);
+	},
+
+
+	/**
+	* Make tetromino go to the next position granted that position is empty.
+	*/
+	nextPos: function(direction) {
+
 	},
 
 

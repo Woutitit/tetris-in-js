@@ -117,8 +117,6 @@ Grid.prototype = {
 				// I guess here we already have drawn all the good 1's. So we just have to draw here.
 				this.playingField[y][x] = 1;
 		}
-
-			console.log(this.playingField);
 	},
 
 

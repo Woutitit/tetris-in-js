@@ -20633,7 +20633,7 @@ module.exports = function listToStyles (parentId, list) {
 		this.grid = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.COLS, this.ROWS, this.canvas, this.CELL_DIMENSION);
 
 		// Spawn new tetromino on grid.
-		//this.grid.spawnTetromino(new Tetromino());
+		this.grid.spawnTetromino(new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */]());
 
 		// We have to update the grid everytime we make a succesful move/spawn somethinng or destroy a row.
 		// this.grid.update();
@@ -20752,8 +20752,6 @@ Grid.prototype = {
 			// I guess here we already have drawn all the good 1's. So we just have to draw here.
 			this.playingField[y][x] = 1;
 		}
-
-		console.log(this.playingField);
 	},
 
 	/**
@@ -20771,11 +20769,25 @@ Grid.prototype = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Tetromino() {}
+function Tetromino() {
+	this.COLOR = "orange"; // TODO: Make color based on shape.
+	this.SHAPE = [[0, 0, 0, 0], [1, 1, 1, 1]];
+
+	this.coordinates = [];
+
+	/*
+ LETTERS: {
+ 	L: {
+ 		color:
+ 		shape: [[]]
+ 	}
+ }
+ */
+}
 
 Tetromino.prototype = {};
 
-/* unused harmony default export */ var _unused_webpack_default_export = (Tetromino);
+/* harmony default export */ __webpack_exports__["a"] = (Tetromino);
 
 /***/ }),
 /* 342 */

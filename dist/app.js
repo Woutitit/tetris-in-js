@@ -20723,7 +20723,7 @@ Grid.prototype = {
 		for (var i = 0; i < coordinates.length; i++) {
 			var x = coordinates[i][0];
 			var y = coordinates[i][1];
-			// Also draw here based on the color.
+			// TODO: now also draw this out.
 			this.playingField[y][x] = 1;
 		}
 		console.log(this.playingField);
@@ -20739,7 +20739,11 @@ Grid.prototype = {
 	},
 
 	checkCollision: function () {
-		// So we should go through ALL current coordinates and check if they would match any coordinates already landed.
+		// So for example when clicked "Left" we should check if any coordinates + 1 (to the left) matches any coordinates already on field.
+		// So for example coordinates[0][1 + 1] = any coordinate already on the field?
+		// If it was down it would be [0 + 1][1] to check if the move is valid.
+		// Also when a move is valid (so if this return true) we should first use the current coordinates to make these 1's to 0's.
+		// And THEN we can increase the coordinates and make these NEW coordinates 1's.
 	}
 };
 

@@ -60,8 +60,7 @@ canvas {
 		},
 		methods: {
 			update: function() {
-				this.grid.update(); // Continously redraw the grid and fill all 0's with 1's based on the coordinates.
-				console.log(this.grid.playingField);
+				// console.log(this.grid.playingField);
 
 				// If no tetromino is dropping at the moment.
 				if(!this.currTetromino || this.currTetromino.landed) {
@@ -80,6 +79,10 @@ canvas {
 			},
 
 
+			/*
+			* Handle all events we're listening to in "startListening()".
+			* @param {Event} event
+			*/
 			handleEvent: function(event) {
 				switch(event.type) {
 					case "keydown":
@@ -89,6 +92,11 @@ canvas {
 			},
 
 
+			/*
+			* Handle keydown keyboard events.
+			* Note: we do not need smooth movement since we want a keypress to only trigger one move event each it has been pressed.
+			* @param {String} key - The keyboard key that has been pressed
+			*/
 			onKeyDown: function(key) {
 				switch(key) {
 					case "ArrowLeft":

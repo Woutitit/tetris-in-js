@@ -20645,8 +20645,7 @@ module.exports = function listToStyles (parentId, list) {
 	},
 	methods: {
 		update: function () {
-			this.grid.update(); // Continously redraw the grid and fill all 0's with 1's based on the coordinates.
-			console.log(this.grid.playingField);
+			// console.log(this.grid.playingField);
 
 			// If no tetromino is dropping at the moment.
 			if (!this.currTetromino || this.currTetromino.landed) {
@@ -20663,6 +20662,10 @@ module.exports = function listToStyles (parentId, list) {
 			document.addEventListener("keydown", this);
 		},
 
+		/*
+  * Handle all events we're listening to in "startListening()".
+  * @param {Event} event
+  */
 		handleEvent: function (event) {
 			switch (event.type) {
 				case "keydown":
@@ -20671,6 +20674,11 @@ module.exports = function listToStyles (parentId, list) {
 			}
 		},
 
+		/*
+  * Handle keydown keyboard events.
+  * Note: we do not need smooth movement since we want a keypress to only trigger one move event each it has been pressed.
+  * @param {String} key - The keyboard key that has been pressed
+  */
 		onKeyDown: function (key) {
 			switch (key) {
 				case "ArrowLeft":
@@ -20776,7 +20784,8 @@ Grid.prototype = {
 	/**
  * Check for new occupied (=landed) cells, update the backend playingfield with them
  * Do note that we do not have to draw anything here since when the current tetromino lands, that drawing will stay on the canvas.
- * It's only important to keep updating the backend to detect collision.
+ * It's only important to keep updating the backend to detect collision for the current tetromino.
+ * Also, everytime we update the grid means that a tetromino has landed. Thus we will also need to check for lines at the y coordinates of current tetromino.
  */
 	update: function () {
 		this.playingField = this.create(this.COL_SPAN, this.ROW_SPAN);
@@ -20805,6 +20814,8 @@ Grid.prototype = {
 		coordinates.forEach(coordinate => {
 			this.occupiedCells.push(coordinate);
 		});
+
+		this.update();
 	},
 
 	/**
@@ -20832,7 +20843,7 @@ Grid.prototype = {
 "use strict";
 function Tetromino(grid) {
 	this.COLOR = "orange"; // TODO: Make color based on shape.
-	this.SHAPE = [[0, 0, 0, 0], [1, 1, 1, 1]];
+	this.SHAPE = [[1, 1], [1, 1]];
 	this.SPAWN_POS_X = 3;
 	this.SPAWN_POS_Y = 0;
 
@@ -20950,7 +20961,11 @@ Tetromino.prototype = {
  * Rotate the tetromino. Will ONLY rotate if the rotation is a valid move to make.
  */
 	rotate: function () {
-		console.log("lol");
+		// So here we should update our coordinates.
+		// Then we should also draw these new coordinates.
+		// Rotation is always 90 degrees.
+		// How can we make a rotation method that works for all coordinates?
+		// Or should we make these rotation shapes ourselves?
 	},
 
 	/*

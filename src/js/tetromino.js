@@ -1,6 +1,6 @@
 function Tetromino(grid) {
 	this.COLOR = "orange" // TODO: Make color based on shape.
-	this.SHAPE = [[0, 0, 0, 0], [1, 1, 1, 1]];
+	this.SHAPE = [[1, 1], [1, 1]];
 	this.SPAWN_POS_X = 3;
 	this.SPAWN_POS_Y = 0;
 
@@ -125,7 +125,11 @@ Tetromino.prototype = {
 	* Rotate the tetromino. Will ONLY rotate if the rotation is a valid move to make.
 	*/
 	rotate: function() {
-		console.log("lol");
+		// So here we should update our coordinates.
+		// Then we should also draw these new coordinates.
+		// Rotation is always 90 degrees.
+		// How can we make a rotation method that works for all coordinates?
+		// Or should we make these rotation shapes ourselves?
 	},
 
 

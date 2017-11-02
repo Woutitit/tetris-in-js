@@ -79,7 +79,8 @@ Grid.prototype = {
 	/**
 	* Check for new occupied (=landed) cells, update the backend playingfield with them
 	* Do note that we do not have to draw anything here since when the current tetromino lands, that drawing will stay on the canvas.
-	* It's only important to keep updating the backend to detect collision.
+	* It's only important to keep updating the backend to detect collision for the current tetromino.
+	* Also, everytime we update the grid means that a tetromino has landed. Thus we will also need to check for lines at the y coordinates of current tetromino.
 	*/
 	update: function() {
 		this.playingField = this.create(this.COL_SPAN, this.ROW_SPAN);
@@ -110,6 +111,8 @@ Grid.prototype = {
 		coordinates.forEach((coordinate) => {
 			this.occupiedCells.push(coordinate);
 		});
+
+		this.update();
 	},
 
 

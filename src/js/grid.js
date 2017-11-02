@@ -46,9 +46,7 @@ function Grid(colSpan, rowSpan, canvas, celSpan) {
 
 	// Holds coordinates of ALL occupied cells organized by color.
 	// We should generate this array based on all possible color rather than setting it manually.
-	this.occupiedCells = {
-		purple: []
-	}; 
+	this.occupiedCells = [];
 
 	this.currTetromino; // Holds tetromino we can control.
 
@@ -79,25 +77,20 @@ Grid.prototype = {
 
 
 	/**
-	* Check for new occupied (=landed) cells, update the backend playingfield with these cells and also draw them.
+	* Check for new occupied (=landed) cells, update the backend playingfield with them
+	* Do note that we do not have to draw anything here since when the current tetromino lands, that drawing will stay on the canvas.
+	* It's only important to keep updating the backend to detect collision.
 	*/
 	update: function() {
-		// Every update we draw the playing field with 0's first and then fill them up according to the coordinates.
-		// This might be slow. Is there a better way?
 		this.playingField = this.create(this.COL_SPAN, this.ROW_SPAN);
+		
+		// For each coordinate per color
+		for(var i = 0; i < this.occupiedCells.length; i++) {
+			var x = this.occupiedCells[i][0];
+			var y = this.occupiedCells[i][1];
 
-		Object.keys(this.occupiedCells).forEach((key, index) => {
-			var color = key;
-
-			// For each coordinate per color
-			for(var i = 0; i < this.occupiedCells[color].length; i++) {
-				var x = this.occupiedCells[color][i][0];
-				var y = this.occupiedCells[color][i][1];
-
-				this.playingField[y][x] = 1; // The cell at this coordinate gets a 1.
-				//this.draw(x, y, color);
-			}
-		});
+			this.playingField[y][x] = 1; // The cell at this coordinate gets a 1.
+		}
 	},
 
 
@@ -115,7 +108,7 @@ Grid.prototype = {
 	*/
 	occupyCells: function(coordinates) {
 		coordinates.forEach((coordinate) => {
-			this.occupiedCells.purple.push(coordinate);
+			this.occupiedCells.push(coordinate);
 		});
 	},
 

@@ -9,7 +9,7 @@ function Tetromino(grid) {
 	this.grid = grid;
 
 	this.dropStart = 0;
-	this.DROP_SPEED = 500;
+	this.DROP_SPEED = 1000;
 
 	this.landed = false;
 
@@ -42,20 +42,16 @@ Tetromino.prototype = {
 
 	spawn: function() {
 		this.determineSpawnCoordinates();
-		this.grid.occupyCells(this.coordinates);
+		//this.grid.occupyCells(this.coordinates);
 	},
 
 
-	// TODO MAKE THE NEW POSITION BASED ON MOVEMENT
-	// THIS ONLY WORKS FOR DOWN MOVEMENT YET.
-	// ALSO MAKE THE LAST ROW AND 2 COLUMNS LEFT AND RIGHT FULL WITH 1's.
-	// THIS WAY WE CAN DETECT WHEN IT HITS A WALL AS WELL.
-	// ALSO HOW DO WE KNOW IF IT LANDED?
-	// If next coordinate are 1's AND direction of the played move is down, if that is invalid ONLY then it means it has landed because it can't go down more.
-	// The move "down" will always decide because either the drop plays it, or the player plays it.
-	// We should also have a boolean that has landed = true;
-	// And that would mean
 	move: function(direction) {
+		// So what a valid move dus is is NOT occupying ANY CELLS.
+		// But this means however our grid will NOT pick up on these coordinates of current tetrominoes thus not drawing them.
+		// Is this bad? Like for RL we then should use current coordinates + occupied coordinates rather than the playing field.
+		// This is also how this link does it: https://gamedevelopment.tutsplus.com/tutorials/implementing-tetris-collision-detection--gamedev-852
+		// They have a landed array (which is the playing field) and they also only push coordinates to it when a tetromino has landed.
 		var oldCoordinates = this.coordinates;
 		var newCoordinates = [];
 
@@ -68,22 +64,22 @@ Tetromino.prototype = {
 			if(direction === "down") newY++;
 
 			// Collision detection. Checks whether the new coordinates would be occupied or out of bounds.
-			if(this.grid.playingField[newY] === undefined || this.grid.playingField[newY][newX] === undefined || 
+			if (this.grid.playingField[newY] === undefined || this.grid.playingField[newY][newX] === undefined || 
 				this.grid.playingField[newY][newX] === 1) {
-				if(direction === "down") this.landed = true; // If the move is not valid AND direction was down, the tetromino has landed.
-				return; // Stay at the old coordinates.
+				if(direction === "down") {
+					this.landed = true;
+					this.grid.occupyCells(this.coordinates);
+				}
+				
+				return;// If the move is not valid AND direction was down, the tetromino has landed.
 			} else {
 				newCoordinates.push([newX, newY]);
 			}
-		}
 
+		}
+		
 		// Only update coordinates if all new coordinates are free.
 		this.coordinates = newCoordinates; 
-
-		// Now unassign the old coordinates and assign the newly occupied cells.
-		this.grid.deoccupyCells(oldCoordinates);
-		this.grid.occupyCells(this.coordinates);
-		
 	},
 
 

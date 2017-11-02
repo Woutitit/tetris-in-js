@@ -20636,7 +20636,6 @@ module.exports = function listToStyles (parentId, list) {
 		this.grid = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.COLS, this.ROWS, this.canvas, this.CELL_DIMENSION);
 
 		// We have to update the grid everytime we make a succesful move/spawn something or destroy a row.
-		// this.grid.update();
 		this.startListening();
 
 		// Now what we have to do is move down the tetromino with a set Interval.
@@ -20647,7 +20646,7 @@ module.exports = function listToStyles (parentId, list) {
 	methods: {
 		update: function () {
 			this.grid.update(); // Continously redraw the grid and fill all 0's with 1's based on the coordinates.
-			//console.log(this.grid.playingField);
+			console.log(this.grid.playingField);
 
 			// If no tetromino is dropping at the moment.
 			if (!this.currTetromino || this.currTetromino.landed) {
@@ -20793,7 +20792,7 @@ Grid.prototype = {
 				var y = this.occupiedCells[color][i][1];
 
 				this.playingField[y][x] = 1; // The cell at this coordinate gets a 1.
-				this.draw(x, y, color);
+				//this.draw(x, y, color);
 			}
 		});
 	},
@@ -20857,10 +20856,16 @@ function Tetromino(grid) {
 }
 
 Tetromino.prototype = {
+	/* 
+ * Initialize tetromino.
+ */
 	init: function () {
 		this.spawn();
 	},
 
+	/* 
+ * Determine the starting coordinates when a tetromino first spawns.
+ */
 	determineSpawnCoordinates: function () {
 		var spawnY = this.SPAWN_POS_Y;
 
@@ -20877,6 +20882,9 @@ Tetromino.prototype = {
 		}
 	},
 
+	/*
+ * Spawn tetromino at the top of the playing field.
+ */
 	spawn: function () {
 		this.determineSpawnCoordinates();
 		//this.grid.occupyCells(this.coordinates);
@@ -20884,23 +20892,23 @@ Tetromino.prototype = {
 
 	/**
  * Move the current tetromino. Will move ONLY if the direction in which it wants to move is valid.
+ * @param {String} direction
  */
-
 	move: function (direction) {
-		var oldCoordinates = this.coordinates;
-		var newCoordinates = [];
+		var currentCoordinates = this.coordinates;
+		var potentialCoordinates = [];
 
-		for (var i = 0; i < oldCoordinates.length; i++) {
-			var newX = oldCoordinates[i][0];
-			var newY = oldCoordinates[i][1];
+		for (var i = 0; i < currentCoordinates.length; i++) {
+			var potentialX = currentCoordinates[i][0];
+			var potentialY = currentCoordinates[i][1];
 
 			// Create "potential" coordinates based on direction for each current coordinates.
-			if (direction === "left") newX--;
-			if (direction === "right") newX++;
-			if (direction === "down") newY++;
+			if (direction === "left") potentialX--;
+			if (direction === "right") potentialX++;
+			if (direction === "down") potentialY++;
 
 			// Collision detection. Checks whether the new coordinates would be occupied or out of bounds.
-			if (this.grid.playingField[newY] === undefined || this.grid.playingField[newY][newX] === undefined || this.grid.playingField[newY][newX] === 1) {
+			if (this.grid.playingField[potentialY] === undefined || this.grid.playingField[potentialY][potentialX] === undefined || this.grid.playingField[potentialY][potentialX] === 1) {
 
 				// If there will be collision at the potential coordinates AND the move is down it means the tetromino has landed.
 				if (direction === "down") {
@@ -20909,25 +20917,25 @@ Tetromino.prototype = {
 				}
 
 				return; // Since the move was invalid we don't need to update the coordinates.
-			} else {
-				newCoordinates.push([newX, newY]);
 			}
+
+			potentialCoordinates.push([potentialX, potentialY]);
 		}
 
 		// Only update coordinates if all new coordinates are free.
-		this.coordinates = newCoordinates;
-		this.grid.update(this.coordinates, this.color);
+		this.coordinates = potentialCoordinates;
 	},
 
-	/**
- * Make tetromino go to the next position granted that position is empty.
+	/*
+ * Rotate the tetromino. Will ONLY rotate if the rotation is a valid move to make.
  */
-	nextPos: function (direction) {},
-
 	rotate: function () {
 		console.log("lol");
 	},
 
+	/*
+ * Drops tetromino at a certain interval rate.
+ */
 	drop: function () {
 		if (this.dropStart === 0) {
 			this.dropStart = new Date().getTime();

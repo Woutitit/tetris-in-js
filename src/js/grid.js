@@ -95,7 +95,7 @@ Grid.prototype = {
 				var y = this.occupiedCells[color][i][1];
 
 				this.playingField[y][x] = 1; // The cell at this coordinate gets a 1.
-				this.draw(x, y, color);
+				//this.draw(x, y, color);
 			}
 		});
 	},

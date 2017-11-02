@@ -20623,7 +20623,7 @@ module.exports = function listToStyles (parentId, list) {
 		};
 	},
 	created() {
-		// Note: we need to use "created()" to be able t assign values to width and height. Otherwise canvas doesn't pick them up.
+		// Note: we need to use "created()" to be able to assign values to width and height. Otherwise canvas doesn't pick them up.
 		this.CELL_DIMENSION = this.COLS * this.size; // Cell dimensions are equal to column amount times size.
 
 		this.CANVAS_WIDTH = this.CELL_DIMENSION * this.COLS;

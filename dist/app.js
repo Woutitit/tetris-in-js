@@ -20585,6 +20585,7 @@ module.exports = function listToStyles (parentId, list) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__grid_js__ = __webpack_require__(340);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tetromino_js__ = __webpack_require__(341);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tetromino_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__tetromino_js__);
 //
 //
 //
@@ -20651,7 +20652,7 @@ module.exports = function listToStyles (parentId, list) {
 			// If no tetromino is dropping at the moment.
 			if (!this.currTetromino || this.currTetromino.landed) {
 				// Spawn new tetromino on grid.
-				this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid);
+				this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["default"](this.grid);
 			}
 
 			this.currTetromino.drop(); // Make tetromino continously drop.
@@ -20834,121 +20835,10 @@ Grid.prototype = {
 
 /***/ }),
 /* 341 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, __webpack_exports__) {
 
 "use strict";
-function Tetromino(grid) {
-	this.COLOR = "orange"; // TODO: Make color based on shape.
-	this.SHAPE = [[0, 0, 0, 0], [1, 1, 1, 1]];
-	this.SPAWN_POS_X = 3;
-	this.SPAWN_POS_Y = 0;
-
-	this.coordinates = [];
-
-	this.grid = grid;
-
-	this.dropStart = 0;
-	this.DROP_SPEED = 1000;
-
-	this.landed = false;
-
-	this.init();
-}
-
-Tetromino.prototype = {
-	/* 
- * Initialize tetromino.
- */
-	init: function () {
-		this.spawn();
-	},
-
-	/* 
- * Determine the starting coordinates when a tetromino first spawns.
- */
-	determineSpawnCoordinates: function () {
-		var spawnY = this.SPAWN_POS_Y;
-
-		for (var i = 0; i < this.SHAPE.length; i++) {
-			var spawnX = this.SPAWN_POS_X;
-
-			for (var j = 0; j < this.SHAPE[i].length; j++) {
-				if (this.SHAPE[i][j] === 1) {
-					this.coordinates.push([spawnX, spawnY]);
-				}
-				spawnX++;
-			}
-			spawnY++;
-		}
-	},
-
-	/*
- * Spawn tetromino at the top of the playing field.
- */
-	spawn: function () {
-		this.determineSpawnCoordinates();
-		//this.grid.occupyCells(this.coordinates);
-	},
-
-	/**
- * Move the current tetromino. Will move ONLY if the direction in which it wants to move is valid.
- * @param {String} direction
- */
-	move: function (direction) {
-		var currentCoordinates = this.coordinates;
-		var potentialCoordinates = [];
-
-		for (var i = 0; i < currentCoordinates.length; i++) {
-			var potentialX = currentCoordinates[i][0];
-			var potentialY = currentCoordinates[i][1];
-
-			// Create "potential" coordinates based on direction for each current coordinates.
-			if (direction === "left") potentialX--;
-			if (direction === "right") potentialX++;
-			if (direction === "down") potentialY++;
-
-			// Collision detection. Checks whether the new coordinates would be occupied or out of bounds.
-			if (this.grid.playingField[potentialY] === undefined || this.grid.playingField[potentialY][potentialX] === undefined || this.grid.playingField[potentialY][potentialX] === 1) {
-
-				// If there will be collision at the potential coordinates AND the move is down it means the tetromino has landed.
-				if (direction === "down") {
-					this.landed = true;
-					this.grid.occupyCells(this.coordinates); // ONLY now occupy these cells so next tetrominoes can detect collision on it.
-				}
-
-				return; // Since the move was invalid we don't need to update the coordinates.
-			}
-
-			potentialCoordinates.push([potentialX, potentialY]);
-		}
-
-		// Only update coordinates if all new coordinates are free.
-		this.coordinates = potentialCoordinates;
-	},
-
-	/*
- * Rotate the tetromino. Will ONLY rotate if the rotation is a valid move to make.
- */
-	rotate: function () {
-		console.log("lol");
-	},
-
-	/*
- * Drops tetromino at a certain interval rate.
- */
-	drop: function () {
-		if (this.dropStart === 0) {
-			this.dropStart = new Date().getTime();
-		}
-
-		if (new Date().getTime() - this.dropStart > this.DROP_SPEED) {
-			this.move("down");
-			this.dropStart = 0;
-		}
-	}
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (Tetromino);
+throw new Error("Module build failed: SyntaxError: C:/Users/woutb/Documents/Code projects/AI/Machine learning algorithms/Flappy bird/src/js/tetromino.js: Unexpected token, expected , (113:1)\n\n  111 | \t* Rotate the tetromino. Will ONLY rotate if the rotation is a valid move to make.\n  112 | \t*/\n> 113 | \trotate: function() {\n      | \t^\n  114 | \t\tconsole.log(\"lol\");\n  115 | \t},\n  116 | \n");
 
 /***/ }),
 /* 342 */

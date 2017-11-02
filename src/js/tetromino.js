@@ -51,6 +51,7 @@ Tetromino.prototype = {
 	*/
 	spawn: function() {
 		this.determineSpawnCoordinates();
+		this.draw();
 		//this.grid.occupyCells(this.coordinates);
 	},
 
@@ -89,13 +90,14 @@ Tetromino.prototype = {
 		}
 
 		// Only update coordinates if all new coordinates are free.
+		this.undraw();
 		this.coordinates = potentialCoordinates;
 		this.draw(); // Draw the new coordinates on the grid.
 	},
 
 
 	/**
-	* Draws ALL the current coordinates on the grid.
+	* Draws ALL the current tetromino's coordinates on the grid.
 	*/
 	draw: function() {
 		this.coordinates.forEach((coordinate) => {
@@ -104,7 +106,19 @@ Tetromino.prototype = {
 
 			this.grid.draw(x, y, this.COLOR);
 		})
-	}
+	},
+
+	/**
+	* Undraws ALL the current tetromino's coordinates on the grid.
+	*/
+	undraw: function() {
+		this.coordinates.forEach((coordinate) => {
+			var x = coordinate[0];
+			var y = coordinate[1];
+
+			this.grid.draw(x, y, "#FFF");
+		})
+	},
 
 
 	/*

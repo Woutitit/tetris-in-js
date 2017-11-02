@@ -79,7 +79,7 @@ Grid.prototype = {
 
 
 	/**
-	* Check for new occupied cells. Update the playingfield with these cells and also draw them.
+	* Check for new occupied (=landed) cells, update the backend playingfield with these cells and also draw them.
 	*/
 	update: function() {
 		// Every update we draw the playing field with 0's first and then fill them up according to the coordinates.

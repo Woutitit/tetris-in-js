@@ -46,12 +46,11 @@ Tetromino.prototype = {
 	},
 
 
+	/**
+	* Move the current tetromino. Will move ONLY if the direction in which it wants to move is valid.
+	*/
+
 	move: function(direction) {
-		// So what a valid move dus is is NOT occupying ANY CELLS.
-		// But this means however our grid will NOT pick up on these coordinates of current tetrominoes thus not drawing them.
-		// Is this bad? Like for RL we then should use current coordinates + occupied coordinates rather than the playing field.
-		// This is also how this link does it: https://gamedevelopment.tutsplus.com/tutorials/implementing-tetris-collision-detection--gamedev-852
-		// They have a landed array (which is the playing field) and they also only push coordinates to it when a tetromino has landed.
 		var oldCoordinates = this.coordinates;
 		var newCoordinates = [];
 
@@ -59,6 +58,7 @@ Tetromino.prototype = {
 			var newX = oldCoordinates[i][0];
 			var newY = oldCoordinates[i][1];
 
+			// Create "potential" coordinates based on direction for each current coordinates.
 			if(direction === "left") newX--;
 			if(direction === "right") newX++;
 			if(direction === "down") newY++;
@@ -66,13 +66,16 @@ Tetromino.prototype = {
 			// Collision detection. Checks whether the new coordinates would be occupied or out of bounds.
 			if (this.grid.playingField[newY] === undefined || this.grid.playingField[newY][newX] === undefined || 
 				this.grid.playingField[newY][newX] === 1) {
+
+				// If there will be collision at the potential coordinates AND the move is down it means the tetromino has landed.
 				if(direction === "down") {
 					this.landed = true;
-					this.grid.occupyCells(this.coordinates);
+					this.grid.occupyCells(this.coordinates); // ONLY now occupy these cells so next tetrominoes can detect collision on it.
 				}
 				
-				return;// If the move is not valid AND direction was down, the tetromino has landed.
-			} else {
+				return; // Since the move was invalid we don't need to update the coordinates.
+			} 
+			else {
 				newCoordinates.push([newX, newY]);
 			}
 

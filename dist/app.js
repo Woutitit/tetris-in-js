@@ -20647,9 +20647,10 @@ module.exports = function listToStyles (parentId, list) {
 	methods: {
 		update: function () {
 			this.grid.update(); // Continously redraw the grid and fill all 0's with 1's based on the coordinates.
+			console.log(this.grid.playingField);
 
 			// If no tetromino is dropping at the moment.
-			if (!this.currTetromino) {
+			if (!this.currTetromino || this.currTetromino.landed) {
 				// Spawn new tetromino on grid.
 				this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid);
 			}
@@ -20770,6 +20771,9 @@ Grid.prototype = {
 	create: function (colSpan, rowSpan) {
 		// Note: we add + 2 to the backend grid so that our tetrominoes spawn off canvas before they come in the field.
 		return Array(rowSpan + 2).fill().map(() => Array(colSpan).fill(0));
+
+		// Now also put 1's at the first AND last values of each row
+		// Add 1's to the bottom row aswell for colission.
 	},
 
 	/**
@@ -20845,7 +20849,9 @@ function Tetromino(grid) {
 	this.grid = grid;
 
 	this.dropStart = 0;
-	this.DROP_SPEED = 1000;
+	this.DROP_SPEED = 500;
+
+	this.landed = false;
 
 	this.init();
 }
@@ -20880,6 +20886,11 @@ Tetromino.prototype = {
 	// THIS ONLY WORKS FOR DOWN MOVEMENT YET.
 	// ALSO MAKE THE LAST ROW AND 2 COLUMNS LEFT AND RIGHT FULL WITH 1's.
 	// THIS WAY WE CAN DETECT WHEN IT HITS A WALL AS WELL.
+	// ALSO HOW DO WE KNOW IF IT LANDED?
+	// If next coordinate are 1's AND direction of the played move is down, if that is invalid ONLY then it means it has landed because it can't go down more.
+	// The move "down" will always decide because either the drop plays it, or the player plays it.
+	// We should also have a boolean that has landed = true;
+	// And that would mean
 	move: function (direction) {
 		var oldCoordinates = this.coordinates;
 		var newCoordinates = [];
@@ -20892,9 +20903,10 @@ Tetromino.prototype = {
 			if (direction === "right") newX++;
 			if (direction === "down") newY++;
 
-			// Collision detection.
-			if (this.grid.playingField[newY][newX] === 1) {
-				return;
+			// Collision detection. Checks whether the new coordinates would be occupied or out of bounds.
+			if (this.grid.playingField[newY] === undefined || this.grid.playingField[newY][newX] === undefined || this.grid.playingField[newY][newX] === 1) {
+				if (direction === "down") this.landed = true; // If the move is not valid AND direction was down, the tetromino has landed.
+				return; // Stay at the old coordinates.
 			} else {
 				newCoordinates.push([newX, newY]);
 			}
@@ -20906,7 +20918,6 @@ Tetromino.prototype = {
 		// Now unassign the old coordinates and assign the newly occupied cells.
 		this.grid.deoccupyCells(oldCoordinates);
 		this.grid.occupyCells(this.coordinates);
-		console.log(this.grid.playingField);
 	},
 
 	/**

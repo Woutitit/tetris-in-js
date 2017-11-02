@@ -72,6 +72,9 @@ Grid.prototype = {
 	create: function(colSpan, rowSpan) {
 		// Note: we add + 2 to the backend grid so that our tetrominoes spawn off canvas before they come in the field.
 		return Array(rowSpan + 2).fill().map(() => Array(colSpan).fill(0));
+
+		// Now also put 1's at the first AND last values of each row
+		// Add 1's to the bottom row aswell for colission.
 	},
 
 

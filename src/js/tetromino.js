@@ -77,9 +77,10 @@ Tetromino.prototype = {
 			}
 
 		}
-		
+
 		// Only update coordinates if all new coordinates are free.
-		this.coordinates = newCoordinates; 
+		this.coordinates = newCoordinates;
+		this.grid.update(this.coordinates, this.color);
 	},
 
 

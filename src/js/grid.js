@@ -79,8 +79,7 @@ Grid.prototype = {
 
 
 	/**
-	* Redraws grid filling every occupied cell (setting the cell with those coordinates to 1).
-	* Thi does NOT draw 0's yet.
+	* Check for new occupied cells. Update the playingfield with these cells and also draw them.
 	*/
 	update: function() {
 		// Every update we draw the playing field with 0's first and then fill them up according to the coordinates.
@@ -90,23 +89,24 @@ Grid.prototype = {
 		Object.keys(this.occupiedCells).forEach((key, index) => {
 			var color = key;
 
+			// For each coordinate per color
 			for(var i = 0; i < this.occupiedCells[color].length; i++) {
 				var x = this.occupiedCells[color][i][0];
 				var y = this.occupiedCells[color][i][1];
 
 				this.playingField[y][x] = 1; // The cell at this coordinate gets a 1.
-				// TODO: Now also draw this cell with the respective color.
+				this.draw(x, y, color);
 			}
 		});
 	},
 
 
-	checkCollision: function() {
-		// So for example when clicked "Left" we should check if any coordinates + 1 (to the left) matches any coordinates already on field.
-		// So for example coordinates[0][1 + 1] = any coordinate already on the field?
-		// If it was down it would be [0 + 1][1] to check if the move is valid.
-		// Also when a move is valid (so if this return true) we should first use the current coordinates to make these 1's to 0's.
-		// And THEN we can increase the coordinates and make these NEW coordinates 1's.
+	/**
+	* Draw a single set of x, y coordinates and its color. Use this in conjunction with a loop.
+	*/ 
+	draw: function(x, y, color) {
+		this.canvasCtx.fillStyle = "#000";
+		this.canvasCtx.fillRect(0, 0, 20, 20);
 	},
 
 

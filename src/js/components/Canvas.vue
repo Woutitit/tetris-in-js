@@ -62,7 +62,7 @@ canvas {
 		methods: {
 			update: function() {
 				this.grid.update(); // Continously redraw the grid and fill all 0's with 1's based on the coordinates.
-				console.log(this.grid.playingField);
+				//console.log(this.grid.playingField);
 
 				// If no tetromino is dropping at the moment.
 				if(!this.currTetromino || this.currTetromino.landed) {

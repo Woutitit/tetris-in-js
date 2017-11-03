@@ -20782,15 +20782,8 @@ Grid.prototype = {
 	},
 
 	/**
- * Check for new occupied (=landed) cells, update the backend playingfield with them
- * Do note that we do not have to draw anything here since when the current tetromino lands, that drawing will stay on the canvas.
- * It's only important to keep updating the backend to detect collision for the current tetromino.
- * Also, everytime we update the grid means that a tetromino has landed. Thus we will also need to check for lines at the y coordinates of current tetromino.
- * But since we only need to check the rows in which the last coordinate landed,
- * we can simply take the last 4 coordinates of the occupiedCells array and then get the y coordinates for it.
- * Then we should check if at these y coordinates (so those rows in playing field) ALL the values are 1. 
- * If at at least one of that this is true we should remove these coordinates frome the occupiedCells.
- * This will make the playingfield output 0 for that row.
+ * Check for new occupied (=landed) cells, update the backend playingfield with them and destroy rows if necesarry.
+ *
  */
 	update: function () {
 		this.playingField = this.create(this.COL_SPAN, this.ROW_SPAN);
@@ -20803,28 +20796,8 @@ Grid.prototype = {
 			this.playingField[y][x] = 1; // The cell at this coordinate gets a 1.
 		}
 
-		// Check if a row contains all 1's meaning that line should be removed.
-		// Now we check each row however we know we should only check the rows of the y coordinates of the last 4 coordinates.
-		this.playingField.forEach((row, index) => {
-			if (row.filter(x => x === 1).length === this.COL_SPAN) {
-				this.removeRow(index);
-			}
-		});
-		/*
-  // Check for all the last landed coordinates.
-  for(var j = 1; j <= 4; j++) {
-  	var y = this.occupiedCells[this.occupiedCells.length - j][1];
-  			var c = 0;
-  			this.playingField[y].forEach((x) => {
-  		if(x === 1) {
-  			c++;
-  		}
-  	})
-  			if(c === 10) {
-  		this.removeLine(this.playingField.indexOf(this.playingField[y]));
-  	}
-  }
-  */
+		// TODO: Maybe add status to update so we only do this check for "landed" status?
+		this.checkFullRows(); // Everytime grid updates check for full rows.
 	},
 
 	/**
@@ -20833,6 +20806,18 @@ Grid.prototype = {
 	draw: function (x, y, color) {
 		this.canvasCtx.fillStyle = color;
 		this.canvasCtx.fillRect(x * this.CELL_SPAN, y * this.CELL_SPAN, this.CELL_SPAN, this.CELL_SPAN);
+	},
+
+	/**
+ * Undraws/Clears any rectangles at a certain coordinate.
+ */
+	undraw: function (x, y) {
+		this.canvasCtx.clearRect(x * this.CELL_SPAN, y * this.CELL_SPAN, this.CELL_SPAN, this.CELL_SPAN);
+	},
+
+	undrawRow: function (y) {
+		// Note: x will always be 0 when undrawing a row.
+		this.canvasCtx.clearRect(0, y * this.CELL_SPAN, this.CELL_SPAN * this.COL_SPAN, this.CELL_SPAN);
 	},
 
 	/**
@@ -20855,10 +20840,26 @@ Grid.prototype = {
 		}
 	},
 
+	checkFullRows: function () {
+		// Check if a row contains all 1's meaning that line should be removed.
+		// Now we check each row however we know we should only check the rows of the y coordinates of the last 4 coordinates that landed.
+
+		this.playingField.forEach((row, index) => {
+			if (row.filter(x => x === 1).length === this.COL_SPAN) {
+				this.removeRow(index);
+			}
+		});
+	},
+
 	removeRow: function (rowCoordinate) {
+		this.undrawRow(rowCoordinate);
+
+		// Also remove all coordinates with this row coordinate from backend.
 		this.occupiedCells.forEach((coordinates, index) => {
+			var occupiedCellX = coordinates[0];
 			var occupiedCellY = coordinates[1];
 
+			// If a coordinate is part of the full row, undraw that coordinate and remove it from the occupiedCells array.
 			if (occupiedCellY === rowCoordinate) {
 				this.occupiedCells.splice(index);
 			}

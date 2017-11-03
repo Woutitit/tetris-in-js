@@ -29,10 +29,60 @@ canvas {
 				CANVAS_WIDTH: 0,
 				CANVAS_HEIGHT: 0,
 
-				grid: null,
-				currTetromino: null,
+				LETTERS: {
+					I: {
+						color: "yellow",
+						shape: [
+						[0, 0, 0, 0],
+						[1, 1, 1, 1]
+						]
+					},
+					J: {
+						color: "blue",
+						shape: [
+						[1, 0, 0],
+						[1, 1, 1]
+						]
+					},
+					L: {
+						color: "blue",
+						shape: [
+						[0, 0, 1],
+						[1, 1, 1]
+						]
+					},
+					O: {
+						color: "yellow",
+						shape: [
+						[1, 1],
+						[1, 1]
+						]
+					},
+					S: {
+						color: "green",
+						shape: [
+						[0, 1, 1],
+						[1, 1, 0]
+						]
+					},
+					T: {
+						color: "purple",
+						shape: [
+						[0, 1, 0],
+						[1, 1, 1]
+						]
+					},
+					Z: {
+						color: "red",
+						shape: [
+						[1, 1, 0],
+						[0, 1, 1]
+						]
+					},
+				},
 
-				interval: 0
+				grid: null,
+				currTetromino: null
 			}
 		},
 		created() {
@@ -65,7 +115,7 @@ canvas {
 				// If no tetromino is dropping at the moment.
 				if(!this.currTetromino || this.currTetromino.landed) {
 					// Spawn new tetromino on grid.
-					this.currTetromino = new Tetromino(this.grid);
+					this.currTetromino = new Tetromino(this.grid, this.randomLetter());
 				}
 
 				this.currTetromino.drop(); // Make tetromino continously drop.
@@ -115,6 +165,12 @@ canvas {
 					this.currTetromino.move("down");
 					break;
 				}
+			},
+
+			randomLetter: function() {
+				var keys = Object.keys(this.LETTERS);
+				
+				return this.LETTERS[keys[Math.floor(Math.random() * keys.length)]];
 			}
 		}
 	}

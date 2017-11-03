@@ -20616,10 +20616,39 @@ module.exports = function listToStyles (parentId, list) {
 			CANVAS_WIDTH: 0,
 			CANVAS_HEIGHT: 0,
 
-			grid: null,
-			currTetromino: null,
+			LETTERS: {
+				I: {
+					color: "yellow",
+					shape: [[0, 0, 0, 0], [1, 1, 1, 1]]
+				},
+				J: {
+					color: "blue",
+					shape: [[1, 0, 0], [1, 1, 1]]
+				},
+				L: {
+					color: "blue",
+					shape: [[0, 0, 1], [1, 1, 1]]
+				},
+				O: {
+					color: "yellow",
+					shape: [[1, 1], [1, 1]]
+				},
+				S: {
+					color: "green",
+					shape: [[0, 1, 1], [1, 1, 0]]
+				},
+				T: {
+					color: "purple",
+					shape: [[0, 1, 0], [1, 1, 1]]
+				},
+				Z: {
+					color: "red",
+					shape: [[1, 1, 0], [0, 1, 1]]
+				}
+			},
 
-			interval: 0
+			grid: null,
+			currTetromino: null
 		};
 	},
 	created() {
@@ -20650,7 +20679,7 @@ module.exports = function listToStyles (parentId, list) {
 			// If no tetromino is dropping at the moment.
 			if (!this.currTetromino || this.currTetromino.landed) {
 				// Spawn new tetromino on grid.
-				this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid);
+				this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid, this.randomLetter());
 			}
 
 			this.currTetromino.drop(); // Make tetromino continously drop.
@@ -20697,6 +20726,12 @@ module.exports = function listToStyles (parentId, list) {
 					this.currTetromino.move("down");
 					break;
 			}
+		},
+
+		randomLetter: function () {
+			var keys = Object.keys(this.LETTERS);
+
+			return this.LETTERS[keys[Math.floor(Math.random() * keys.length)]];
 		}
 	}
 });
@@ -20714,7 +20749,7 @@ function Grid(colSpan, rowSpan, canvas, celSpan) {
  * 0 means a free space.
  * 1 means occupied space.
  
- This grid matrix will be updated everytime a tetromino spawns, moves, gets destroyed.
+ This grid matrix will be updated everytime a tetromino has landed.
  This way we can easily keep track of collision, when to destroy a row and such.
  
  IMPORTANT: We can use THIS grid in our neural network as state like outlace did.
@@ -20843,7 +20878,6 @@ Grid.prototype = {
 	checkFullRows: function () {
 		// Check if a row contains all 1's meaning that line should be removed.
 		// Now we check each row however we know we should only check the rows of the y coordinates of the last 4 coordinates that landed.
-
 		this.playingField.forEach((row, index) => {
 			if (row.filter(x => x === 1).length === this.COL_SPAN) {
 				this.removeRow(index);
@@ -20859,7 +20893,7 @@ Grid.prototype = {
 			var occupiedCellX = coordinates[0];
 			var occupiedCellY = coordinates[1];
 
-			// If a coordinate is part of the full row, undraw that coordinate and remove it from the occupiedCells array.
+			// If a coordinate from the occupiedCells array is part of the full row, remove it.
 			if (occupiedCellY === rowCoordinate) {
 				this.occupiedCells.splice(index);
 			}
@@ -20876,9 +20910,9 @@ Grid.prototype = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Tetromino(grid) {
-	this.COLOR = "orange"; // TODO: Make color based on shape.
-	this.SHAPE = [[1, 1], [1, 1]];
+function Tetromino(grid, letter) {
+	this.COLOR = letter.color;
+	this.SHAPE = letter.shape;
 	this.SPAWN_POS_X = 3;
 	this.SPAWN_POS_Y = 0;
 

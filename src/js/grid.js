@@ -6,7 +6,7 @@ function Grid(colSpan, rowSpan, canvas, celSpan) {
 	* 0 means a free space.
 	* 1 means occupied space.
 
-	This grid matrix will be updated everytime a tetromino spawns, moves, gets destroyed.
+	This grid matrix will be updated everytime a tetromino has landed.
 	This way we can easily keep track of collision, when to destroy a row and such.
 
 	IMPORTANT: We can use THIS grid in our neural network as state like outlace did.
@@ -145,7 +145,6 @@ Grid.prototype = {
 	checkFullRows: function() {
 		// Check if a row contains all 1's meaning that line should be removed.
 		// Now we check each row however we know we should only check the rows of the y coordinates of the last 4 coordinates that landed.
-
 		this.playingField.forEach((row, index) => {
 			if((row.filter((x) => x === 1 ).length) === this.COL_SPAN) {
 				this.removeRow(index);
@@ -162,7 +161,7 @@ Grid.prototype = {
 			var occupiedCellX = coordinates[0];
 			var occupiedCellY = coordinates[1];
 
-			// If a coordinate is part of the full row, undraw that coordinate and remove it from the occupiedCells array.
+			// If a coordinate from the occupiedCells array is part of the full row, remove it.
 			if(occupiedCellY === rowCoordinate) {
 				this.occupiedCells.splice(index);
 			}

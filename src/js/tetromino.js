@@ -1,6 +1,6 @@
-function Tetromino(grid) {
-	this.COLOR = "orange" // TODO: Make color based on shape.
-	this.SHAPE = [[1, 1], [1, 1]];
+function Tetromino(grid, letter) {
+	this.COLOR = letter.color;
+	this.SHAPE = letter.shape;
 	this.SPAWN_POS_X = 3;
 	this.SPAWN_POS_Y = 0;
 

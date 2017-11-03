@@ -74,20 +74,18 @@ Tetromino.prototype = {
 			if(direction === "down") potentialY++;
 
 			// Collision detection. Checks whether the new coordinates would be occupied or out of bounds.
-			if (this.grid.playingField[potentialY] === undefined || this.grid.playingField[potentialY][potentialX] === undefined || 
-				this.grid.playingField[potentialY][potentialX] === 1) {
-
-				// If there will be collision at the potential coordinates AND the move is down it means the tetromino has landed.
+			if (this.grid.playingField[potentialY] === undefined || this.grid.playingField[potentialY][potentialX] === undefined || this.grid.playingField[potentialY][potentialX] === 1) {
+			// If there will be collision at the potential coordinates AND the move is down it means the tetromino has landed.
 			if(direction === "down") {
 				this.landed = true;
-					this.grid.occupyCells(this.coordinates); // ONLY now occupy these cells so next tetrominoes can detect collision on it.
-				}
-				
-				return; // When ANY new coordinate is invalid DON'T execute the move.
+				this.grid.occupyCells(this.coordinates); // ONLY now occupy these cells so next tetrominoes can detect collision on it.
 			}
 
-			potentialCoordinates.push([potentialX, potentialY]);
+			return; // When ANY new coordinate is invalid DON'T execute the move.
 		}
+
+		potentialCoordinates.push([potentialX, potentialY]);
+	}
 
 		// Only update coordinates if all new coordinates are free.
 		this.undraw();

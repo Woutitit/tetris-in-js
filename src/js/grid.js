@@ -81,6 +81,11 @@ Grid.prototype = {
 	* Do note that we do not have to draw anything here since when the current tetromino lands, that drawing will stay on the canvas.
 	* It's only important to keep updating the backend to detect collision for the current tetromino.
 	* Also, everytime we update the grid means that a tetromino has landed. Thus we will also need to check for lines at the y coordinates of current tetromino.
+	* But since we only need to check the rows in which the last coordinate landed,
+	* we can simply take the last 4 coordinates of the occupiedCells array and then get the y coordinates for it.
+	* Then we should check if at these y coordinates (so those rows in playing field) ALL the values are 1. 
+	* If at at least one of that this is true we should remove these coordinates frome the occupiedCells.
+	* This will make the playingfield output 0 for that row.
 	*/
 	update: function() {
 		this.playingField = this.create(this.COL_SPAN, this.ROW_SPAN);
@@ -92,6 +97,33 @@ Grid.prototype = {
 
 			this.playingField[y][x] = 1; // The cell at this coordinate gets a 1.
 		}
+
+		// Check if a row contains all 1's meaning that line should be removed.
+		// Now we check each row however we know we should only check the rows of the y coordinates of the last 4 coordinates.
+		this.playingField.forEach((row, index) => {
+			if((row.filter((x) => x === 1 ).length) === this.COL_SPAN) {
+				this.removeRow(index);
+			}
+		})
+		/*
+		// Check for all the last landed coordinates.
+		for(var j = 1; j <= 4; j++) {
+			var y = this.occupiedCells[this.occupiedCells.length - j][1];
+
+			var c = 0;
+
+			this.playingField[y].forEach((x) => {
+				if(x === 1) {
+					c++;
+				}
+			})
+
+			if(c === 10) {
+				this.removeLine(this.playingField.indexOf(this.playingField[y]));
+			}
+		}
+		*/
+
 	},
 
 
@@ -125,10 +157,16 @@ Grid.prototype = {
 		}
 	},
 
-	removeLine: function() {
-		// For removing lines we need better than pop.
-		// However we can find out the x coordinate of which cells to remove.
-		// And then remove all "occupiedCells" which, at position [0] (so x), have that x coordinate.
+	removeRow: function(rowCoordinate) {
+		this.occupiedCells.forEach((coordinates, index) => {
+			var occupiedCellY = coordinates[1];
+
+			if(occupiedCellY === rowCoordinate) {
+				this.occupiedCells.splice(index);
+			}
+		});
+
+		this.update();
 	}
 }
 

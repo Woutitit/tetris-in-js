@@ -78,7 +78,7 @@ Tetromino.prototype = {
 			// If there will be collision at the potential coordinates AND the move is down it means the tetromino has landed.
 			if(direction === "down") {
 				this.landed = true;
-				this.grid.occupyCells(this.coordinates); // ONLY now occupy these cells so next tetrominoes can detect collision on it.
+				this.grid.occupyCells(this.coordinates, this.COLOR); // ONLY now occupy these cells so next tetrominoes can detect collision on it.
 			}
 
 			return; // When ANY new coordinate is invalid DON'T execute the move.

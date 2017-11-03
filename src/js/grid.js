@@ -46,7 +46,13 @@ function Grid(colSpan, rowSpan, canvas, celSpan) {
 
 	// Holds coordinates of ALL occupied cells organized by color.
 	// We should generate this array based on all possible color rather than setting it manually.
-	this.occupiedCells = [];
+	this.occupiedCells = {
+		yellow: [],
+		blue: [],
+		green: [],
+		purple: [],
+		red: []
+	};
 
 	this.currTetromino; // Holds tetromino we can control.
 
@@ -82,7 +88,19 @@ Grid.prototype = {
 	*/
 	update: function() {
 		this.playingField = this.create(this.COL_SPAN, this.ROW_SPAN);
-		
+
+		Object.keys(this.occupiedCells).forEach((color) => {
+			this.occupiedCells[color].forEach((coordinates) => {
+				var x = coordinates[0];
+				var y = coordinates[1];
+
+				this.playingField[y][x] = 1;
+			})
+		});
+
+		console.log(this.playingField);
+
+		/*
 		// For each coordinate per color
 		for(var i = 0; i < this.occupiedCells.length; i++) {
 			var x = this.occupiedCells[i][0];
@@ -93,6 +111,7 @@ Grid.prototype = {
 
 		// TODO: Maybe add status to update so we only do this check for "landed" status?
 		this.checkFullRows(); // Everytime grid updates check for full rows.
+		*/
 	},
 
 
@@ -122,11 +141,12 @@ Grid.prototype = {
 	/**
 	* Pushes coordinates that also should be occupied to the global occupiedCells object.
 	*/
-	occupyCells: function(coordinates) {
+	occupyCells: function(coordinates, color) {
+		
 		coordinates.forEach((coordinate) => {
-			this.occupiedCells.push(coordinate);
+			this.occupiedCells[color].push(coordinate);
 		});
-
+		
 		this.update();
 	},
 
@@ -163,10 +183,19 @@ Grid.prototype = {
 
 			// If a coordinate from the occupiedCells array is part of the full row, remove it.
 			if(occupiedCellY === rowCoordinate) {
-				this.occupiedCells.splice(index);
+				this.occupiedCells.splice(index, 1); // Will remove this particular value from occupiedcells.
+			} 
+			else if(occupiedCellY < rowCoordinate) {
+				// Else we should remove that coordinate 1 y down. (IF NOT UNDEFINED that is.)
+				// Else IF that coordinate his y value is lower than the removed row's coordinate we should
+				//this.undraw(occupiedCellX, occupiedCellY);
+				// So this means we SHOULD keep track of the color or each occupied coordinate!
+				this.occupiedCells[index][1]++;
+
 			}
 		});
 
+		// Now we should move ALL coordinates on the playing field 1 y value down.
 		this.update();
 	}
 }

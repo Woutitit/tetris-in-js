@@ -20658,8 +20658,6 @@ module.exports = function listToStyles (parentId, list) {
 
 		// Now what we have to do is move down the tetromino with a set Interval.
 		this.update();
-
-		// Anyway we can just run requestAnimationFrame the whole time and it will on its own pick up the things to draw.
 	},
 	methods: {
 		update: function () {
@@ -20764,7 +20762,7 @@ function Grid(colSpan, rowSpan, canvas, celSpan) {
  	[0,0,0,0,0,0,0,0,0,0]
  	]
  
- THE SOLUTION FOR MULTICOLOR BLOCKS IS TO HAVE EACH SHAPE DIFFERENT VALUES!
+ 
  --------------------------------------------------------------------------------------------
  --------------------------------------------------------------------------------------------*/
 	this.COL_SPAN = colSpan;
@@ -20780,24 +20778,6 @@ function Grid(colSpan, rowSpan, canvas, celSpan) {
 
 	// Holds coordinates of ALL occupied cells organized by color.
 	// We should generate this array based on all possible color rather than setting it manually.
-	this.occupiedCells = {
-		0: [],
-		1: [],
-		2: [],
-		3: [],
-		4: [],
-		5: [],
-		6: [],
-		7: [],
-		8: [],
-		9: [],
-		10: [],
-		11: [],
-		12: [],
-		13: [],
-		14: [],
-		15: []
-	};
 
 	this.currTetromino; // Holds tetromino we can control.
 
@@ -20924,8 +20904,7 @@ Grid.prototype = {
 
 "use strict";
 function Tetromino(grid, letter) {
-	this.COLOR = letter.color;
-	this.SHAPE = letter.shape;
+	this.SHAPE = letter;
 	this.SPAWN_POS_X = 3;
 	this.SPAWN_POS_Y = 0;
 
@@ -20959,7 +20938,7 @@ Tetromino.prototype = {
 			var spawnX = this.SPAWN_POS_X;
 
 			for (var j = 0; j < this.SHAPE[i].length; j++) {
-				if (this.SHAPE[i][j] === 1) {
+				if (this.SHAPE[i][j] !== 0) {
 					this.coordinates.push([spawnX, spawnY]);
 				}
 				spawnX++;
@@ -20973,8 +20952,8 @@ Tetromino.prototype = {
  */
 	spawn: function () {
 		this.determineSpawnCoordinates();
+		console.log(this.SHAPE);
 		this.draw();
-		//this.grid.occupyCells(this.coordinates);
 	},
 
 	/**
@@ -20999,7 +20978,7 @@ Tetromino.prototype = {
 				// If there will be collision at the potential coordinates AND the move is down it means the tetromino has landed.
 				if (direction === "down") {
 					this.landed = true;
-					this.grid.occupyCells(this.coordinates, this.COLOR); // ONLY now occupy these cells so next tetrominoes can detect collision on it.
+					//this.grid.occupyCells(this.coordinates); // ONLY now occupy these cells so next tetrominoes can detect collision on it.
 				}
 
 				return; // When ANY new coordinate is invalid DON'T execute the move.
@@ -21022,7 +21001,7 @@ Tetromino.prototype = {
 			var x = coordinate[0];
 			var y = coordinate[1];
 
-			this.grid.draw(x, y, this.COLOR);
+			this.grid.draw(x, y, "yellow");
 		});
 	},
 

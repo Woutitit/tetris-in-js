@@ -32,7 +32,7 @@ function Grid(colSpan, rowSpan, canvas, celSpan) {
 		[0,0,0,0,0,0,0,0,0,0]
 		]
 
-	THE SOLUTION FOR MULTICOLOR BLOCKS IS TO HAVE EACH SHAPE DIFFERENT VALUES!
+	
 	--------------------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------------------*/
 	this.COL_SPAN = colSpan;
@@ -48,24 +48,6 @@ function Grid(colSpan, rowSpan, canvas, celSpan) {
 
 	// Holds coordinates of ALL occupied cells organized by color.
 	// We should generate this array based on all possible color rather than setting it manually.
-	this.occupiedCells = {
-		0: [],
-		1: [],
-		2: [],
-		3: [],
-		4: [],
-		5: [],
-		6: [],
-		7: [],
-		8: [],
-		9: [],
-		10: [],
-		11: [],
-		12: [],
-		13: [],
-		14: [],
-		15: [],
-	};
 
 	this.currTetromino; // Holds tetromino we can control.
 

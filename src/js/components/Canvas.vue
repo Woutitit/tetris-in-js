@@ -73,8 +73,6 @@ canvas {
 
 			// Now what we have to do is move down the tetromino with a set Interval.
 			this.update();
-
-			// Anyway we can just run requestAnimationFrame the whole time and it will on its own pick up the things to draw.
 		},
 		methods: {
 			update: function() {

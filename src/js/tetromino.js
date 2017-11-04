@@ -1,6 +1,5 @@
 function Tetromino(grid, letter) {
-	this.COLOR = letter.color;
-	this.SHAPE = letter.shape;
+	this.SHAPE = letter;
 	this.SPAWN_POS_X = 3;
 	this.SPAWN_POS_Y = 0;
 
@@ -36,7 +35,7 @@ Tetromino.prototype = {
 			var spawnX = this.SPAWN_POS_X;
 
 			for(var j = 0; j < this.SHAPE[i].length; j++) {
-				if (this.SHAPE[i][j] === 1) {
+				if (this.SHAPE[i][j] !== 0) {
 					this.coordinates.push([spawnX, spawnY]);
 				}
 				spawnX++;
@@ -51,8 +50,8 @@ Tetromino.prototype = {
 	*/
 	spawn: function() {
 		this.determineSpawnCoordinates();
+		console.log(this.SHAPE);
 		this.draw();
-		//this.grid.occupyCells(this.coordinates);
 	},
 
 
@@ -78,7 +77,7 @@ Tetromino.prototype = {
 			// If there will be collision at the potential coordinates AND the move is down it means the tetromino has landed.
 			if(direction === "down") {
 				this.landed = true;
-				this.grid.occupyCells(this.coordinates, this.COLOR); // ONLY now occupy these cells so next tetrominoes can detect collision on it.
+				//this.grid.occupyCells(this.coordinates); // ONLY now occupy these cells so next tetrominoes can detect collision on it.
 			}
 
 			return; // When ANY new coordinate is invalid DON'T execute the move.
@@ -102,7 +101,7 @@ Tetromino.prototype = {
 			var x = coordinate[0];
 			var y = coordinate[1];
 
-			this.grid.draw(x, y, this.COLOR);
+			this.grid.draw(x, y, "yellow");
 		})
 	},
 

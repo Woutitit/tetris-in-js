@@ -20616,35 +20616,24 @@ module.exports = function listToStyles (parentId, list) {
 			CANVAS_WIDTH: 0,
 			CANVAS_HEIGHT: 0,
 
+			/**
+   * THE LETTER COLOR CODES:
+   * 1 = light blue
+   * 2 = dark blue
+   * 3 = orange
+   * 4 = yellow
+   * 5 = green
+   * 6 = purple
+   * 7 = red
+   */
 			LETTERS: {
-				I: {
-					color: "yellow",
-					shape: [[0, 0, 0, 0], [1, 1, 1, 1]]
-				},
-				J: {
-					color: "blue",
-					shape: [[1, 0, 0], [1, 1, 1]]
-				},
-				L: {
-					color: "blue",
-					shape: [[0, 0, 1], [1, 1, 1]]
-				},
-				O: {
-					color: "yellow",
-					shape: [[1, 1], [1, 1]]
-				},
-				S: {
-					color: "green",
-					shape: [[0, 1, 1], [1, 1, 0]]
-				},
-				T: {
-					color: "purple",
-					shape: [[0, 1, 0], [1, 1, 1]]
-				},
-				Z: {
-					color: "red",
-					shape: [[1, 1, 0], [0, 1, 1]]
-				}
+				I: [[0, 0, 0, 0], [1, 1, 1, 1]],
+				J: [[2, 0, 0], [2, 2, 2]],
+				L: [[0, 0, 3], [3, 3, 3]],
+				O: [[4, 4], [4, 4]],
+				S: [[0, 5, 5], [5, 5, 0]],
+				T: [[0, 6, 0], [6, 6, 6]],
+				Z: [[7, 7, 0], [0, 7, 7]]
 			},
 
 			grid: null,
@@ -20679,7 +20668,7 @@ module.exports = function listToStyles (parentId, list) {
 			// If no tetromino is dropping at the moment.
 			if (!this.currTetromino || this.currTetromino.landed) {
 				// Spawn new tetromino on grid.
-				this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid, this.randomLetter());
+				this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid, this.LETTERS.O);
 			}
 
 			this.currTetromino.drop(); // Make tetromino continously drop.
@@ -20774,6 +20763,8 @@ function Grid(colSpan, rowSpan, canvas, celSpan) {
  	[0,0,0,0,0,0,0,0,0,0],
  	[0,0,0,0,0,0,0,0,0,0]
  	]
+ 
+ THE SOLUTION FOR MULTICOLOR BLOCKS IS TO HAVE EACH SHAPE DIFFERENT VALUES!
  --------------------------------------------------------------------------------------------
  --------------------------------------------------------------------------------------------*/
 	this.COL_SPAN = colSpan;
@@ -20790,11 +20781,22 @@ function Grid(colSpan, rowSpan, canvas, celSpan) {
 	// Holds coordinates of ALL occupied cells organized by color.
 	// We should generate this array based on all possible color rather than setting it manually.
 	this.occupiedCells = {
-		yellow: [],
-		blue: [],
-		green: [],
-		purple: [],
-		red: []
+		0: [],
+		1: [],
+		2: [],
+		3: [],
+		4: [],
+		5: [],
+		6: [],
+		7: [],
+		8: [],
+		9: [],
+		10: [],
+		11: [],
+		12: [],
+		13: [],
+		14: [],
+		15: []
 	};
 
 	this.currTetromino; // Holds tetromino we can control.
@@ -20838,18 +20840,8 @@ Grid.prototype = {
 			});
 		});
 
-		console.log(this.playingField);
-
-		/*
-  // For each coordinate per color
-  for(var i = 0; i < this.occupiedCells.length; i++) {
-  	var x = this.occupiedCells[i][0];
-  	var y = this.occupiedCells[i][1];
-  			this.playingField[y][x] = 1; // The cell at this coordinate gets a 1.
-  }
-  		// TODO: Maybe add status to update so we only do this check for "landed" status?
-  this.checkFullRows(); // Everytime grid updates check for full rows.
-  */
+		// TODO: Maybe add status to update so we only do this check for "landed" status?
+		this.checkFullRows(); // Everytime grid updates check for full rows.
 	},
 
 	/**
@@ -20898,7 +20890,7 @@ Grid.prototype = {
 		// Now we check each row however we know we should only check the rows of the y coordinates of the last 4 coordinates that landed.
 		this.playingField.forEach((row, index) => {
 			if (row.filter(x => x === 1).length === this.COL_SPAN) {
-				this.removeRow(index);
+				this.removeRow(index); // index is the y coordinate that should be removed.
 			}
 		});
 	},
@@ -20907,24 +20899,20 @@ Grid.prototype = {
 		this.undrawRow(rowCoordinate);
 
 		// Also remove all coordinates with this row coordinate from backend.
-		this.occupiedCells.forEach((coordinates, index) => {
-			var occupiedCellX = coordinates[0];
-			var occupiedCellY = coordinates[1];
+		Object.keys(this.occupiedCells).forEach(color => {
+			this.occupiedCells[color].forEach((coordinates, index) => {
+				var occupiedCellX = coordinates[0];
+				var occupiedCellY = coordinates[1];
 
-			// If a coordinate from the occupiedCells array is part of the full row, remove it.
-			if (occupiedCellY === rowCoordinate) {
-				this.occupiedCells.splice(index, 1); // Will remove this particular value from occupiedcells.
-			} else if (occupiedCellY < rowCoordinate) {
-				// Else we should remove that coordinate 1 y down. (IF NOT UNDEFINED that is.)
-				// Else IF that coordinate his y value is lower than the removed row's coordinate we should
-				//this.undraw(occupiedCellX, occupiedCellY);
-				// So this means we SHOULD keep track of the color or each occupied coordinate!
-				this.occupiedCells[index][1]++;
-			}
+				if (occupiedCellY === rowCoordinate) {
+					console.log(this.occupiedCells[color].splice(index, 1));
+				}
+			});
 		});
 
 		// Now we should move ALL coordinates on the playing field 1 y value down.
 		this.update();
+		console.log(this.playingField);
 	}
 };
 

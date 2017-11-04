@@ -29,56 +29,24 @@ canvas {
 				CANVAS_WIDTH: 0,
 				CANVAS_HEIGHT: 0,
 
+				/**
+				* THE LETTER COLOR CODES:
+				* 1 = light blue
+				* 2 = dark blue
+				* 3 = orange
+				* 4 = yellow
+				* 5 = green
+				* 6 = purple
+				* 7 = red
+				*/
 				LETTERS: {
-					I: {
-						color: "yellow",
-						shape: [
-						[0, 0, 0, 0],
-						[1, 1, 1, 1]
-						]
-					},
-					J: {
-						color: "blue",
-						shape: [
-						[1, 0, 0],
-						[1, 1, 1]
-						]
-					},
-					L: {
-						color: "blue",
-						shape: [
-						[0, 0, 1],
-						[1, 1, 1]
-						]
-					},
-					O: {
-						color: "yellow",
-						shape: [
-						[1, 1],
-						[1, 1]
-						]
-					},
-					S: {
-						color: "green",
-						shape: [
-						[0, 1, 1],
-						[1, 1, 0]
-						]
-					},
-					T: {
-						color: "purple",
-						shape: [
-						[0, 1, 0],
-						[1, 1, 1]
-						]
-					},
-					Z: {
-						color: "red",
-						shape: [
-						[1, 1, 0],
-						[0, 1, 1]
-						]
-					},
+					I: [ [0, 0, 0, 0], [1, 1, 1, 1] ],
+					J: [ [2, 0, 0], [2, 2, 2] ],
+					L: [ [0, 0, 3], [3, 3, 3] ], 
+					O: [ [4, 4], [4, 4] ],
+					S: [ [0, 5, 5], [5, 5, 0] ],
+					T: [ [0, 6, 0], [6, 6, 6] ],
+					Z: [ [7, 7, 0], [0, 7, 7] ],
 				},
 
 				grid: null,
@@ -115,7 +83,7 @@ canvas {
 				// If no tetromino is dropping at the moment.
 				if(!this.currTetromino || this.currTetromino.landed) {
 					// Spawn new tetromino on grid.
-					this.currTetromino = new Tetromino(this.grid, this.randomLetter());
+					this.currTetromino = new Tetromino(this.grid, this.LETTERS.O);
 				}
 
 				this.currTetromino.drop(); // Make tetromino continously drop.

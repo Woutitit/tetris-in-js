@@ -25,13 +25,16 @@ function Tetromino(grid, shape) {
 
 Tetromino.prototype = {
 	/* 
-	* Initialize tetromino.
+	* Draw tetromino on canvas.
 	*/
 	init: function() {
-		this.drawShape();
+		this.drawShape(); 
 	},
 
 
+	/*
+	* Draw tetromino based on the current rotation and top left coordinate.
+	*/
 	drawShape: function() {
 		var currentY = this.topLeft.y;
 

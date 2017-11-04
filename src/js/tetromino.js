@@ -1,11 +1,18 @@
-function Tetromino(grid, letter) {
-	this.SHAPE = letter;
-	this.SPAWN_POS_X = 3;
-	this.SPAWN_POS_Y = 0;
-
-	this.coordinates = [];
-
+function Tetromino(grid, shape) {
+	/*--------------------------------------------------------------------------------------------
+	HOW SHAPES WORK
+	----------------------------------------------------------------------------------------------
+	
+	
+	--------------------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------------------*/
+	this.shape = shape;
 	this.grid = grid;
+
+	this.topLeft = {
+		x: 3,
+		y: 0
+	};
 
 	this.dropStart = 0;
 	this.DROP_SPEED = 1000;
@@ -21,27 +28,25 @@ Tetromino.prototype = {
 	* Initialize tetromino.
 	*/
 	init: function() {
-		this.spawn();
+		this.drawShape();
 	},
 
 
-	/* 
-	* Determine the starting coordinates when a tetromino first spawns.
-	*/
-	determineSpawnCoordinates: function() {
-		var spawnY = this.SPAWN_POS_Y;
+	drawShape: function() {
+		var currentY = this.topLeft.y;
 
-		for(var i = 0; i < this.SHAPE.length; i++) {
-			var spawnX = this.SPAWN_POS_X;
+		this.shape.forEach((row) => {
 
-			for(var j = 0; j < this.SHAPE[i].length; j++) {
-				if (this.SHAPE[i][j] !== 0) {
-					this.coordinates.push([spawnX, spawnY]);
+			var currentX =  this.topLeft.x;
+
+			row.forEach((colorValue) => {
+				if(colorValue !== 0) {
+					this.grid.draw(currentX, currentY, colorValue);
 				}
-				spawnX++;
-			}
-			spawnY++;
-		}
+				currentX++; // Make next x coordinate current x to insert into grid if necessary.
+			})
+			currentY++; // Make next row current Y coordinate
+		});
 	},
 
 

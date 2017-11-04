@@ -20626,11 +20626,11 @@ module.exports = function listToStyles (parentId, list) {
    * 6 = purple
    * 7 = red
    */
-			LETTERS: {
-				I: [[0, 0, 0, 0], [1, 1, 1, 1]],
+			SPAWN_SHAPES: {
+				I: [[0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0]],
 				J: [[2, 0, 0], [2, 2, 2]],
 				L: [[0, 0, 3], [3, 3, 3]],
-				O: [[4, 4], [4, 4]],
+				O: [[0, 4, 4, 0], [0, 4, 4, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
 				S: [[0, 5, 5], [5, 5, 0]],
 				T: [[0, 6, 0], [6, 6, 6]],
 				Z: [[7, 7, 0], [0, 7, 7]]
@@ -20666,10 +20666,10 @@ module.exports = function listToStyles (parentId, list) {
 			// If no tetromino is dropping at the moment.
 			if (!this.currTetromino || this.currTetromino.landed) {
 				// Spawn new tetromino on grid.
-				this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid, this.LETTERS.O);
+				this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid, this.SPAWN_SHAPES.I);
 			}
 
-			this.currTetromino.drop(); // Make tetromino continously drop.
+			//this.currTetromino.drop(); // Make tetromino continously drop.
 
 			requestAnimationFrame(this.update);
 		},
@@ -20902,37 +20902,27 @@ Grid.prototype = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Tetromino(grid, letter) {
-	this.SHAPE = letter;
-	this.SPAWN_POS_X = 3;
-	this.SPAWN_POS_Y = 0;
-
-	this.coordinates = [];
-
+function Tetromino(grid, shape) {
+	/*--------------------------------------------------------------------------------------------
+ HOW SHAPES WORK
+ ----------------------------------------------------------------------------------------------
+ 
+ 
+ --------------------------------------------------------------------------------------------
+ --------------------------------------------------------------------------------------------*/
+	this.shape = shape;
 	this.grid = grid;
+
+	this.topLeft = {
+		x: 3,
+		y: 0
+	};
 
 	this.dropStart = 0;
 	this.DROP_SPEED = 1000;
 
 	this.landed = false;
 
-	// SO INSTEAD OF KEEPING TRACK OF ALL THE COORDINATES.
-	// WE WILL HAVE A 4x4 GRID AND ONLY KEEP TRACK OF THE COORDINATE OF THE TOPLEFT
-	// WITH THIS COORDINATE + THE CURRENT ROTATION
-	// WE CAN CHECK AND ADD + 1 (DEPENDING ON DIRECTION) TO EACH COORDINATE OF THE SHAPE WHICH IS NOT 0
-	// AND CHECK IF THESE POTENTIAL COORDINATES ON THE PLAYING FIELD ARE ACTUALLY 0.
-	// IF NOT 0 AND DIRECTION IS DOWN IT MEANS THE TETROMINO HAS LANDED.
-	// THEN WE SHOULD DO AGAIN A LOOP STARTING FROM TOP LEFT AND THEN AGAIN FOR EACH SHAPE VALUE WHICH IS NOT 0
-	// WE SHOULD FIND OUT THE VALUE (FOR EXAMPLE 6) and update the grid. DO this.grid.update(x, y, value); Value here means color.
-	// ELSE IF ALL PLAYINGFIELD SPACES ARE FREE WE CAN MOVE FREELY AND THUS UPDATE THE TOPLEFT COORDINATE
-	// INSTEAD OF DOING A FOR LOOP OF OCCUPATING THE BACKEND WE SHOULD DO A FOR LOOP TO UPDATE THE DRAWN FRONT END.
-
-	// SO EVERYTIME A TETROMINO ROTATES WE JUST DO A MATRIX ROTATION OF OUR CURRENT SHAPE.
-	// MEANWHILE WE ALSO GET THE COORDINATES.
-	// AND THEN CHECK WHICH VALUES ARE NOT 0 AND GET THE COORDINATES BASED ON THE TOPLEFT COORDINATE OF OUR GRID WE KEEP TRACK OF.
-	// THEN WE CHECK IF THESE
-	// SO HOW DO WE DEAL WITH COLOR VALUES?
-	// HOW TO INSERT VALUES IN A MATRIX?
 	this.init();
 }
 
@@ -20941,26 +20931,24 @@ Tetromino.prototype = {
  * Initialize tetromino.
  */
 	init: function () {
-		this.spawn();
+		this.drawShape();
 	},
 
-	/* 
- * Determine the starting coordinates when a tetromino first spawns.
- */
-	determineSpawnCoordinates: function () {
-		var spawnY = this.SPAWN_POS_Y;
+	drawShape: function () {
+		var currentY = this.topLeft.y;
 
-		for (var i = 0; i < this.SHAPE.length; i++) {
-			var spawnX = this.SPAWN_POS_X;
+		this.shape.forEach(row => {
 
-			for (var j = 0; j < this.SHAPE[i].length; j++) {
-				if (this.SHAPE[i][j] !== 0) {
-					this.coordinates.push([spawnX, spawnY]);
+			var currentX = this.topLeft.x;
+
+			row.forEach(colorValue => {
+				if (colorValue !== 0) {
+					this.grid.draw(currentX, currentY, colorValue);
 				}
-				spawnX++;
-			}
-			spawnY++;
-		}
+				currentX++; // Make next x coordinate current x to insert into grid if necessary.
+			});
+			currentY++; // Make next row current Y coordinate
+		});
 	},
 
 	/*
@@ -20976,18 +20964,44 @@ Tetromino.prototype = {
  * @param {String} direction
  */
 	move: function (direction) {
-		if (!this.validMove(direction)) {
-			if (direction === "down") {
-				this.landed = true;
-			}
-
-			return; // Stop executing the actual move.
-		};
+		// Will stop executing if the move is not valid. Else it will return the new top left coordinate.
+		// ONLY PROBLEM. IF TOP LEFT IS NOT OCCUPIED. FOR EXAMPLE WHEN THE I IS VERTICAL. THEN TOP LEFT WILL BE OUT OF BOUNDS.
+		// OR WILL IT BE OUT OF BOUNDS?
+		// BECAUSE BASED ON TOP LEFT COORDINATE WE GET THE SHAPES COORDINATE AND IF THAT SHAPE IS 2 AWAY.
+		// THEN IT WILL BE -2 +1 +1 = 0 index until it finds something. BECAUSE WITH THE TOPLEFT COORDINATE WE ALSO DON'T DO ANY CHECKS ON THE PLAYING FIELD
+		// THE ONLY THING WE DO THIS IS TO KEEP TRACK OF OUR SHAPES COORDINATES IN ANY ROTATION.
+		// THIS WAY WE CAN EASILY ROTATE THE PIECE AND FIND THE COORDINATES FOR THAT ROTATION.
+		// SO ITS JUST IMPORTANT TO NOT CHECK TOPLEFT ON THE PLAYING FIELD BUT ONLY USE TOPLEFT TO GET THE SHAPE COORDINATES AND CHECK THOSE ON THE PLAYING FIELD.
+		// THE SPAWN DEFAULT VALUES FOR TOP LEFT ARE INDICES 2 FOR X AND 0 FOR Y.
+		var newTopLeft = this.validateMove(direction);
 
 		// If move is valid execute the move and update our canvas.
 		this.undraw();
-		this.updateTopLeft(direction);
+		this.topLeft = newTopLeft;
 		this.draw();
+	},
+
+	validateMove: function (direction) {
+		var potentialTopLeft = {
+			x: this.topLeft.x,
+			y: this.topLeft.y
+		};
+
+		switch (direction) {
+			case "down":
+				potentialTopLeft.y++;
+			case "left":
+				potentialTopLeft.x--;
+			case "right":
+				potentialTopLeft.x++;
+		}
+
+		// Check the coordinates based on current shape rotation and potential top left coordinate.
+		if (this.validPotentialCoordinates(potentialTopLeft)) {
+			return potentialTopLeft;
+		} else {
+			return;
+		}
 	},
 
 	/**

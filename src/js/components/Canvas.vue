@@ -94,7 +94,7 @@ canvas {
 					this.currTetromino = new Tetromino(this.grid, this.SPAWN_SHAPES.I);
 				}
 
-				//this.currTetromino.drop(); // Make tetromino continously drop.
+				this.currTetromino.drop(); // Make tetromino continously drop.
 
 				requestAnimationFrame(this.update);
 			},

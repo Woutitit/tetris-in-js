@@ -20669,7 +20669,7 @@ module.exports = function listToStyles (parentId, list) {
 				this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid, this.SPAWN_SHAPES.I);
 			}
 
-			//this.currTetromino.drop(); // Make tetromino continously drop.
+			this.currTetromino.drop(); // Make tetromino continously drop.
 
 			requestAnimationFrame(this.update);
 		},
@@ -20935,9 +20935,9 @@ Tetromino.prototype = {
 	},
 
 	/*
- * Draw tetromino based on the current rotation and top left coordinate.
+ * Will execute callback function for each FULL block.
  */
-	drawShape: function () {
+	eachBlock: function (callback) {
 		var currentY = this.topLeft.y;
 
 		this.shape.forEach(row => {
@@ -20946,7 +20946,8 @@ Tetromino.prototype = {
 
 			row.forEach(colorValue => {
 				if (colorValue !== 0) {
-					this.grid.draw(currentX, currentY, colorValue);
+					//this.grid.draw(currentX, currentY, colorValue);
+					callback(currentX, currentY, colorValue);
 				}
 				currentX++; // Make next x coordinate current x to insert into grid if necessary.
 			});
@@ -20955,12 +20956,15 @@ Tetromino.prototype = {
 	},
 
 	/*
- * Spawn tetromino at the top of the playing field.
+ * Draw tetromino based on the current rotation and top left coordinate.
  */
-	spawn: function () {
-		this.determineSpawnCoordinates();
-		this.draw();
+	drawShape: function () {
+		this.eachBlock((x, y, colorValue) => {
+			this.grid.draw(x, y, colorValue);
+		});
 	},
+
+	undrawShape: function () {},
 
 	/**
  * Move the current tetromino. Will move ONLY if the direction in which it wants to move is valid.
@@ -20976,12 +20980,12 @@ Tetromino.prototype = {
 		// THIS WAY WE CAN EASILY ROTATE THE PIECE AND FIND THE COORDINATES FOR THAT ROTATION.
 		// SO ITS JUST IMPORTANT TO NOT CHECK TOPLEFT ON THE PLAYING FIELD BUT ONLY USE TOPLEFT TO GET THE SHAPE COORDINATES AND CHECK THOSE ON THE PLAYING FIELD.
 		// THE SPAWN DEFAULT VALUES FOR TOP LEFT ARE INDICES 2 FOR X AND 0 FOR Y.
-		var newTopLeft = this.validateMove(direction);
+		// var newTopLeft = this.validateMove(direction);
 
 		// If move is valid execute the move and update our canvas.
-		this.undraw();
-		this.topLeft = newTopLeft;
-		this.draw();
+		this.undrawShape();
+		this.topLeft.y++;
+		this.drawShape();
 	},
 
 	validateMove: function (direction) {
@@ -20999,12 +21003,33 @@ Tetromino.prototype = {
 				potentialTopLeft.x++;
 		}
 
-		// Check the coordinates based on current shape rotation and potential top left coordinate.
-		if (this.validPotentialCoordinates(potentialTopLeft)) {
-			return potentialTopLeft;
-		} else {
+		// If this is a valid move then return the new potential top left.
+		if (!this.validatePotentialCoordinates(potentialTopLeft)) {
 			return;
+		} else {
+			return potentialTopLeft;
 		}
+	},
+
+	validPotentialCoordinates: function (potentialTopLeft) {
+		var potentialY = this.potentialTopLeft.y;
+
+		this.shape.forEach(row => {
+
+			var potentialX = this.potentialTopLeft.x;
+
+			// Check for this coordinate if grid is empty.
+			// TODO: CAN WE MAKE THIS EACH BLOCK IN A SEPERATE FUNCTION WITH CALLBACK?
+			row.forEach(colorValue => {
+				if (colorValue !== 0) {
+					if (this.grid.isFull(potentialX, potentialY)) {
+						return false;
+					}
+				}
+				currentX++; // Make next x coordinate current x to insert into grid if necessary.
+			});
+			currentY++; // Make next row current Y coordinate
+		});
 	},
 
 	/**

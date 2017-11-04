@@ -20808,7 +20808,15 @@ Grid.prototype = {
  * Check for new occupied (=landed) cells, update the backend playingfield with them and destroy rows if necesarry.
  *
  */
-	update: function (coordinatesPair) {
+	insert: function (x, y, value) {
+		this.playingField[y][x] = value;
+	},
+
+	/**
+ * Check for new occupied (=landed) cells, update the backend playingfield with them and destroy rows if necesarry.
+ *
+ */
+	update: function (x, y, value) {
 		//this.playingField = this.create(this.COL_SPAN, this.ROW_SPAN);
 		coordinatesPair.forEach(coordinates => {
 			this.playingField[coordinates[1]][coordinates[0]] = 1;
@@ -20916,8 +20924,15 @@ function Tetromino(grid, letter) {
 	// IF NOT 0 AND DIRECTION IS DOWN IT MEANS THE TETROMINO HAS LANDED.
 	// THEN WE SHOULD DO AGAIN A LOOP STARTING FROM TOP LEFT AND THEN AGAIN FOR EACH SHAPE VALUE WHICH IS NOT 0
 	// WE SHOULD FIND OUT THE VALUE (FOR EXAMPLE 6) and update the grid. DO this.grid.update(x, y, value); Value here means color.
-	// ELSE IF ALL PLAYINGFIELD SPACES ARE FREE
-	// DO A LOOP AND
+	// ELSE IF ALL PLAYINGFIELD SPACES ARE FREE WE CAN MOVE FREELY AND THUS UPDATE THE TOPLEFT COORDINATE
+	// INSTEAD OF DOING A FOR LOOP OF OCCUPATING THE BACKEND WE SHOULD DO A FOR LOOP TO UPDATE THE DRAWN FRONT END.
+
+	// SO EVERYTIME A TETROMINO ROTATES WE JUST DO A MATRIX ROTATION OF OUR CURRENT SHAPE.
+	// MEANWHILE WE ALSO GET THE COORDINATES.
+	// AND THEN CHECK WHICH VALUES ARE NOT 0 AND GET THE COORDINATES BASED ON THE TOPLEFT COORDINATE OF OUR GRID WE KEEP TRACK OF.
+	// THEN WE CHECK IF THESE
+	// SO HOW DO WE DEAL WITH COLOR VALUES?
+	// HOW TO INSERT VALUES IN A MATRIX?
 	this.init();
 }
 
@@ -20961,36 +20976,18 @@ Tetromino.prototype = {
  * @param {String} direction
  */
 	move: function (direction) {
-		var currentCoordinates = this.coordinates;
-		var potentialCoordinates = [];
-
-		for (var i = 0; i < currentCoordinates.length; i++) {
-			var potentialX = currentCoordinates[i][0];
-			var potentialY = currentCoordinates[i][1];
-
-			// Create "potential" coordinates based on direction for each current coordinates.
-			if (direction === "left") potentialX--;
-			if (direction === "right") potentialX++;
-			if (direction === "down") potentialY++;
-
-			// Collision detection. Checks whether the new coordinates would be occupied or out of bounds.
-			if (this.grid.playingField[potentialY] === undefined || this.grid.playingField[potentialY][potentialX] === undefined || this.grid.playingField[potentialY][potentialX] !== 0) {
-				// If there will be collision at the potential coordinates AND the move is down it means the tetromino has landed.
-				if (direction === "down") {
-					this.landed = true;
-					this.grid.update(this.coordinates); // ONLY now occupy these cells so next tetrominoes can detect collision on it.
-				}
-
-				return; // When ANY new coordinate is invalid DON'T execute the move.
+		if (!this.validMove(direction)) {
+			if (direction === "down") {
+				this.landed = true;
 			}
 
-			potentialCoordinates.push([potentialX, potentialY]);
-		}
+			return; // Stop executing the actual move.
+		};
 
-		// Only update coordinates if all new coordinates are free.
+		// If move is valid execute the move and update our canvas.
 		this.undraw();
-		this.coordinates = potentialCoordinates;
-		this.draw(); // Draw the new coordinates on the grid.
+		this.updateTopLeft(direction);
+		this.draw();
 	},
 
 	/**

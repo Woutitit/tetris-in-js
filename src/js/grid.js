@@ -81,7 +81,16 @@ Grid.prototype = {
 	* Check for new occupied (=landed) cells, update the backend playingfield with them and destroy rows if necesarry.
 	*
 	*/
-	update: function(coordinatesPair) {
+	insert: function(x, y, value) {
+		this.playingField[y][x] = value;
+	},
+
+
+	/**
+	* Check for new occupied (=landed) cells, update the backend playingfield with them and destroy rows if necesarry.
+	*
+	*/
+	update: function(x, y, value) {
 		//this.playingField = this.create(this.COL_SPAN, this.ROW_SPAN);
 		coordinatesPair.forEach((coordinates) => {
 			this.playingField[coordinates[1]][coordinates[0]] = 1;

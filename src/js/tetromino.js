@@ -12,16 +12,6 @@ function Tetromino(grid, letter) {
 
 	this.landed = false;
 
-	// SO INSTEAD OF KEEPING TRACK OF ALL THE COORDINATES.
-	// WE WILL HAVE A 4x4 GRID AND ONLY KEEP TRACK OF THE COORDINATE OF THE TOPLEFT
-	// WITH THIS COORDINATE + THE CURRENT ROTATION
-	// WE CAN CHECK AND ADD + 1 (DEPENDING ON DIRECTION) TO EACH COORDINATE OF THE SHAPE WHICH IS NOT 0
-	// AND CHECK IF THESE POTENTIAL COORDINATES ON THE PLAYING FIELD ARE ACTUALLY 0.
-	// IF NOT 0 AND DIRECTION IS DOWN IT MEANS THE TETROMINO HAS LANDED.
-	// THEN WE SHOULD DO AGAIN A LOOP STARTING FROM TOP LEFT AND THEN AGAIN FOR EACH SHAPE VALUE WHICH IS NOT 0
-	// WE SHOULD FIND OUT THE VALUE (FOR EXAMPLE 6) and update the grid. DO this.grid.update(x, y, value); Value here means color.
-	// ELSE IF ALL PLAYINGFIELD SPACES ARE FREE
-	// DO A LOOP AND
 	this.init();
 }
 
@@ -69,36 +59,45 @@ Tetromino.prototype = {
 	* @param {String} direction
 	*/
 	move: function(direction) {
-		var currentCoordinates = this.coordinates;
-		var potentialCoordinates = [];
+		// Will stop executing if the move is not valid. Else it will return the new top left coordinate.
+		// ONLY PROBLEM. IF TOP LEFT IS NOT OCCUPIED. FOR EXAMPLE WHEN THE I IS VERTICAL. THEN TOP LEFT WILL BE OUT OF BOUNDS.
+		// OR WILL IT BE OUT OF BOUNDS?
+		// BECAUSE BASED ON TOP LEFT COORDINATE WE GET THE SHAPES COORDINATE AND IF THAT SHAPE IS 2 AWAY.
+		// THEN IT WILL BE -2 +1 +1 = 0 index until it finds something. BECAUSE WITH THE TOPLEFT COORDINATE WE ALSO DON'T DO ANY CHECKS ON THE PLAYING FIELD
+		// THE ONLY THING WE DO THIS IS TO KEEP TRACK OF OUR SHAPES COORDINATES IN ANY ROTATION.
+		// THIS WAY WE CAN EASILY ROTATE THE PIECE AND FIND THE COORDINATES FOR THAT ROTATION.
+		// SO ITS JUST IMPORTANT TO NOT CHECK TOPLEFT ON THE PLAYING FIELD BUT ONLY USE TOPLEFT TO GET THE SHAPE COORDINATES AND CHECK THOSE ON THE PLAYING FIELD.
+		// THE SPAWN DEFAULT VALUES FOR TOP LEFT ARE INDICES 2 FOR X AND 0 FOR Y.
+		var newTopLeft = this.validateMove(direction);
 
-		for(var i = 0; i < currentCoordinates.length; i++) {
-			var potentialX = currentCoordinates[i][0];
-			var potentialY = currentCoordinates[i][1];
+		// If move is valid execute the move and update our canvas.
+		this.undraw();
+		this.topLeft = newTopLeft;
+		this.draw();
+	},
 
-			// Create "potential" coordinates based on direction for each current coordinates.
-			if(direction === "left") potentialX--;
-			if(direction === "right") potentialX++;
-			if(direction === "down") potentialY++;
 
-			// Collision detection. Checks whether the new coordinates would be occupied or out of bounds.
-			if (this.grid.playingField[potentialY] === undefined || this.grid.playingField[potentialY][potentialX] === undefined || this.grid.playingField[potentialY][potentialX] !== 0) {
-			// If there will be collision at the potential coordinates AND the move is down it means the tetromino has landed.
-			if(direction === "down") {
-				this.landed = true;
-				this.grid.update(this.coordinates); // ONLY now occupy these cells so next tetrominoes can detect collision on it.
-			}
-
-			return; // When ANY new coordinate is invalid DON'T execute the move.
+	validateMove: function(direction) {
+		var potentialTopLeft = {
+			x: this.topLeft.x,
+			y: this.topLeft.y
 		}
 
-		potentialCoordinates.push([potentialX, potentialY]);
-	}
+		switch(direction) {
+			case "down":
+			potentialTopLeft.y++;
+			case "left":
+			potentialTopLeft.x--;
+			case "right":
+			potentialTopLeft.x++;
+		}
 
-		// Only update coordinates if all new coordinates are free.
-		this.undraw();
-		this.coordinates = potentialCoordinates;
-		this.draw(); // Draw the new coordinates on the grid.
+		// Check the coordinates based on current shape rotation and potential top left coordinate.
+		if(this.validPotentialCoordinates(potentialTopLeft)) {
+			return potentialTopLeft;
+		} else {
+			return;
+		}
 	},
 
 

@@ -32,7 +32,7 @@ Tetromino.prototype = {
 	},
 
 	/*
-	* Will execute callback function for each FULL block.
+	* Will execute callback function for each FULL block giving as argument that current x, y and color value.
 	*/
 	eachBlock: function(callback) {
 		var currentY = this.topLeft.y;
@@ -62,8 +62,13 @@ Tetromino.prototype = {
 		});
 	},
 
+	/*
+	* Undraw tetromino based on current rotation and top left coordinate.
+	*/
 	undrawShape: function() {
-
+		this.eachBlock((x, y, colorValue) => {
+			this.grid.undraw(x, y, colorValue);
+		});
 	},
 
 

@@ -81,20 +81,11 @@ Grid.prototype = {
 	* Check for new occupied (=landed) cells, update the backend playingfield with them and destroy rows if necesarry.
 	*
 	*/
-	update: function() {
-		this.playingField = this.create(this.COL_SPAN, this.ROW_SPAN);
-
-		Object.keys(this.occupiedCells).forEach((color) => {
-			this.occupiedCells[color].forEach((coordinates) => {
-				var x = coordinates[0];
-				var y = coordinates[1];
-
-				this.playingField[y][x] = 1;
-			});
+	update: function(coordinatesPair) {
+		//this.playingField = this.create(this.COL_SPAN, this.ROW_SPAN);
+		coordinatesPair.forEach((coordinates) => {
+			this.playingField[coordinates[1]][coordinates[0]] = 1;
 		});
-
-		// TODO: Maybe add status to update so we only do this check for "landed" status?
-		this.checkFullRows(); // Everytime grid updates check for full rows.
 	},
 
 

@@ -12,6 +12,16 @@ function Tetromino(grid, letter) {
 
 	this.landed = false;
 
+	// SO INSTEAD OF KEEPING TRACK OF ALL THE COORDINATES.
+	// WE WILL HAVE A 4x4 GRID AND ONLY KEEP TRACK OF THE COORDINATE OF THE TOPLEFT
+	// WITH THIS COORDINATE + THE CURRENT ROTATION
+	// WE CAN CHECK AND ADD + 1 (DEPENDING ON DIRECTION) TO EACH COORDINATE OF THE SHAPE WHICH IS NOT 0
+	// AND CHECK IF THESE POTENTIAL COORDINATES ON THE PLAYING FIELD ARE ACTUALLY 0.
+	// IF NOT 0 AND DIRECTION IS DOWN IT MEANS THE TETROMINO HAS LANDED.
+	// THEN WE SHOULD DO AGAIN A LOOP STARTING FROM TOP LEFT AND THEN AGAIN FOR EACH SHAPE VALUE WHICH IS NOT 0
+	// WE SHOULD FIND OUT THE VALUE (FOR EXAMPLE 6) and update the grid. DO this.grid.update(x, y, value); Value here means color.
+	// ELSE IF ALL PLAYINGFIELD SPACES ARE FREE
+	// DO A LOOP AND
 	this.init();
 }
 
@@ -50,7 +60,6 @@ Tetromino.prototype = {
 	*/
 	spawn: function() {
 		this.determineSpawnCoordinates();
-		console.log(this.SHAPE);
 		this.draw();
 	},
 
@@ -73,11 +82,11 @@ Tetromino.prototype = {
 			if(direction === "down") potentialY++;
 
 			// Collision detection. Checks whether the new coordinates would be occupied or out of bounds.
-			if (this.grid.playingField[potentialY] === undefined || this.grid.playingField[potentialY][potentialX] === undefined || this.grid.playingField[potentialY][potentialX] === 1) {
+			if (this.grid.playingField[potentialY] === undefined || this.grid.playingField[potentialY][potentialX] === undefined || this.grid.playingField[potentialY][potentialX] !== 0) {
 			// If there will be collision at the potential coordinates AND the move is down it means the tetromino has landed.
 			if(direction === "down") {
 				this.landed = true;
-				//this.grid.occupyCells(this.coordinates); // ONLY now occupy these cells so next tetrominoes can detect collision on it.
+				this.grid.update(this.coordinates); // ONLY now occupy these cells so next tetrominoes can detect collision on it.
 			}
 
 			return; // When ANY new coordinate is invalid DON'T execute the move.

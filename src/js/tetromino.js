@@ -62,6 +62,7 @@ Tetromino.prototype = {
 		});
 	},
 
+
 	/*
 	* Undraw tetromino based on current rotation and top left coordinate.
 	*/
@@ -77,25 +78,15 @@ Tetromino.prototype = {
 	* @param {String} direction
 	*/
 	move: function(direction) {
-		// Will stop executing if the move is not valid. Else it will return the new top left coordinate.
-		// ONLY PROBLEM. IF TOP LEFT IS NOT OCCUPIED. FOR EXAMPLE WHEN THE I IS VERTICAL. THEN TOP LEFT WILL BE OUT OF BOUNDS.
-		// OR WILL IT BE OUT OF BOUNDS?
-		// BECAUSE BASED ON TOP LEFT COORDINATE WE GET THE SHAPES COORDINATE AND IF THAT SHAPE IS 2 AWAY.
-		// THEN IT WILL BE -2 +1 +1 = 0 index until it finds something. BECAUSE WITH THE TOPLEFT COORDINATE WE ALSO DON'T DO ANY CHECKS ON THE PLAYING FIELD
-		// THE ONLY THING WE DO THIS IS TO KEEP TRACK OF OUR SHAPES COORDINATES IN ANY ROTATION.
-		// THIS WAY WE CAN EASILY ROTATE THE PIECE AND FIND THE COORDINATES FOR THAT ROTATION.
-		// SO ITS JUST IMPORTANT TO NOT CHECK TOPLEFT ON THE PLAYING FIELD BUT ONLY USE TOPLEFT TO GET THE SHAPE COORDINATES AND CHECK THOSE ON THE PLAYING FIELD.
-		// THE SPAWN DEFAULT VALUES FOR TOP LEFT ARE INDICES 2 FOR X AND 0 FOR Y.
-		// var newTopLeft = this.validateMove(direction);
+		var potentialTopleft = this.getPotentialTopLeft(direction);
 
-		// If move is valid execute the move and update our canvas.
-		this.undrawShape();
-		this.topLeft.y++;
-		this.drawShape();
+		if(this.validPosition(potentialTopleft)) {
+			this.updatePosition(potentialTopleft);
+		};
 	},
 
 
-	validateMove: function(direction) {
+	getPotentialTopLeft: function(direction) {
 		var potentialTopLeft = {
 			x: this.topLeft.x,
 			y: this.topLeft.y
@@ -104,19 +95,32 @@ Tetromino.prototype = {
 		switch(direction) {
 			case "down":
 			potentialTopLeft.y++;
+			break;
+
 			case "left":
 			potentialTopLeft.x--;
+			break;
+
 			case "right":
 			potentialTopLeft.x++;
+			break;
 		}
 
-		// If this is a valid move then return the new potential top left.
-		if(!this.validatePotentialCoordinates(potentialTopLeft)) {
-			return;
-		} else {
-			return potentialTopLeft;
-		}
+		return potentialTopLeft;
 	},
+
+
+	validPosition: function(potentialTopleft) {
+		return true;	
+	},
+
+
+	updatePosition: function(potentialTopleft) {
+		this.undrawShape();
+		this.topLeft = potentialTopleft;
+		this.drawShape();
+	},
+
 
 	validPotentialCoordinates: function(potentialTopLeft) {
 		var potentialY = this.potentialTopLeft.y;
@@ -137,31 +141,6 @@ Tetromino.prototype = {
 			})
 			currentY++; // Make next row current Y coordinate
 		});
-	},
-
-
-	/**
-	* Draws ALL the current tetromino's coordinates on the grid.
-	*/
-	draw: function() {
-		this.coordinates.forEach((coordinate) => {
-			var x = coordinate[0];
-			var y = coordinate[1];
-
-			this.grid.draw(x, y, "yellow");
-		})
-	},
-
-	/**
-	* Undraws ALL the current tetromino's coordinates on the grid.
-	*/
-	undraw: function() {
-		this.coordinates.forEach((coordinate) => {
-			var x = coordinate[0];
-			var y = coordinate[1];
-
-			this.grid.draw(x, y, "#FFF");
-		})
 	},
 
 

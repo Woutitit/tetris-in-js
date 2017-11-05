@@ -78,11 +78,14 @@ Tetromino.prototype = {
 	* @param {String} direction
 	*/
 	move: function(direction) {
-		var potentialTopleft = this.getPotentialTopLeft(direction);
+		var potentialTopleft = this.getPotentialTopLeft(direction); // Get position we want to go to.
 
 		if(this.validPosition(potentialTopleft)) {
 			this.updatePosition(potentialTopleft);
-		};
+		} 
+		else if(direction === "down") {
+			this.land(this.topLeft); // If move is not valid and direction is down, land at CURRENT position.
+		}
 	},
 
 
@@ -122,25 +125,13 @@ Tetromino.prototype = {
 	},
 
 
-	validPotentialCoordinates: function(potentialTopLeft) {
-		var potentialY = this.potentialTopLeft.y;
-
-		this.shape.forEach((row) => {
-
-			var potentialX =  this.potentialTopLeft.x;
-
-			// Check for this coordinate if grid is empty.
-			// TODO: CAN WE MAKE THIS EACH BLOCK IN A SEPERATE FUNCTION WITH CALLBACK?
-			row.forEach((colorValue) => {
-				if(colorValue !== 0) {
-					if(this.grid.isFull(potentialX, potentialY)) {
-						return false;
-					}	
-				}
-				currentX++; // Make next x coordinate current x to insert into grid if necessary.
-			})
-			currentY++; // Make next row current Y coordinate
+	land: function() {
+		this.landed = true;
+		/*
+		this.eachBlock((x, y, colorValue) => {
+			this.grid.insert(x, y, colorValue);
 		});
+		*/
 	},
 
 

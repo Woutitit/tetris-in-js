@@ -2,9 +2,12 @@ function Tetromino(grid, shape) {
 	/*--------------------------------------------------------------------------------------------
 	HOW SHAPES WORK
 	----------------------------------------------------------------------------------------------
-	
+	* The shapes consist of any matrix that has equal width and height. The numbers are either 0 or NOT 0.
+	* We use square shaped matrices because this way we can easily rotate them around. 
+	* The different numbers per letter are simply color codes so we can keep track of each color of each cell on the playing field.
+
 	ROTATION:
-	Since our shapes are defined in a 4x4 grid we have 2 layers.
+	Our shapes are defined in a matrix with equal width and height. For this example, let's take the the matrix for our I shape:
 
 	2 2 2 2
 	2 1 1 2

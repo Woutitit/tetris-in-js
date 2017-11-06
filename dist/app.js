@@ -20990,7 +20990,7 @@ Tetromino.prototype = {
 			var currentX = topLeft.x;
 
 			row.forEach(colorValue => {
-				if (colorValue !== 0) {
+				if (colorValue !== 0 && colorValue !== undefined) {
 					//this.grid.draw(currentX, currentY, colorValue);
 					callback(currentX, currentY, colorValue);
 				}
@@ -21066,6 +21066,8 @@ Tetromino.prototype = {
 		this.eachBlock(this.topLeft, this.shape, (x, y, colorValue) => {
 			this.grid.insert(x, y, colorValue);
 		});
+
+		console.log(this.grid.playingField);
 	},
 
 	/*

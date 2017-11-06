@@ -20628,12 +20628,12 @@ module.exports = function listToStyles (parentId, list) {
    */
 			SPAWN_SHAPES: {
 				I: [[0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0]],
-				J: [[2, 0, 0, 0], [2, 2, 2, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
-				L: [[0, 0, 3, 0], [3, 3, 3, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
-				O: [[0, 4, 4, 0], [0, 4, 4, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
-				S: [[0, 5, 5, 0], [5, 5, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
-				T: [[0, 6, 0, 0], [6, 6, 6, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
-				Z: [[7, 7, 0, 0], [0, 7, 7, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+				J: [[2, 0, 0], [2, 2, 2], [0, 0, 0]],
+				L: [[0, 0, 3], [3, 3, 3], [0, 0, 0]],
+				O: [[0, 0, 0, 0], [0, 4, 4, 0], [0, 4, 4, 0], [0, 0, 0, 0]],
+				S: [[0, 5, 5], [5, 5, 0], [0, 0, 0]],
+				T: [[0, 6, 0], [6, 6, 6], [0, 0, 0]],
+				Z: [[7, 7, 0], [0, 7, 7], [0, 0, 0]]
 			},
 
 			grid: null,
@@ -21089,6 +21089,7 @@ Tetromino.prototype = {
 		var lastElIndex = shapeDimensions - 1; // -1 because the length is 4 but index is from 0 to 3 so last element will be at index = 3.
 
 		// If rotation is valid, undraw current shape before executing rotation.
+		// TODO: WE NOW HAVE BEEN ABLE TO ROTATE A TETROMINO HOWEVER WE SHOULD STILL CHECK IF THAT ROTATION CAN BE VALID.
 		this.undrawShape();
 		for (var layer = 0; layer < layerCount; layer++) {
 			// Loop from first element in layer PER SIDE (so left, top, right and bottom) to last element.

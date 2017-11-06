@@ -185,6 +185,7 @@ Tetromino.prototype = {
 		var lastElIndex = shapeDimensions - 1; // -1 because the length is 4 but index is from 0 to 3 so last element will be at index = 3.
 
 		// If rotation is valid, undraw current shape before executing rotation.
+		// TODO: WE NOW HAVE BEEN ABLE TO ROTATE A TETROMINO HOWEVER WE SHOULD STILL CHECK IF THAT ROTATION CAN BE VALID.
 		this.undrawShape();
 		for (var layer = 0; layer < layerCount; layer++) {
 			// Loop from first element in layer PER SIDE (so left, top, right and bottom) to last element.

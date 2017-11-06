@@ -69,10 +69,10 @@ Tetromino.prototype = {
 	/*
 	* Will give coordinates of each FULL block given a certain top left coordinate.
 	*/
-	eachBlock: function(topLeft, callback) {
+	eachBlock: function(topLeft, shape, callback) {
 		var currentY = topLeft.y;
 
-		this.shape.forEach((row) => {
+		shape.forEach((row) => {
 
 			var currentX =  topLeft.x;
 
@@ -92,7 +92,7 @@ Tetromino.prototype = {
 	* Draw tetromino based on the current rotation and top left coordinate.
 	*/
 	drawShape: function() {
-		this.eachBlock(this.topLeft, (x, y, colorValue) => {
+		this.eachBlock(this.topLeft, this.shape, (x, y, colorValue) => {
 			this.grid.draw(x, y, colorValue);
 		});
 	},
@@ -102,7 +102,7 @@ Tetromino.prototype = {
 	* Undraw tetromino based on current rotation and top left coordinate.
 	*/
 	undrawShape: function() {
-		this.eachBlock(this.topLeft, (x, y, colorValue) => {
+		this.eachBlock(this.topLeft, this.shape, (x, y, colorValue) => {
 			this.grid.undraw(x, y, colorValue);
 		});
 	},
@@ -151,7 +151,7 @@ Tetromino.prototype = {
 	validPosition: function(potentialTopleft) {
 		var errors = 0;
 		
-		this.eachBlock(potentialTopleft, (x, y, colorValue) => {
+		this.eachBlock(potentialTopleft, this.shape, (x, y, colorValue) => {
 			// Check if cell for the blocks future position is defined or not occupied yet.
 			if(this.grid.playingField[y] === undefined || this.grid.playingField[y][x] === undefined || this.grid.playingField[y][x] !== 0) {
 				return errors++;
@@ -171,7 +171,7 @@ Tetromino.prototype = {
 
 	land: function() {
 		this.landed = true;
-		this.eachBlock(this.topLeft, (x, y, colorValue) => {
+		this.eachBlock(this.topLeft, this.shape, (x, y, colorValue) => {
 			this.grid.insert(x, y, colorValue);
 		});
 	},
@@ -187,32 +187,44 @@ Tetromino.prototype = {
 		var firstElIndex = 0;
 		var lastElIndex = shapeDimensions - 1; // -1 because the length is 4 but index is from 0 to 3 so last element will be at index = 3.
 
+		// Create array where we will hold our test shape.
+		var potentialShape = Array(shapeDimensions).fill().map(() => Array(shapeDimensions).fill());
 		// If rotation is valid, undraw current shape before executing rotation.
-		// TODO: WE NOW HAVE BEEN ABLE TO ROTATE A TETROMINO HOWEVER WE SHOULD STILL CHECK IF THAT ROTATION CAN BE VALID.
-		this.undrawShape();
+		
 		for (var layer = 0; layer < layerCount; layer++) {
 			// Loop from first element in layer PER SIDE (so left, top, right and bottom) to last element.
 			for(var i = 0; i < lastElIndex - firstElIndex; i++) {
 				// Get element values
-				console.log(lastElIndex - i);
-			
+
 				var currTop = this.shape[firstElIndex][firstElIndex + i];
 				var currRight = this.shape[firstElIndex + i][lastElIndex];
 				var currBottom = this.shape[lastElIndex][lastElIndex - i];
 				var currLeft = this.shape[lastElIndex - i][firstElIndex];
 				
-				this.shape[firstElIndex][firstElIndex + i] = currLeft;
-				this.shape[firstElIndex + i][lastElIndex] = currTop;
-				this.shape[lastElIndex][lastElIndex - i] = currRight;
-				this.shape[lastElIndex - i][firstElIndex] = currBottom;
+				potentialShape[firstElIndex][firstElIndex + i] = currLeft;
+				potentialShape[firstElIndex + i][lastElIndex] = currTop;
+				potentialShape[lastElIndex][lastElIndex - i] = currRight;
+				potentialShape[lastElIndex - i][firstElIndex] = currBottom;
 				
 			}
 			firstElIndex++;
 			lastElIndex--;
 		}
 
-		console.log(this.shape);
-		this.drawShape();	
+		// Test shape
+		var errors = 0;
+
+		this.eachBlock(this.topLeft, potentialShape, (x, y, colorValue) => {
+			if(this.grid.playingField[y] === undefined || this.grid.playingField[y][x] === undefined || this.grid.playingField[y][x] !== 0) {
+				errors++;
+			}
+		});
+
+		if(errors === 0) {
+			this.undrawShape();
+			this.shape = potentialShape;
+			this.drawShape();
+		}	
 	},
 
 

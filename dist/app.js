@@ -20921,7 +20921,8 @@ function Tetromino(grid, shape) {
  * The different numbers per letter are simply color codes so we can keep track of each color of each cell on the playing field.
  
  ROTATION:
- Our shapes are defined in a matrix with equal width and height. For this example, let's take the the matrix for our I shape:
+ Our shapes are defined in a matrix with equal width and height. For this example, let's take the the matrix for our I shape.
+ As next figure shows it has 2 layers:
  
  2 2 2 2
  2 1 1 2
@@ -20934,13 +20935,13 @@ function Tetromino(grid, shape) {
  
  Next step. Since elements that get rotated don't hop layers we can simply set up a nested loop in this layer loop that will go through all
  elements in the particular layer. A loop (for a 4x4 matrix) will look like this:
- "Get element at the top right in layer x (= 1st pos of 1st row)"
+ "Get element at the top left in layer x (= 1st pos of 1st row)"
  "Get element at top right in layer x (= 1st pos of last column)"
  "Get element at bottom right in layer x"
  "Get element at bottom left in layer x"
  "Now make top right = top left, top left = bottom left and bottom right = top right"
  
- Next:
+ Next iteration of the loop:
  "Get element at position 2 at top in layer x"
  "Get element at position 2 at right in layer x"
  "Get element at position 2 (COUNTED FROM LAST ELEMENT SINCE CLOCKWISE ROTATION, SO ACTUALLY ELEMENT AT POSITION 3) at bottom in layer x"
@@ -20951,7 +20952,7 @@ function Tetromino(grid, shape) {
  values to rotate?" Well indeed, but that's the genious of this loop. As you can see, ALL the values we GET we ALSO IMMEDIATELY REPLACE.
  And since we need to get each value and replace it only 1 time this is totally fine!
  
- Note: that this method only works for matrixes where width and height are the same.
+ Note: that this method only works for matrices where width and height are the same.
  
  --------------------------------------------------------------------------------------------
  --------------------------------------------------------------------------------------------*/

@@ -61,7 +61,6 @@ Grid.prototype = {
 	*/
 	init: function() {
 		this.playingField = this.create(this.COL_SPAN, this.ROW_SPAN);
-
 	},
 
 

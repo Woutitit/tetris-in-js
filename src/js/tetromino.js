@@ -77,7 +77,7 @@ Tetromino.prototype = {
 			var currentX =  topLeft.x;
 
 			row.forEach((colorValue) => {
-				if(colorValue !== 0 && colorValue !== undefined) {
+				if(colorValue !== 0) {
 					//this.grid.draw(currentX, currentY, colorValue);
 					callback(currentX, currentY, colorValue);
 				}
@@ -176,7 +176,8 @@ Tetromino.prototype = {
 		var lastElIndex = shapeDimensions - 1; // -1 because the length is 4 but index is from 0 to 3 so last element will be at index = 3.
 
 		// Create array where we will hold our test shape.
-		var potentialShape = Array(shapeDimensions).fill().map(() => Array(shapeDimensions).fill());
+		// We fill it with 1's so not be empty AND to have blocks that not rotate be filled at all times.
+		var potentialShape = Array(shapeDimensions).fill().map(() => Array(shapeDimensions).fill(1));
 		// If rotation is valid, undraw current shape before executing rotation.
 		
 		for (var layer = 0; layer < layerCount; layer++) {

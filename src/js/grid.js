@@ -81,8 +81,8 @@ Grid.prototype = {
 	* Check for new occupied (=landed) cells, update the backend playingfield with them and destroy rows if necesarry.
 	*
 	*/
-	insert: function(x, y, value) {
-		this.playingField[y][x] = value;
+	insert: function(x, y, colorValue) {
+		this.playingField[y][x] = colorValue;
 	},
 
 

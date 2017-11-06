@@ -136,11 +136,9 @@ Tetromino.prototype = {
 
 	land: function() {
 		this.landed = true;
-		/*
-		this.eachBlock((x, y, colorValue) => {
+		this.eachBlock(this.topLeft, (x, y, colorValue) => {
 			this.grid.insert(x, y, colorValue);
 		});
-		*/
 	},
 
 

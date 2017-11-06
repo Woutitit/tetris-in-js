@@ -20813,6 +20813,15 @@ Grid.prototype = {
 	},
 
 	/**
+ * 
+ */
+	validateCell: function (x, y) {
+		if (this.playingField[y] === undefined || this.playingField[y][x] === undefined || this.playingField[y][x] === 1) {
+			return false;
+		}
+	},
+
+	/**
  * Check for new occupied (=landed) cells, update the backend playingfield with them and destroy rows if necesarry.
  *
  */
@@ -20935,14 +20944,14 @@ Tetromino.prototype = {
 	},
 
 	/*
- * Will execute callback function for each FULL block giving as argument that current x, y and color value.
+ * Will give coordinates of each FULL block given a certain top left coordinate.
  */
-	eachBlock: function (callback) {
-		var currentY = this.topLeft.y;
+	eachBlock: function (topLeft, callback) {
+		var currentY = topLeft.y;
 
 		this.shape.forEach(row => {
 
-			var currentX = this.topLeft.x;
+			var currentX = topLeft.x;
 
 			row.forEach(colorValue => {
 				if (colorValue !== 0) {
@@ -20959,7 +20968,7 @@ Tetromino.prototype = {
  * Draw tetromino based on the current rotation and top left coordinate.
  */
 	drawShape: function () {
-		this.eachBlock((x, y, colorValue) => {
+		this.eachBlock(this.topLeft, (x, y, colorValue) => {
 			this.grid.draw(x, y, colorValue);
 		});
 	},
@@ -20968,7 +20977,7 @@ Tetromino.prototype = {
  * Undraw tetromino based on current rotation and top left coordinate.
  */
 	undrawShape: function () {
-		this.eachBlock((x, y, colorValue) => {
+		this.eachBlock(this.topLeft, (x, y, colorValue) => {
 			this.grid.undraw(x, y, colorValue);
 		});
 	},
@@ -21011,7 +21020,16 @@ Tetromino.prototype = {
 	},
 
 	validPosition: function (potentialTopleft) {
-		return true;
+		var errors = 0;
+
+		this.eachBlock(potentialTopleft, (x, y, colorValue) => {
+			// Check if cell for the blocks future position is defined or not occupied yet.
+			if (this.grid.playingField[y] === undefined || this.grid.playingField[y][x] === undefined || this.grid.playingField[y][x] !== 0) {
+				return errors++;
+			}
+		});
+
+		return errors > 0 ? false : true;
 	},
 
 	updatePosition: function (potentialTopleft) {

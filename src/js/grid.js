@@ -87,6 +87,16 @@ Grid.prototype = {
 
 
 	/**
+	* 
+	*/
+	validateCell: function(x, y) {
+		if(this.playingField[y] === undefined || this.playingField[y][x] === undefined || this.playingField[y][x] === 1) {
+			return false;
+		}
+	},
+
+
+	/**
 	* Check for new occupied (=landed) cells, update the backend playingfield with them and destroy rows if necesarry.
 	*
 	*/

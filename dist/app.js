@@ -20916,6 +20916,38 @@ function Tetromino(grid, shape) {
  HOW SHAPES WORK
  ----------------------------------------------------------------------------------------------
  
+ ROTATION:
+ Since our shapes are defined in a 4x4 grid we have 2 layers.
+ 
+ 2 2 2 2
+ 2 1 1 2
+ 2 1 1 2
+ 2 2 2 2
+ 
+ Since both these layers are bigger than a 1x1 matrix they will change when wanting to rotate them 90 degrees.
+ We do this by first setting up a loop that goes through each layer. A loop will look like this:
+ "For layer 1, do everything what you write in this loop."
+ 
+ Next step. Since elements that get rotated don't hop layers we can simply set up a nested loop in this layer loop that will go through all
+ elements in the particular layer. A loop (for a 4x4 matrix) will look like this:
+ "Get element at the top right in layer x (= 1st pos of 1st row)"
+ "Get element at top right in layer x (= 1st pos of last column)"
+ "Get element at bottom right in layer x"
+ "Get element at bottom left in layer x"
+ "Now make top right = top left, top left = bottom left and bottom right = top right"
+ 
+ Next:
+ "Get element at position 2 at top in layer x"
+ "Get element at position 2 at right in layer x"
+ "Get element at position 2 (COUNTED FROM LAST ELEMENT SINCE CLOCKWISE ROTATION, SO ACTUALLY ELEMENT AT POSITION 3) at bottom in layer x"
+ "Get element at position 2 (COUNTED FROM LAST ELEMENT SINCE CLOCKWISE ROTATION, SO ACTUALLY ELEMENT AT POSITION 3) at left in layer x"
+ "Now assign all new values"
+ 
+ You can make the remark like "but if you already assign values to the matrix in that loop it will screw with the values and not giving correct
+ values to rotate?" Well indeed, but that's the genious of this loop. As you can see, ALL the values we GET we ALSO IMMEDIATELY REPLACE.
+ And since we need to get each value and replace it only 1 time this is totally fine!
+ 
+ Note: that this method only works for matrixes where width and height are the same.
  
  --------------------------------------------------------------------------------------------
  --------------------------------------------------------------------------------------------*/
@@ -21049,11 +21081,23 @@ Tetromino.prototype = {
  * Rotate the tetromino. Will ONLY rotate if the rotation is a valid move to make.
  */
 	rotate: function () {
-		// So here we should update our coordinates.
-		// Then we should also draw these new coordinates.
-		// Rotation is always 90 degrees.
-		// How can we make a rotation method that works for all coordinates?
-		// Or should we make these rotation shapes ourselves?
+		var matrixDimensions = this.shape.length;
+		var layerCount = this.shape.length / 2;
+
+		var first_index = 0;
+		var last_index = this.matrixDimensions - 1; // -1 Because length is 4 but indices are from 0 to 3.
+
+		for (var layer = 0; layer < layerCount; layer++) {
+			for (var el = 0; el < matrixDimensions; el++) {
+				console.log("lol");
+			}
+		}
+
+		/*
+  this.undrawShape(); // If rotation appeared to be valid first undraw the current shape.
+  this.shape = rotation // Set shape to new rotation.
+  this.drawShape(); // Draw the new shape.
+  */
 	},
 
 	/*

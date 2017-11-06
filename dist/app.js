@@ -20628,12 +20628,12 @@ module.exports = function listToStyles (parentId, list) {
    */
 			SPAWN_SHAPES: {
 				I: [[0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0]],
-				J: [[2, 0, 0], [2, 2, 2]],
-				L: [[0, 0, 3], [3, 3, 3]],
+				J: [[2, 0, 0, 0], [2, 2, 2, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
+				L: [[0, 0, 3, 0], [3, 3, 3, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
 				O: [[0, 4, 4, 0], [0, 4, 4, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
-				S: [[0, 5, 5], [5, 5, 0]],
-				T: [[0, 6, 0], [6, 6, 6]],
-				Z: [[7, 7, 0], [0, 7, 7]]
+				S: [[0, 5, 5, 0], [5, 5, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
+				T: [[0, 6, 0, 0], [6, 6, 6, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
+				Z: [[7, 7, 0, 0], [0, 7, 7, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 			},
 
 			grid: null,
@@ -20666,7 +20666,7 @@ module.exports = function listToStyles (parentId, list) {
 			// If no tetromino is dropping at the moment.
 			if (!this.currTetromino || this.currTetromino.landed) {
 				// Spawn new tetromino on grid.
-				this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid, this.SPAWN_SHAPES.I);
+				this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid, this.randomLetter());
 			}
 
 			this.currTetromino.drop(); // Make tetromino continously drop.
@@ -20716,9 +20716,10 @@ module.exports = function listToStyles (parentId, list) {
 		},
 
 		randomLetter: function () {
-			var keys = Object.keys(this.LETTERS);
+			// TODO: Make randomize that is less random. For example, favor tetromino shapes that have not spawned as much as others.
+			var keys = Object.keys(this.SPAWN_SHAPES);
 
-			return this.LETTERS[keys[Math.floor(Math.random() * keys.length)]];
+			return this.SPAWN_SHAPES[keys[Math.floor(Math.random() * keys.length)]];
 		}
 	}
 });
@@ -21081,23 +21082,36 @@ Tetromino.prototype = {
  * Rotate the tetromino. Will ONLY rotate if the rotation is a valid move to make.
  */
 	rotate: function () {
-		var matrixDimensions = this.shape.length;
+		var shapeDimensions = this.shape.length;
 		var layerCount = this.shape.length / 2;
 
-		var first_index = 0;
-		var last_index = this.matrixDimensions - 1; // -1 Because length is 4 but indices are from 0 to 3.
+		var firstElIndex = 0;
+		var lastElIndex = shapeDimensions - 1; // -1 because the length is 4 but index is from 0 to 3 so last element will be at index = 3.
 
+		// If rotation is valid, undraw current shape before executing rotation.
+		this.undrawShape();
 		for (var layer = 0; layer < layerCount; layer++) {
-			for (var el = 0; el < matrixDimensions; el++) {
-				console.log("lol");
+			// Loop from first element in layer PER SIDE (so left, top, right and bottom) to last element.
+			for (var i = 0; i < lastElIndex - firstElIndex; i++) {
+				// Get element values
+				console.log(lastElIndex - i);
+
+				var currTop = this.shape[firstElIndex][firstElIndex + i];
+				var currRight = this.shape[firstElIndex + i][lastElIndex];
+				var currBottom = this.shape[lastElIndex][lastElIndex - i];
+				var currLeft = this.shape[lastElIndex - i][firstElIndex];
+
+				this.shape[firstElIndex][firstElIndex + i] = currLeft;
+				this.shape[firstElIndex + i][lastElIndex] = currTop;
+				this.shape[lastElIndex][lastElIndex - i] = currRight;
+				this.shape[lastElIndex - i][firstElIndex] = currBottom;
 			}
+			firstElIndex++;
+			lastElIndex--;
 		}
 
-		/*
-  this.undrawShape(); // If rotation appeared to be valid first undraw the current shape.
-  this.shape = rotation // Set shape to new rotation.
-  this.drawShape(); // Draw the new shape.
-  */
+		console.log(this.shape);
+		this.drawShape();
 	},
 
 	/*

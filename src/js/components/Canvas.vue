@@ -46,17 +46,42 @@ canvas {
 					[0, 0, 0, 0],
 					[0, 0, 0, 0],
 					],
-					J: [ [2, 0, 0], [2, 2, 2] ],
-					L: [ [0, 0, 3], [3, 3, 3] ], 
+					J: [
+					[2, 0, 0, 0], 
+					[2, 2, 2, 0],
+					[0, 0, 0, 0],
+					[0, 0, 0, 0],
+					],
+					L: [
+					[0, 0, 3, 0], 
+					[3, 3, 3, 0],
+					[0, 0, 0, 0],
+					[0, 0, 0, 0],
+					], 
 					O: [ 
 					[0, 4, 4, 0], 
 					[0, 4, 4, 0],
 					[0, 0, 0, 0],
 					[0, 0, 0, 0],
-					 ],
-					S: [ [0, 5, 5], [5, 5, 0] ],
-					T: [ [0, 6, 0], [6, 6, 6] ],
-					Z: [ [7, 7, 0], [0, 7, 7] ],
+					],
+					S: [ 
+					[0, 5, 5, 0], 
+					[5, 5, 0, 0],
+					[0, 0, 0, 0],
+					[0, 0, 0, 0],
+					],
+					T: [ 
+					[0, 6, 0, 0], 
+					[6, 6, 6, 0],
+					[0, 0, 0, 0],
+					[0, 0, 0, 0], 
+					],
+					Z: [ 
+					[7, 7, 0, 0], 
+					[0, 7, 7, 0],
+					[0, 0, 0, 0],
+					[0, 0, 0, 0], 
+					],
 				},
 
 				grid: null,
@@ -91,7 +116,7 @@ canvas {
 				// If no tetromino is dropping at the moment.
 				if(!this.currTetromino || this.currTetromino.landed) {
 					// Spawn new tetromino on grid.
-					this.currTetromino = new Tetromino(this.grid, this.SPAWN_SHAPES.I);
+					this.currTetromino = new Tetromino(this.grid, this.randomLetter());
 				}
 
 				this.currTetromino.drop(); // Make tetromino continously drop.
@@ -144,9 +169,10 @@ canvas {
 			},
 
 			randomLetter: function() {
-				var keys = Object.keys(this.LETTERS);
+				// TODO: Make randomize that is less random. For example, favor tetromino shapes that have not spawned as much as others.
+				var keys = Object.keys(this.SPAWN_SHAPES);
 				
-				return this.LETTERS[keys[Math.floor(Math.random() * keys.length)]];
+				return this.SPAWN_SHAPES[keys[Math.floor(Math.random() * keys.length)]];
 			}
 		}
 	}

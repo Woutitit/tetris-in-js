@@ -178,24 +178,37 @@ Tetromino.prototype = {
 	* Rotate the tetromino. Will ONLY rotate if the rotation is a valid move to make.
 	*/
 	rotate: function() {
-		var matrixDimensions = this.shape.length;
+		var shapeDimensions = this.shape.length;
 		var layerCount = this.shape.length / 2;
 
-		var first_index = 0;
-		var last_index = this.matrixDimensions - 1; // -1 Because length is 4 but indices are from 0 to 3.
+		var firstElIndex = 0;
+		var lastElIndex = shapeDimensions - 1; // -1 because the length is 4 but index is from 0 to 3 so last element will be at index = 3.
 
+		// If rotation is valid, undraw current shape before executing rotation.
+		this.undrawShape();
 		for (var layer = 0; layer < layerCount; layer++) {
-			for(var el = 0; el < matrixDimensions; el++) {
-				console.log("lol");
+			// Loop from first element in layer PER SIDE (so left, top, right and bottom) to last element.
+			for(var i = 0; i < lastElIndex - firstElIndex; i++) {
+				// Get element values
+				console.log(lastElIndex - i);
+			
+				var currTop = this.shape[firstElIndex][firstElIndex + i];
+				var currRight = this.shape[firstElIndex + i][lastElIndex];
+				var currBottom = this.shape[lastElIndex][lastElIndex - i];
+				var currLeft = this.shape[lastElIndex - i][firstElIndex];
+				
+				this.shape[firstElIndex][firstElIndex + i] = currLeft;
+				this.shape[firstElIndex + i][lastElIndex] = currTop;
+				this.shape[lastElIndex][lastElIndex - i] = currRight;
+				this.shape[lastElIndex - i][firstElIndex] = currBottom;
+				
 			}
+			firstElIndex++;
+			lastElIndex--;
 		}
 
-		
-		/*
-		this.undrawShape(); // If rotation appeared to be valid first undraw the current shape.
-		this.shape = rotation // Set shape to new rotation.
-		this.drawShape(); // Draw the new shape.
-		*/
+		console.log(this.shape);
+		this.drawShape();	
 	},
 
 

@@ -115,7 +115,7 @@ Tetromino.prototype = {
 	move: function(direction) {
 		var potentialTopleft = this.getPotentialTopLeft(direction); // Get position we want to go to.
 
-		if(this.validPosition(potentialTopleft)) {
+		if(this.testPosition(potentialTopleft, this.shape)) {
 			this.updatePosition(potentialTopleft);
 		} 
 		else if(direction === "down") {
@@ -145,20 +145,6 @@ Tetromino.prototype = {
 		}
 
 		return potentialTopLeft;
-	},
-
-
-	validPosition: function(potentialTopleft) {
-		var errors = 0;
-		
-		this.eachBlock(potentialTopleft, this.shape, (x, y, colorValue) => {
-			// Check if cell for the blocks future position is defined or not occupied yet.
-			if(this.grid.playingField[y] === undefined || this.grid.playingField[y][x] === undefined || this.grid.playingField[y][x] !== 0) {
-				return errors++;
-			}
-		});
-		
-		return errors > 0 ? false : true;
 	},
 
 
@@ -212,19 +198,25 @@ Tetromino.prototype = {
 		}
 
 		// Test shape
+		if (this.testPosition(this.topLeft, potentialShape)) {
+			this.undrawShape();
+			this.shape = potentialShape;
+			this.drawShape();
+		};	
+	},
+
+
+	// Note: should this method be in the grid class instead of here?
+	testPosition: function(topLeft, shape) {
 		var errors = 0;
 
-		this.eachBlock(this.topLeft, potentialShape, (x, y, colorValue) => {
+		this.eachBlock(topLeft, shape, (x, y, colorValue) => {
 			if(this.grid.playingField[y] === undefined || this.grid.playingField[y][x] === undefined || this.grid.playingField[y][x] !== 0) {
 				errors++;
 			}
 		});
 
-		if(errors === 0) {
-			this.undrawShape();
-			this.shape = potentialShape;
-			this.drawShape();
-		}	
+		return errors === 0 ? true: false;	
 	},
 
 

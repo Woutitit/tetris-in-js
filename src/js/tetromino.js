@@ -164,8 +164,6 @@ Tetromino.prototype = {
 		this.eachBlock(this.topLeft, this.shape, (x, y, colorValue) => {
 			this.grid.insert(x, y, colorValue);
 		});
-
-		console.log(this.grid.playingField);
 	},
 
 

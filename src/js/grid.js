@@ -40,6 +40,7 @@ function Grid(colSpan, rowSpan, canvas, celSpan) {
 
 	this.CELL_SPAN = celSpan;
 
+	// Colors used to color the spaces that tetrominoes occupy.
 	this.GRID_COLORS = {
 		1: "#000",
 		2: "blue",
@@ -143,13 +144,13 @@ Grid.prototype = {
 				});
 			}
 		};
-
-		console.log(this.playingField);
 	},
 
 
 	/**
 	* Draw a single set of x, y coordinates and its color. Use this in conjunction with a loop.
+	* IMPORTANT: Instead of drawing and undrawing we could smootthly move our rectangles (for example with a liner clear).
+	* The backend area would obviously still immediately update but we can simply smoothly move our rectangles down as much as necessary.
 	*/ 
 	draw: function(x, y, colorValue) {
 		this.canvasCtx.fillStyle = this.GRID_COLORS[colorValue];
@@ -166,4 +167,3 @@ Grid.prototype = {
 }
 
 export default Grid;
-

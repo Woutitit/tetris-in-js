@@ -111,6 +111,11 @@ canvas {
 				// If no tetromino is dropping at the moment.
 				if(!this.currTetromino || this.currTetromino.landed) {
 					// Spawn new tetromino on grid.
+					// TODO: BEFORE SPAWNING CHECK IF THESE COORDINATES ARE NOT OCCUPIED
+					// IF THEY ARE IT IS GAME OVER.
+					// SO WE DO THIS BY RANDOMING OUR TETROMINO WITH NEW AND IF
+					// FREE COORDINATES THEN EXECUTE THE SPAWN METHOD.
+					// SO SPAWN WILL REPLACE INIT.
 					this.currTetromino = new Tetromino(this.grid, this.randomLetter());
 				}
 

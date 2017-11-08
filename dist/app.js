@@ -20858,12 +20858,14 @@ Grid.prototype = {
 			} else {
 				this.playingField[i].forEach((colorValue, index) => {
 					// Replace current row with row above it.
+					var newColor = this.playingField[i - 1][index];
+
 					this.playingField[i][index] = this.playingField[i - 1][index];
 
 					// Also if the block above current row is filled we should undraw and redraw it at the new position.
 					if (this.playingField[i - 1][index] !== 0) {
 						this.undraw(index, i - 1);
-						this.draw(index, i, this.playingField[i - 1][index]);
+						this.draw(index, i, newColor);
 					}
 				});
 			}
@@ -20945,6 +20947,8 @@ function Tetromino(grid, shape) {
 		y: 0
 	};
 
+	this.COLOR_VALUE = 0;
+
 	this.dropStart = 0;
 	this.DROP_SPEED = 1000;
 
@@ -20987,6 +20991,7 @@ Tetromino.prototype = {
  */
 	drawShape: function () {
 		this.eachBlock(this.topLeft, this.shape, (x, y, colorValue) => {
+			this.COLOR_VALUE = this.colorValue; // Store color value for easy access.
 			this.grid.draw(x, y, colorValue);
 		});
 	},
@@ -21061,8 +21066,8 @@ Tetromino.prototype = {
 		var lastElIndex = shapeDimensions - 1; // -1 because the length is 4 but index is from 0 to 3 so last element will be at index = 3.
 
 		// Create array where we will hold our test shape.
-		// We fill it with 1's so not be empty AND to have blocks that not rotate be filled at all times.
-		var potentialShape = Array(shapeDimensions).fill().map(() => Array(shapeDimensions).fill(1));
+		// We fill it with the shape's color value so not be empty AND to have blocks that not rotate be filled at all times.
+		var potentialShape = Array(shapeDimensions).fill().map(() => Array(shapeDimensions).fill(this.COLOR_VALUE));
 		// If rotation is valid, undraw current shape before executing rotation.
 
 		for (var layer = 0; layer < layerCount; layer++) {

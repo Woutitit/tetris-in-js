@@ -20819,10 +20819,10 @@ Grid.prototype = {
 	insert: function (x, y, colorValue) {
 		this.playingField[y][x] = colorValue;
 
-		this.detectRow(y);
+		this.detectLine(y);
 	},
 
-	detectRow: function (y) {
+	detectLine: function (y) {
 		// TODO: We should also add this to a "row" counter for the UI.
 		var count = 0;
 		this.playingField[y].forEach(x => {
@@ -20832,12 +20832,12 @@ Grid.prototype = {
 		});
 
 		if (count === 10) {
-			this.removeRow(y);
+			this.clearLine(y);
 		}
 	},
 
 	// TODO: Add a small delay for spawning new tetromino until when all rows are cleared.
-	removeRow: function (y) {
+	clearLine: function (y) {
 		this.playingField[y].forEach((value, x) => {
 			this.playingField[y][x] = 0;
 			this.undraw(x, y);

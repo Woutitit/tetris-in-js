@@ -132,18 +132,19 @@ Grid.prototype = {
 			else {
 				this.playingField[i].forEach((colorValue, index) => {
 					// Replace current row with row above it.
-					var newColor = this.playingField[i - 1][index];
-
 					this.playingField[i][index] = this.playingField[i - 1][index];
 
 					// Also if the block above current row is filled we should undraw and redraw it at the new position.
 					if(this.playingField[i - 1][index] !== 0) {
 						this.undraw(index, i - 1);
-						this.draw(index, i, newColor);
+						// Problem the row goes down but the color does not change.
+						this.draw(index, i, this.playingField[i - 1][index]);
 					}	
 				});
 			}
 		};
+
+		console.log(this.playingField);
 	},
 
 

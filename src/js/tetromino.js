@@ -96,7 +96,7 @@ Tetromino.prototype = {
 	*/
 	drawShape: function() {
 		this.eachBlock(this.topLeft, this.shape, (x, y, colorValue) => {
-			this.COLOR_VALUE = this.colorValue; // Store color value for easy access.
+			this.COLOR_VALUE = colorValue; // Store color value for easy access.
 			this.grid.draw(x, y, colorValue);
 		});
 	},
@@ -164,6 +164,8 @@ Tetromino.prototype = {
 		this.eachBlock(this.topLeft, this.shape, (x, y, colorValue) => {
 			this.grid.insert(x, y, colorValue);
 		});
+
+		console.log(this.grid.playingField);
 	},
 
 

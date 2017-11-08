@@ -60,12 +60,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 125);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 124:
+/******/ ([
+/* 0 */
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -174,32 +173,57 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
+/* 1 */
+/***/ (function(module, exports) {
 
-/***/ 125:
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(328);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
  //Webpack alias for vue/dist/vue.js
 
 // Dumb components
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component("v-panel", __webpack_require__(346).default);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component("v-panel", __webpack_require__(7).default);
 
 // Smart components
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component("v-game", __webpack_require__(343).default);
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component("v-canvas", __webpack_require__(333).default);
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component("v-score-panel", __webpack_require__(348).default);
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component("v-lines-panel", __webpack_require__(351).default);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component("v-game", __webpack_require__(9).default);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component("v-canvas", __webpack_require__(11).default);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component("v-score-panel", __webpack_require__(22).default);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component("v-lines-panel", __webpack_require__(25).default);
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
 	el: "#app"
 });
 
 /***/ }),
-
-/***/ 328:
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, setImmediate) {/*!
@@ -10755,11 +10779,10 @@ return Vue$3;
 
 })));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(49), __webpack_require__(329).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(4).setImmediate))
 
 /***/ }),
-
-/***/ 329:
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var apply = Function.prototype.apply;
@@ -10812,14 +10835,13 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(330);
+__webpack_require__(5);
 exports.setImmediate = setImmediate;
 exports.clearImmediate = clearImmediate;
 
 
 /***/ }),
-
-/***/ 330:
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -11009,11 +11031,10 @@ exports.clearImmediate = clearImmediate;
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(49), __webpack_require__(331)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(6)))
 
 /***/ }),
-
-/***/ 331:
+/* 6 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -11203,20 +11224,175 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-
-/***/ 333:
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_Canvas_vue__ = __webpack_require__(339);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1ede9e78_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Canvas_vue__ = __webpack_require__(342);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_vue_loader_lib_template_compiler_index_id_data_v_40e071d8_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Panel_vue__ = __webpack_require__(8);
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = null
+/* template */
+
+/* template functional */
+  var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __WEBPACK_IMPORTED_MODULE_0__node_modules_vue_loader_lib_template_compiler_index_id_data_v_40e071d8_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Panel_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "src\\js\\components\\Panel.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-40e071d8", Component.options)
+  } else {
+    hotAPI.reload("data-v-40e071d8", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["default"] = (Component.exports);
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "panel" }, [_vm._t("default")], 2)
+}
+var staticRenderFns = []
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-40e071d8", esExports)
+  }
+}
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4b4acbdc_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Game_vue__ = __webpack_require__(10);
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = null
+/* template */
+
+/* template functional */
+  var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __WEBPACK_IMPORTED_MODULE_0__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4b4acbdc_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Game_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "src\\js\\components\\Game.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4b4acbdc", Component.options)
+  } else {
+    hotAPI.reload("data-v-4b4acbdc", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["default"] = (Component.exports);
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("v-canvas", { attrs: { id: "gameCanvas", size: "2" } }),
+      _vm._v(" "),
+      _c("v-score-panel"),
+      _vm._v(" "),
+      _c("v-lines-panel")
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-4b4acbdc", esExports)
+  }
+}
+
+/***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_Canvas_vue__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1ede9e78_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Canvas_vue__ = __webpack_require__(21);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(334)
+  __webpack_require__(12)
 }
-var normalizeComponent = __webpack_require__(124)
+var normalizeComponent = __webpack_require__(0)
 /* script */
 
 /* template */
@@ -11260,18 +11436,17 @@ if (false) {(function () {
 
 
 /***/ }),
-
-/***/ 334:
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(335);
+var content = __webpack_require__(13);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(337)("b34a8050", content, false);
+var update = __webpack_require__(15)("b34a8050", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -11287,11 +11462,10 @@ if(false) {
 }
 
 /***/ }),
-
-/***/ 335:
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(336)(undefined);
+exports = module.exports = __webpack_require__(14)(undefined);
 // imports
 
 
@@ -11302,8 +11476,7 @@ exports.push([module.i, "\ncanvas {\r\n\t/* TODO: Position canvas in middle of w
 
 
 /***/ }),
-
-/***/ 336:
+/* 14 */
 /***/ (function(module, exports) {
 
 /*
@@ -11385,8 +11558,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-
-/***/ 337:
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -11405,7 +11577,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(338)
+var listToStyles = __webpack_require__(16)
 
 /*
 type StyleObject = {
@@ -11607,8 +11779,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-
-/***/ 338:
+/* 16 */
 /***/ (function(module, exports) {
 
 /**
@@ -11641,13 +11812,11 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-
-/***/ 339:
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__grid_js__ = __webpack_require__(340);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tetromino_js__ = __webpack_require__(341);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__game_js__ = __webpack_require__(18);
 //
 //
 //
@@ -11659,7 +11828,6 @@ module.exports = function listToStyles (parentId, list) {
 //
 //
 //
-
 
 
 
@@ -11668,49 +11836,73 @@ module.exports = function listToStyles (parentId, list) {
 	data: function () {
 		return {
 			canvas: null,
-			canvasCtx: null,
-
-			COLS: 10,
-			ROWS: 16,
-
-			CELL_WIDTH: 0,
-			CELL_HEIGHT: 0,
 
 			CANVAS_WIDTH: 0,
-			CANVAS_HEIGHT: 0,
-
-			/**
-   * THE LETTER COLOR CODES:
-   * 1 = light blue
-   * 2 = dark blue
-   * 3 = orange
-   * 4 = yellow
-   * 5 = green
-   * 6 = purple
-   * 7 = red
-   */
-			SPAWN_SHAPES: {
-				I: [[0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0]],
-				J: [[2, 0, 0], [2, 2, 2], [0, 0, 0]],
-				L: [[0, 0, 3], [3, 3, 3], [0, 0, 0]],
-				O: [[0, 0, 0, 0], [0, 4, 4, 0], [0, 4, 4, 0], [0, 0, 0, 0]],
-				S: [[0, 5, 5], [5, 5, 0], [0, 0, 0]],
-				T: [[0, 6, 0], [6, 6, 6], [0, 0, 0]],
-				Z: [[7, 7, 0], [0, 7, 7], [0, 0, 0]]
-			},
-
-			grid: null,
-			currTetromino: null
+			CANVAS_HEIGHT: 0
 		};
 	},
-	created() {
+	mounted: function () {
+		// TODO: Start game on button click.
+		// TODO: Maybe we can GET the width and height of this canvas element so we only need to supply the canvas?
+		new __WEBPACK_IMPORTED_MODULE_0__game_js__["a" /* default */](canvas);
+	}
+});
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__grid_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tetromino_js__ = __webpack_require__(20);
+
+
+
+function Game(canvas) {
+	this.canvas = canvas;
+	this.canvasCtx = canvas.getContext("2d");
+
+	this.COLS = 10;
+	this.ROWS = 16;
+
+	this.CELL_WIDTH = 0;
+	this.CELL_HEIGHT = 0;
+
+	this.CANVAS_WIDTH = 0;
+	this.CANVAS_HEIGHT = 0;
+
+	/**
+ * THE LETTER COLOR CODES:
+ * 1 = light blue
+ * 2 = dark blue
+ * 3 = orange
+ * 4 = yellow
+ * 5 = green
+ * 6 = purple
+ * 7 = red
+ */
+	this.SPAWN_SHAPES = {
+		I: [[0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0]],
+		J: [[2, 0, 0], [2, 2, 2], [0, 0, 0]],
+		L: [[0, 0, 3], [3, 3, 3], [0, 0, 0]],
+		O: [[0, 0, 0, 0], [0, 4, 4, 0], [0, 4, 4, 0], [0, 0, 0, 0]],
+		S: [[0, 5, 5], [5, 5, 0], [0, 0, 0]],
+		T: [[0, 6, 0], [6, 6, 6], [0, 0, 0]],
+		Z: [[7, 7, 0], [0, 7, 7], [0, 0, 0]]
+	}, grid = null, currTetromino = null;
+
+	// Initialize game.
+	this.init();
+}
+
+Game.prototype = {
+	init: function () {
 		// Note: we need to use "created()" to be able to assign values to width and height. Otherwise canvas doesn't pick them up.
 		this.CELL_DIMENSION = this.COLS * this.size; // Cell dimensions are equal to column amount times size.
 
 		this.CANVAS_WIDTH = this.CELL_DIMENSION * this.COLS;
 		this.CANVAS_HEIGHT = this.CELL_DIMENSION * this.ROWS;
-	},
-	mounted: function () {
+
 		this.canvas = document.getElementById(this.id);
 		this.canvasCtx = this.canvas.getContext("2d");
 
@@ -11722,79 +11914,79 @@ module.exports = function listToStyles (parentId, list) {
 		// Now what we have to do is move down the tetromino with a set Interval.
 		this.update();
 	},
-	methods: {
-		update: function () {
-			// console.log(this.grid.playingField);
 
-			// If no tetromino is dropping at the moment.
-			if (!this.currTetromino || this.currTetromino.landed) {
-				// Spawn new tetromino on grid.
-				// TODO: BEFORE SPAWNING CHECK IF THESE COORDINATES ARE NOT OCCUPIED
-				// IF THEY ARE IT IS GAME OVER.
-				// SO WE DO THIS BY RANDOMING OUR TETROMINO WITH NEW AND IF
-				// FREE COORDINATES THEN EXECUTE THE SPAWN METHOD.
-				// SO SPAWN WILL REPLACE INIT.
-				this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid, this.randomLetter());
-			}
+	update: function () {
+		// console.log(this.grid.playingField);
 
-			this.currTetromino.drop(); // Make tetromino continously drop.
-
-			requestAnimationFrame(this.update);
-		},
-
-		startListening: function () {
-			document.addEventListener("keydown", this);
-		},
-
-		/*
-  * Handle all events we're listening to in "startListening()".
-  * @param {Event} event
-  */
-		handleEvent: function (event) {
-			switch (event.type) {
-				case "keydown":
-					this.onKeyDown(event.key);
-					break;
-			}
-		},
-
-		/*
-  * Handle keydown keyboard events.
-  * Note: we do not need smooth movement since we want a keypress to only trigger one move event each it has been pressed.
-  * @param {String} key - The keyboard key that has been pressed
-  */
-		onKeyDown: function (key) {
-			switch (key) {
-				case "ArrowLeft":
-					this.currTetromino.move("left");
-					break;
-
-				case "ArrowUp":
-					this.currTetromino.rotate();
-					break;
-
-				case "ArrowRight":
-					this.currTetromino.move("right");
-					break;
-
-				case "ArrowDown":
-					this.currTetromino.move("down");
-					break;
-			}
-		},
-
-		randomLetter: function () {
-			// TODO: Make randomize that is less random. For example, favor tetromino shapes that have not spawned as much as others.
-			var keys = Object.keys(this.SPAWN_SHAPES);
-
-			return this.SPAWN_SHAPES[keys[Math.floor(Math.random() * keys.length)]];
+		// If no tetromino is dropping at the moment.
+		if (!this.currTetromino || this.currTetromino.landed) {
+			// Spawn new tetromino on grid.
+			// TODO: BEFORE SPAWNING CHECK IF THESE COORDINATES ARE NOT OCCUPIED
+			// IF THEY ARE IT IS GAME OVER.
+			// SO WE DO THIS BY RANDOMING OUR TETROMINO WITH NEW AND IF
+			// FREE COORDINATES THEN EXECUTE THE SPAWN METHOD.
+			// SO SPAWN WILL REPLACE INIT.
+			this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid, this.randomLetter());
 		}
+
+		this.currTetromino.drop(); // Make tetromino continously drop.
+
+		requestAnimationFrame(this.update);
+	},
+
+	startListening: function () {
+		document.addEventListener("keydown", this);
+	},
+
+	/*
+ * Handle all events we're listening to in "startListening()".
+ * @param {Event} event
+ */
+	handleEvent: function (event) {
+		switch (event.type) {
+			case "keydown":
+				this.onKeyDown(event.key);
+				break;
+		}
+	},
+
+	/*
+ * Handle keydown keyboard events.
+ * Note: we do not need smooth movement since we want a keypress to only trigger one move event each it has been pressed.
+ * @param {String} key - The keyboard key that has been pressed
+ */
+	onKeyDown: function (key) {
+		switch (key) {
+			case "ArrowLeft":
+				this.currTetromino.move("left");
+				break;
+
+			case "ArrowUp":
+				this.currTetromino.rotate();
+				break;
+
+			case "ArrowRight":
+				this.currTetromino.move("right");
+				break;
+
+			case "ArrowDown":
+				this.currTetromino.move("down");
+				break;
+		}
+	},
+
+	randomLetter: function () {
+		// TODO: Make randomize that is less random. For example, favor tetromino shapes that have not spawned as much as others.
+		var keys = Object.keys(this.SPAWN_SHAPES);
+
+		return this.SPAWN_SHAPES[keys[Math.floor(Math.random() * keys.length)]];
 	}
-});
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Game);
 
 /***/ }),
-
-/***/ 340:
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11962,8 +12154,7 @@ Grid.prototype = {
 /* harmony default export */ __webpack_exports__["a"] = (Grid);
 
 /***/ }),
-
-/***/ 341:
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12200,8 +12391,7 @@ Tetromino.prototype = {
 /* harmony default export */ __webpack_exports__["a"] = (Tetromino);
 
 /***/ }),
-
-/***/ 342:
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12225,176 +12415,15 @@ if (false) {
 }
 
 /***/ }),
-
-/***/ 343:
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4b4acbdc_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Game_vue__ = __webpack_require__(344);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_ScorePanel_vue__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_639c9eb2_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_ScorePanel_vue__ = __webpack_require__(24);
 var disposed = false
-var normalizeComponent = __webpack_require__(124)
-/* script */
-var __vue_script__ = null
-/* template */
-
-/* template functional */
-  var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __WEBPACK_IMPORTED_MODULE_0__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4b4acbdc_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Game_vue__["a" /* default */],
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "src\\js\\components\\Game.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4b4acbdc", Component.options)
-  } else {
-    hotAPI.reload("data-v-4b4acbdc", Component.options)
-' + '  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-/* harmony default export */ __webpack_exports__["default"] = (Component.exports);
-
-
-/***/ }),
-
-/***/ 344:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("v-canvas", { attrs: { id: "gameCanvas", size: "2" } }),
-      _vm._v(" "),
-      _c("v-score-panel"),
-      _vm._v(" "),
-      _c("v-lines-panel")
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-var esExports = { render: render, staticRenderFns: staticRenderFns }
-/* harmony default export */ __webpack_exports__["a"] = (esExports);
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-4b4acbdc", esExports)
-  }
-}
-
-/***/ }),
-
-/***/ 346:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_vue_loader_lib_template_compiler_index_id_data_v_40e071d8_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Panel_vue__ = __webpack_require__(347);
-var disposed = false
-var normalizeComponent = __webpack_require__(124)
-/* script */
-var __vue_script__ = null
-/* template */
-
-/* template functional */
-  var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __WEBPACK_IMPORTED_MODULE_0__node_modules_vue_loader_lib_template_compiler_index_id_data_v_40e071d8_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Panel_vue__["a" /* default */],
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "src\\js\\components\\Panel.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-40e071d8", Component.options)
-  } else {
-    hotAPI.reload("data-v-40e071d8", Component.options)
-' + '  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-/* harmony default export */ __webpack_exports__["default"] = (Component.exports);
-
-
-/***/ }),
-
-/***/ 347:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "panel" }, [_vm._t("default")], 2)
-}
-var staticRenderFns = []
-render._withStripped = true
-var esExports = { render: render, staticRenderFns: staticRenderFns }
-/* harmony default export */ __webpack_exports__["a"] = (esExports);
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-40e071d8", esExports)
-  }
-}
-
-/***/ }),
-
-/***/ 348:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_ScorePanel_vue__ = __webpack_require__(350);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_639c9eb2_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_ScorePanel_vue__ = __webpack_require__(349);
-var disposed = false
-var normalizeComponent = __webpack_require__(124)
+var normalizeComponent = __webpack_require__(0)
 /* script */
 
 /* template */
@@ -12438,8 +12467,26 @@ if (false) {(function () {
 
 
 /***/ }),
+/* 23 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-/***/ 349:
+"use strict";
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+	data: function () {
+		return {
+			Score: 0
+		};
+	}
+});
+
+/***/ }),
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12461,36 +12508,15 @@ if (false) {
 }
 
 /***/ }),
-
-/***/ 350:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-	data: function () {
-		return {
-			Score: 0
-		};
-	}
-});
-
-/***/ }),
-
-/***/ 351:
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_LinesPanel_vue__ = __webpack_require__(352);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_db588e36_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_LinesPanel_vue__ = __webpack_require__(353);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_LinesPanel_vue__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_db588e36_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_LinesPanel_vue__ = __webpack_require__(27);
 var disposed = false
-var normalizeComponent = __webpack_require__(124)
+var normalizeComponent = __webpack_require__(0)
 /* script */
 
 /* template */
@@ -12534,8 +12560,7 @@ if (false) {(function () {
 
 
 /***/ }),
-
-/***/ 352:
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12554,8 +12579,7 @@ if (false) {(function () {
 });
 
 /***/ }),
-
-/***/ 353:
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12576,34 +12600,5 @@ if (false) {
   }
 }
 
-/***/ }),
-
-/***/ 49:
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
 /***/ })
-
-/******/ });
+/******/ ]);

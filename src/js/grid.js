@@ -82,6 +82,49 @@ Grid.prototype = {
 	*/
 	insert: function(x, y, colorValue) {
 		this.playingField[y][x] = colorValue;
+
+		this.detectRow(y);
+	},
+
+
+	detectRow: function(y) {
+		// We should also ad this to a "row" counter for the UI.
+		var count = 0;
+		this.playingField[y].forEach((x) => {
+			if(x !== 0) { count++; }
+		});
+
+		if (count === 10) {
+			this.removeRow(y);
+		}
+	},
+
+	// TODO: Add a small delay for spawning new tetromino until when all rows are cleared.
+	removeRow: function(y) {
+		this.playingField[y].forEach((value, x) => {
+			this.playingField[y][x] = 0;
+			this.undraw(x, y);
+		});
+		for (var i = y; i >= 0; i--) {
+			// Special case for top row where we make all the values simply 0.
+			if(i === 0) {
+				this.playingField[i].forEach((colorValue, index) => {
+					this.playingField[i][index] = 0;
+				});
+			}
+			else {
+			this.playingField[i].forEach((colorValue, index) => {
+				// Replace current row with row above it.
+				this.playingField[i][index] = this.playingField[i - 1][index];
+
+				// Also if the block above current row is filled we should undraw and redraw it at the new position.
+				if(this.playingField[i - 1][index] !== 0) {
+					this.undraw(index, i - 1);
+					this.draw(index, i, "#000");
+				}	
+			});
+		}
+		};
 	},
 
 
@@ -129,6 +172,11 @@ Grid.prototype = {
 		this.canvasCtx.clearRect(0, y * this.CELL_SPAN, this.CELL_SPAN * this.COL_SPAN, this.CELL_SPAN);
 	},
 
+	drawRow: function(y) {
+		// Note: x will always be 0 when undrawing a row.
+		this.canvasCtx.fillRect(0, y * this.CELL_SPAN, this.CELL_SPAN * this.COL_SPAN, this.CELL_SPAN);
+	},
+
 
 	/**
 	* Pushes coordinates that also should be occupied to the global occupiedCells object.
@@ -162,27 +210,6 @@ Grid.prototype = {
 				this.removeRow(index); // index is the y coordinate that should be removed.
 			}
 		})
-	},
-
-
-	removeRow: function(rowCoordinate) {
-		this.undrawRow(rowCoordinate);
-
-		// Also remove all coordinates with this row coordinate from backend.
-		Object.keys(this.occupiedCells).forEach((color) => {
-			this.occupiedCells[color].forEach((coordinates, index) => {
-				var occupiedCellX = coordinates[0];
-				var occupiedCellY = coordinates[1];
-
-				if(occupiedCellY === rowCoordinate) {
-					console.log(this.occupiedCells[color].splice(index, 1));
-				}
-			});
-		});
-
-		// Now we should move ALL coordinates on the playing field 1 y value down.
-		this.update();
-		console.log(this.playingField);
 	}
 }
 

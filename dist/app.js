@@ -11882,14 +11882,14 @@ function Game(canvas, columns, rows, size) {
 
 	this.colSpan = columns;
 	this.rowSpan = rows;
-	this.celSpan = canvasWidth / columns;
+	this.celSpan = this.canvasWidth / columns;
 
 	this.init(); // Initialize game.
 }
 
 Game.prototype = {
 	init: function () {
-		new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.canvasCtx, colSpan, rowSpan, cellSpan);
+		new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.canvasCtx, this.colSpan, this.rowSpan, this.cellSpan);
 	}
 };
 
@@ -11900,7 +11900,15 @@ Game.prototype = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Grid(canvasCtx, colSpan, rowSpan, cellSpan) {}
+function Grid(canvasCtx, colSpan, rowSpan, cellSpan) {
+	this.init(rowSpan, colSpan);
+}
+
+Grid.prototype = {
+	init: function (rowSpan, colSpan) {
+		var gridData = Array(rowSpan).fill().map(() => Array(colSpan).fill(0));
+	}
+};
 
 /* harmony default export */ __webpack_exports__["a"] = (Grid);
 

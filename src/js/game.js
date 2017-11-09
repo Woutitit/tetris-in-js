@@ -10,14 +10,14 @@ function Game(canvas, columns, rows, size) {
 
 	this.colSpan = columns;
 	this.rowSpan = rows;
-	this.celSpan = canvasWidth / columns;
+	this.celSpan = this.canvasWidth / columns;
 
 	this.init(); // Initialize game.
 }
 
 Game.prototype = {
 	init: function() {
-		new Grid(this.canvasCtx, colSpan, rowSpan, cellSpan);
+		new Grid(this.canvasCtx, this.colSpan, this.rowSpan, this.cellSpan);
 	}
 }
 

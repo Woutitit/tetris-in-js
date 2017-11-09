@@ -2,7 +2,7 @@
 Written in JavaScript, Vue.js and HTML 5 canvas. 
 
 ## Source code clarifications
-Here I address and explain some "weird" decisions I have made when coding this game up. It can be useful for later references for others or myself.
+Here I address and explain some "weird" decisions I have made when coding this game up. It can be useful as later reference for others or myself.
 
 ### In game.js
 * It might look very counter intuitive to do `Grid.moveTetromino(direction)` instead of something like `Tetromino.move(direction)`. However, we do this because

@@ -2,7 +2,7 @@ import Grid from "./grid.js";
 import Tetromino from "./tetromino.js";
 
 function Game(canvas, columns, rows, size, parent) {
-	
+
 	this.canvas = canvas;
 	this.canvasCtx = canvas.getContext("2d");
 	this.parent = parent;
@@ -10,8 +10,8 @@ function Game(canvas, columns, rows, size, parent) {
 	this.COLS = columns;
 	this.ROWS = rows;
 
-	this.CANVAS_WIDTH = columns * size;
-	this.CANVAS_HEIGHT = rows * size;
+	this.CANVAS_WIDTH = canvas.width;
+	this.CANVAS_HEIGHT = canvas.height;
 
 	/**
 	* THE LETTER COLOR CODES:

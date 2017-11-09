@@ -11882,8 +11882,8 @@ function Game(canvas, columns, rows, size, parent) {
 	this.COLS = columns;
 	this.ROWS = rows;
 
-	this.CANVAS_WIDTH = columns * size;
-	this.CANVAS_HEIGHT = rows * size;
+	this.CANVAS_WIDTH = canvas.width;
+	this.CANVAS_HEIGHT = canvas.height;
 
 	/**
  * THE LETTER COLOR CODES:
@@ -12061,34 +12061,35 @@ function Grid(colSpan, rowSpan, canvas, canvasWidth, parent) {
 
 	this.currTetromino; // Holds tetromino we can control.
 
-
-	this.init(); // Intializes backend and frontend playing field.
+	// Intializes backend and frontend playing field.
+	this.playingField = this.createBackend(colSpan, rowSpan);
 }
 
 Grid.prototype = {
 	/**
- * Initialize playing field by creating and drawing initial grid.
+ * Create playing field backend matrix.
+ * @param {Number} colSpan - Number of columns.
+ * @param {Number} rowSpan - Number of rows.
+ * @return {Array}
  */
-	init: function () {
-		this.playingField = this.create(this.COL_SPAN, this.ROW_SPAN);
-	},
-
-	/**
- * Create playing field backend.
- */
-	create: function (colSpan, rowSpan) {
-		// Note: we add + 2 to the backend grid so that our tetrominoes spawn off canvas before they come in the field.
+	createBackend: function (colSpan, rowSpan) {
 		return Array(rowSpan).fill().map(() => Array(colSpan).fill(0));
 	},
 
 	/**
- * Check for new occupied (=landed) cells, update the backend playingfield with them and destroy rows if necesarry.
- *
+ * Insert a block of a tetromino at a certain x/y coordinate.
+ * @param {Number} x.
+ * @param {Number} y.
+ * @param {Number} colorValue.
  */
 	insert: function (x, y, colorValue) {
 		this.playingField[y][x] = colorValue;
 	},
 
+	/**
+ * Detect full lines on the playing field.
+ * @param {Array} rowCoordinates - Optional. Array of y coordinates that specify on which rows to look.
+ */
 	detectLines: function (rowsInserted) {
 		// TODO: We should also add this to a "row" counter for the UI.
 		var lines = 0;
@@ -12132,8 +12133,12 @@ Grid.prototype = {
 		}
 	},
 
-	// TODO: Add a small delay for spawning new tetromino until when all rows are cleared.
+	/**
+ * Clear a certain line.
+ * @param {Number} rowCoordinate.
+ */
 	clearLine: function (y) {
+		// TODO: Add a small delay for spawning new tetromino until when all rows are cleared.
 		this.playingField[y].forEach((value, x) => {
 			this.playingField[y][x] = 0;
 			this.undraw(x, y);
@@ -12143,6 +12148,10 @@ Grid.prototype = {
 		this.dropTetrominoes(y);
 	},
 
+	/**
+ * Drop all tetrominoes.
+ * @param {Number} rowCoordinate - The row coordinate to determine which rows have to drop after a line clear.
+ */
 	dropTetrominoes: function (y) {
 		// Start from cleared row and move up.
 		for (var i = y; i >= 0; i--) {
@@ -12169,17 +12178,22 @@ Grid.prototype = {
 	},
 
 	/**
- * Draw a single set of x, y coordinates and its color. Use this in conjunction with a loop.
- * IMPORTANT: Instead of drawing and undrawing we could smootthly move our rectangles (for example with a liner clear).
- * The backend area would obviously still immediately update but we can simply smoothly move our rectangles down as much as necessary.
+ * Draw a single set of x, y coordinates and its color.
+ * @param {Number} x.
+ * @param {Number} y.
+ * @param {Number} colorValue.
  */
 	draw: function (x, y, colorValue) {
+		// IMPORTANT: Instead of drawing and undrawing we could smootthly move our rectangles (for example with a liner clear).
+		// The backend area would obviously still immediately update but we can simply smoothly move our rectangles down as much as necessary.
 		this.canvasCtx.fillStyle = this.GRID_COLORS[colorValue];
 		this.canvasCtx.fillRect(x * this.CELL_SPAN, y * this.CELL_SPAN, this.CELL_SPAN, this.CELL_SPAN);
 	},
 
 	/**
- * Undraws/Clears any rectangles at a certain coordinate.
+ * Undraws/Clears any rectangles at given x/y coordinates.
+ * @param {Number} x.
+ * @param {Number} y.
  */
 	undraw: function (x, y) {
 		this.canvasCtx.clearRect(x * this.CELL_SPAN, y * this.CELL_SPAN, this.CELL_SPAN, this.CELL_SPAN);

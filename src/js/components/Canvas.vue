@@ -36,8 +36,8 @@ canvas {
 		},
 		// Some methods that will be called from the J files through the "parent argument" to be able to update reactive components.
 		methods: {
-			updateScore: function() {
-				this.$root.$emit("updateScore");
+			updateScore: function(score) {
+				this.$root.$emit("updateScore", score);
 			}
 		}
 	}

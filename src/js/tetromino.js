@@ -162,11 +162,17 @@ Tetromino.prototype = {
 
 	land: function() {
 		this.landed = true;
+
+		var linesInserted = [] // Y coordinates of where we placed our blocks.
+
 		this.eachBlock(this.topLeft, this.shape, (x, y, colorValue) => {
 			this.grid.insert(x, y, colorValue);
+			linesInserted.push(y);
 		});
 
-		this.parent.updateScore();
+		this.grid.detectLines(linesInserted);
+
+		//this.parent.updateScore();
 	},
 
 

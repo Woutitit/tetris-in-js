@@ -2,6 +2,7 @@ import Grid from "./grid.js";
 import Tetromino from "./tetromino.js";
 
 function Game(canvas, columns, rows, size, parent) {
+	
 	this.canvas = canvas;
 	this.canvasCtx = canvas.getContext("2d");
 	this.parent = parent;
@@ -72,7 +73,7 @@ function Game(canvas, columns, rows, size, parent) {
 Game.prototype = {
 	init: function() {
 
-		this.grid = new Grid(this.COLS, this.ROWS, this.canvas, this.CANVAS_WIDTH);
+		this.grid = new Grid(this.COLS, this.ROWS, this.canvas, this.CANVAS_WIDTH, this.parent);
 
 		// We have to update the grid everytime we make a succesful move/spawn something or destroy a row.
 		this.startListening();

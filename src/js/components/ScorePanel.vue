@@ -11,8 +11,8 @@
 			}
 		},
 		mounted: function() {
-			this.$root.$on("updateScore", () => {
-				this.score += 10;
+			this.$root.$on("updateScore", (score) => {
+				this.score += score;
 			})
 		}
 	}

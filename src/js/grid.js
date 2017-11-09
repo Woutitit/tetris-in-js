@@ -1,4 +1,4 @@
-function Grid(colSpan, rowSpan, canvas, canvasWidth) {
+function Grid(colSpan, rowSpan, canvas, canvasWidth, parent) {
 	/*--------------------------------------------------------------------------------------------
 	HOW THE GRID WORKS.
 	----------------------------------------------------------------------------------------------
@@ -56,6 +56,7 @@ function Grid(colSpan, rowSpan, canvas, canvasWidth) {
 
 	this.canvas = canvas;
 	this.canvasCtx = canvas.getContext("2d");
+	this.parent = parent;
 
 	this.currTetromino; // Holds tetromino we can control.
 
@@ -87,21 +88,49 @@ Grid.prototype = {
 	*/
 	insert: function(x, y, colorValue) {
 		this.playingField[y][x] = colorValue;
-
-		this.detectLine(y);
 	},
 
 
-	detectLine: function(y) {
+	detectLines: function(rowsInserted) {
 		// TODO: We should also add this to a "row" counter for the UI.
-		var count = 0;
-		this.playingField[y].forEach((x) => {
-			if(x !== 0) { count++; }
+		var lines = 0;
+
+		rowsInserted.forEach((y) => {
+			var count = 0;
+
+			this.playingField[y].forEach((x) => {
+				if(x !== 0) { count++; }
+			});
+
+			if (count === 10) {
+				lines++;
+				this.clearLine(y);
+			}
 		});
 
-		if (count === 10) {
-			this.clearLine(y);
+		// Update score according to the line count.
+		if(lines !== 0) {
+			var score = 0;
+			switch(lines) {
+				case 1:
+				score = 1 * 40 + 40; // Level times 40 + 40. We should make this level dynamic.
+				break;
+
+				case 2:
+				score = 1 * 100 + 100;
+				break;
+
+				case 3:
+				score = 1 * 300 + 300;
+				break;
+
+				case 4:
+				score = 1 * 1200 + 1200;
+				break;
+			}
+			this.parent.updateScore(score);
 		}
+		
 	},
 
 

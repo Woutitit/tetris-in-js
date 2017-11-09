@@ -11857,8 +11857,8 @@ module.exports = function listToStyles (parentId, list) {
 	},
 	// Some methods that will be called from the J files through the "parent argument" to be able to update reactive components.
 	methods: {
-		updateScore: function () {
-			this.$root.$emit("updateScore");
+		updateScore: function (score) {
+			this.$root.$emit("updateScore", score);
 		}
 	}
 });
@@ -11874,6 +11874,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 function Game(canvas, columns, rows, size, parent) {
+
 	this.canvas = canvas;
 	this.canvasCtx = canvas.getContext("2d");
 	this.parent = parent;
@@ -11914,7 +11915,7 @@ function Game(canvas, columns, rows, size, parent) {
 Game.prototype = {
 	init: function () {
 
-		this.grid = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.COLS, this.ROWS, this.canvas, this.CANVAS_WIDTH);
+		this.grid = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.COLS, this.ROWS, this.canvas, this.CANVAS_WIDTH, this.parent);
 
 		// We have to update the grid everytime we make a succesful move/spawn something or destroy a row.
 		this.startListening();
@@ -11998,7 +11999,7 @@ Game.prototype = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Grid(colSpan, rowSpan, canvas, canvasWidth) {
+function Grid(colSpan, rowSpan, canvas, canvasWidth, parent) {
 	/*--------------------------------------------------------------------------------------------
  HOW THE GRID WORKS.
  ----------------------------------------------------------------------------------------------
@@ -12056,6 +12057,7 @@ function Grid(colSpan, rowSpan, canvas, canvasWidth) {
 
 	this.canvas = canvas;
 	this.canvasCtx = canvas.getContext("2d");
+	this.parent = parent;
 
 	this.currTetromino; // Holds tetromino we can control.
 
@@ -12085,21 +12087,48 @@ Grid.prototype = {
  */
 	insert: function (x, y, colorValue) {
 		this.playingField[y][x] = colorValue;
-
-		this.detectLine(y);
 	},
 
-	detectLine: function (y) {
+	detectLines: function (rowsInserted) {
 		// TODO: We should also add this to a "row" counter for the UI.
-		var count = 0;
-		this.playingField[y].forEach(x => {
-			if (x !== 0) {
-				count++;
+		var lines = 0;
+
+		rowsInserted.forEach(y => {
+			var count = 0;
+
+			this.playingField[y].forEach(x => {
+				if (x !== 0) {
+					count++;
+				}
+			});
+
+			if (count === 10) {
+				lines++;
+				this.clearLine(y);
 			}
 		});
 
-		if (count === 10) {
-			this.clearLine(y);
+		// Update score according to the line count.
+		if (lines !== 0) {
+			var score = 0;
+			switch (lines) {
+				case 1:
+					score = 1 * 40 + 40; // Level times 40 + 40. We should make this level dynamic.
+					break;
+
+				case 2:
+					score = 1 * 100 + 100;
+					break;
+
+				case 3:
+					score = 1 * 300 + 300;
+					break;
+
+				case 4:
+					score = 1 * 1200 + 1200;
+					break;
+			}
+			this.parent.updateScore(score);
 		}
 	},
 
@@ -12320,11 +12349,17 @@ Tetromino.prototype = {
 
 	land: function () {
 		this.landed = true;
+
+		var linesInserted = []; // Y coordinates of where we placed our blocks.
+
 		this.eachBlock(this.topLeft, this.shape, (x, y, colorValue) => {
 			this.grid.insert(x, y, colorValue);
+			linesInserted.push(y);
 		});
 
-		this.parent.updateScore();
+		this.grid.detectLines(linesInserted);
+
+		//this.parent.updateScore();
 	},
 
 	/*
@@ -12493,8 +12528,8 @@ if (false) {(function () {
 		};
 	},
 	mounted: function () {
-		this.$root.$on("updateScore", () => {
-			this.score += 10;
+		this.$root.$on("updateScore", score => {
+			this.score += score;
 		});
 	}
 });

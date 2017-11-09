@@ -1,3 +1,4 @@
+import Shapes from "./shapes.js";
 import Grid from "./grid.js";
 import Tetromino from "./tetromino.js";
 
@@ -18,6 +19,8 @@ function Game(canvas, columns, rows, size) {
 Game.prototype = {
 	init: function() {
 		new Grid(this.canvasCtx, this.colSpan, this.rowSpan, this.cellSpan);
+
+		var shape = Shapes.random();
 	}
 }
 

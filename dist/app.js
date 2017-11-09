@@ -11868,8 +11868,10 @@ module.exports = function listToStyles (parentId, list) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__grid_js__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tetromino_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shapes_js__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__grid_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tetromino_js__ = __webpack_require__(20);
+
 
 
 
@@ -11889,7 +11891,9 @@ function Game(canvas, columns, rows, size) {
 
 Game.prototype = {
 	init: function () {
-		new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.canvasCtx, this.colSpan, this.rowSpan, this.cellSpan);
+		new __WEBPACK_IMPORTED_MODULE_1__grid_js__["a" /* default */](this.canvasCtx, this.colSpan, this.rowSpan, this.cellSpan);
+
+		var shape = __WEBPACK_IMPORTED_MODULE_0__shapes_js__["a" /* default */].random();
 	}
 };
 
@@ -11917,158 +11921,9 @@ Grid.prototype = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Tetromino(grid, shape, parent) {
-	/*--------------------------------------------------------------------------------------------
- HOW SHAPES WORK
- ----------------------------------------------------------------------------------------------
- * The shapes consist of any matrix that has equal width and height. The numbers are either 0 or NOT 0.
- * We use square shaped matrices because this way we can easily rotate them around. 
- * The different numbers per letter are simply color codes so we can keep track of each color of each cell on the playing field.
- 
- ROTATION:
- Our shapes are defined in a matrix with equal width and height. For this example, let's take the the matrix for our I shape.
- As next figure shows it has 2 layers:
- 
- 2 2 2 2
- 2 1 1 2
- 2 1 1 2
- 2 2 2 2
- 
- Since both these layers are bigger than a 1x1 matrix they will change when wanting to rotate them 90 degrees.
- We do this by first setting up a loop that goes through each layer. A loop will look like this:
- "For layer 1, do everything what you write in this loop."
- 
- Next step. Since elements that get rotated don't hop layers we can simply set up a nested loop in this layer loop that will go through all
- elements in the particular layer. A loop (for a 4x4 matrix) will look like this:
- "Get element at the top left in layer x (= 1st pos of 1st row)"
- "Get element at top right in layer x (= 1st pos of last column)"
- "Get element at bottom right in layer x"
- "Get element at bottom left in layer x"
- "Now make top right = top left, top left = bottom left and bottom right = top right"
- 
- Next iteration of the loop:
- "Get element at position 2 at top in layer x"
- "Get element at position 2 at right in layer x"
- "Get element at position 2 (COUNTED FROM LAST ELEMENT SINCE CLOCKWISE ROTATION, SO ACTUALLY ELEMENT AT POSITION 3) at bottom in layer x"
- "Get element at position 2 (COUNTED FROM LAST ELEMENT SINCE CLOCKWISE ROTATION, SO ACTUALLY ELEMENT AT POSITION 3) at left in layer x"
- "Now assign all new values"
- 
- You can make the remark like "but if you already assign values to the matrix in that loop it will screw with the values and not giving correct
- values to rotate?" Well indeed, but that's the genious of this loop. As you can see, ALL the values we GET we ALSO IMMEDIATELY REPLACE.
- And since we need to get each value and replace it only 1 time this is totally fine!
- 
- Note: that this method only works for matrices where width and height are the same.
- 
- --------------------------------------------------------------------------------------------
- --------------------------------------------------------------------------------------------*/
-	this.shape = shape;
-	this.grid = grid;
-	this.parent = parent;
+function Tetromino(shape) {}
 
-	this.topLeft = {
-		x: 3,
-		y: 0
-	};
-
-	this.COLOR_VALUE = 0;
-
-	this.dropStart = 0;
-	this.DROP_SPEED = 1000;
-
-	this.landed = false;
-
-	this.init();
-}
-
-Tetromino.prototype = {
-	/* 
- * Draw tetromino on canvas.
- */
-	init: function () {
-		this.drawShape();
-	},
-
-	/*
- * Draw tetromino based on the current rotation and top left coordinate.
- */
-	drawShape: function () {
-		this.eachBlock(this.topLeft, this.shape, (x, y, colorValue) => {
-			this.COLOR_VALUE = colorValue; // Store color value for easy access.
-			this.grid.draw(x, y, colorValue);
-		});
-	},
-
-	/*
- * Undraw tetromino based on current rotation and top left coordinate.
- */
-	undrawShape: function () {
-		this.eachBlock(this.topLeft, this.shape, (x, y, colorValue) => {
-			this.grid.undraw(x, y, colorValue);
-		});
-	},
-
-	/**
- * Move the current tetromino. Will move ONLY if the direction in which it wants to move is valid.
- * @param {String} direction
- */
-	move: function (direction) {},
-
-	/*
- * Rotate the tetromino. Will ONLY rotate if the rotation is a valid move to make.
- */
-	rotate: function () {
-		var shapeDimensions = this.shape.length;
-		var layerCount = this.shape.length / 2;
-
-		var firstElIndex = 0;
-		var lastElIndex = shapeDimensions - 1; // -1 because the length is 4 but index is from 0 to 3 so last element will be at index = 3.
-
-		// Create array where we will hold our test shape.
-		// We fill it with the shape's color value so not be empty AND to have blocks that not rotate be filled at all times.
-		var potentialShape = Array(shapeDimensions).fill().map(() => Array(shapeDimensions).fill(this.COLOR_VALUE));
-		// If rotation is valid, undraw current shape before executing rotation.
-
-		for (var layer = 0; layer < layerCount; layer++) {
-			// Loop from first element in layer PER SIDE (so left, top, right and bottom) to last element.
-			for (var i = 0; i < lastElIndex - firstElIndex; i++) {
-				// Get element values
-
-				var currTop = this.shape[firstElIndex][firstElIndex + i];
-				var currRight = this.shape[firstElIndex + i][lastElIndex];
-				var currBottom = this.shape[lastElIndex][lastElIndex - i];
-				var currLeft = this.shape[lastElIndex - i][firstElIndex];
-
-				potentialShape[firstElIndex][firstElIndex + i] = currLeft;
-				potentialShape[firstElIndex + i][lastElIndex] = currTop;
-				potentialShape[lastElIndex][lastElIndex - i] = currRight;
-				potentialShape[lastElIndex - i][firstElIndex] = currBottom;
-			}
-			firstElIndex++;
-			lastElIndex--;
-		}
-
-		// Test shape
-		if (this.testPosition(this.topLeft, potentialShape)) {
-			this.undrawShape();
-			this.shape = potentialShape;
-			this.drawShape();
-		};
-	},
-
-	/*
- * Drops tetromino at a certain interval rate.
- */
-	drop: function () {
-		if (this.dropStart === 0) {
-			this.dropStart = new Date().getTime();
-		}
-
-		if (new Date().getTime() - this.dropStart > this.DROP_SPEED) {
-			this.move("down");
-			this.dropStart = 0;
-		}
-	}
-};
+Tetromino.prototype = {};
 
 /* unused harmony default export */ var _unused_webpack_default_export = (Tetromino);
 
@@ -12288,6 +12143,34 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-db588e36", esExports)
   }
 }
+
+/***/ }),
+/* 28 */,
+/* 29 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+	// All tetromino spawn shapes defined in a square grid.
+	spawnShapes: {
+		I: [[0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0]],
+		J: [[2, 0, 0], [2, 2, 2], [0, 0, 0]],
+		L: [[0, 0, 3], [3, 3, 3], [0, 0, 0]],
+		O: [[0, 0, 0, 0], [0, 4, 4, 0], [0, 4, 4, 0], [0, 0, 0, 0]],
+		S: [[0, 5, 5], [5, 5, 0], [0, 0, 0]],
+		T: [[0, 6, 0], [6, 6, 6], [0, 0, 0]],
+		Z: [[7, 7, 0], [0, 7, 7], [0, 0, 0]]
+	},
+
+	/**
+ * Return random tetromino shape.
+ */
+	random: function () {
+		var keys = Object.keys(this.spawnShapes);
+
+		return this.spawnShapes[keys[Math.floor(Math.random() * keys.length)]];
+	}
+});
 
 /***/ })
 /******/ ]);

@@ -71,28 +71,6 @@ Tetromino.prototype = {
 	},
 
 	/*
-	* Will give coordinates of each FULL block given a certain shape and top left coordinate.
-	*/
-	eachBlock: function(topLeft, shape, callback) {
-		var currentY = topLeft.y;
-
-		shape.forEach((row) => {
-
-			var currentX =  topLeft.x;
-
-			row.forEach((colorValue) => {
-				if(colorValue !== 0) {
-					//this.grid.draw(currentX, currentY, colorValue);
-					callback(currentX, currentY, colorValue);
-				}
-				currentX++; // Make next x coordinate current x to insert into grid if necessary.
-			})
-			currentY++; // Make next row current Y coordinate
-		});
-	},
-
-
-	/*
 	* Draw tetromino based on the current rotation and top left coordinate.
 	*/
 	drawShape: function() {
@@ -118,62 +96,9 @@ Tetromino.prototype = {
 	* @param {String} direction
 	*/
 	move: function(direction) {
-		var potentialTopleft = this.getPotentialTopLeft(direction); // Get position we want to go to.
-
-		if(this.testPosition(potentialTopleft, this.shape)) {
-			this.updatePosition(potentialTopleft);
-		} 
-		else if(direction === "down") {
-			this.land(this.topLeft); // If move is not valid and direction is down, land at CURRENT position.
-		}
+		
 	},
-
-
-	getPotentialTopLeft: function(direction) {
-		var potentialTopLeft = {
-			x: this.topLeft.x,
-			y: this.topLeft.y
-		}
-
-		switch(direction) {
-			case "down":
-			potentialTopLeft.y++;
-			break;
-
-			case "left":
-			potentialTopLeft.x--;
-			break;
-
-			case "right":
-			potentialTopLeft.x++;
-			break;
-		}
-
-		return potentialTopLeft;
-	},
-
-
-	updatePosition: function(potentialTopleft) {
-		this.undrawShape();
-		this.topLeft = potentialTopleft;
-		this.drawShape();
-	},
-
-
-	land: function() {
-		this.landed = true;
-
-		var linesInserted = [] // Y coordinates of where we placed our blocks.
-
-		this.eachBlock(this.topLeft, this.shape, (x, y, colorValue) => {
-			this.grid.insert(x, y, colorValue);
-			linesInserted.push(y);
-		});
-
-		this.grid.detectLines(linesInserted);
-
-		//this.parent.updateScore();
-	},
+	
 
 
 	/*
@@ -217,20 +142,6 @@ Tetromino.prototype = {
 			this.shape = potentialShape;
 			this.drawShape();
 		};	
-	},
-
-
-	// Note: should this method be in the grid class instead of here?
-	testPosition: function(topLeft, shape) {
-		var errors = 0;
-
-		this.eachBlock(topLeft, shape, (x, y, colorValue) => {
-			if(this.grid.playingField[y] === undefined || this.grid.playingField[y][x] === undefined || this.grid.playingField[y][x] !== 0) {
-				errors++;
-			}
-		});
-
-		return errors === 0 ? true: false;	
 	},
 
 

@@ -11853,7 +11853,7 @@ module.exports = function listToStyles (parentId, list) {
 
 		// Start new game.
 		// TODO: Start game on button click instead of directly.
-		new __WEBPACK_IMPORTED_MODULE_0__game_js__["a" /* default */](canvas, parseInt(this.columns), parseInt(this.rows), parseInt(this.size), this);
+		new __WEBPACK_IMPORTED_MODULE_0__game_js__["a" /* default */](canvas, parseInt(this.columns), parseInt(this.rows), parseInt(this.size));
 	},
 	// Some methods that will be called from the J files through the "parent argument" to be able to update reactive components.
 	methods: {
@@ -11873,122 +11873,23 @@ module.exports = function listToStyles (parentId, list) {
 
 
 
-function Game(canvas, columns, rows, size, parent) {
-
+function Game(canvas, columns, rows, size) {
 	this.canvas = canvas;
 	this.canvasCtx = canvas.getContext("2d");
-	this.parent = parent;
 
-	this.COLS = columns;
-	this.ROWS = rows;
+	this.canvasWidth = canvas.width;
+	this.canvasHeight = canvas.height;
 
-	this.CANVAS_WIDTH = canvas.width;
-	this.CANVAS_HEIGHT = canvas.height;
+	this.colSpan = columns;
+	this.rowSpan = rows;
+	this.celSpan = canvasWidth / columns;
 
-	/**
- * THE LETTER COLOR CODES:
- * 1 = light blue
- * 2 = dark blue
- * 3 = orange
- * 4 = yellow
- * 5 = green
- * 6 = purple
- * 7 = red
- */
-	this.SPAWN_SHAPES = {
-		I: [[0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0]],
-		J: [[2, 0, 0], [2, 2, 2], [0, 0, 0]],
-		L: [[0, 0, 3], [3, 3, 3], [0, 0, 0]],
-		O: [[0, 0, 0, 0], [0, 4, 4, 0], [0, 4, 4, 0], [0, 0, 0, 0]],
-		S: [[0, 5, 5], [5, 5, 0], [0, 0, 0]],
-		T: [[0, 6, 0], [6, 6, 6], [0, 0, 0]],
-		Z: [[7, 7, 0], [0, 7, 7], [0, 0, 0]]
-	};
-
-	this.grid = null;
-	this.currTetromino = null;
-
-	// Initialize game.
-	this.init();
+	this.init(); // Initialize game.
 }
 
 Game.prototype = {
 	init: function () {
-
-		this.grid = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.COLS, this.ROWS, this.canvas, this.CANVAS_WIDTH, this.parent);
-
-		// We have to update the grid everytime we make a succesful move/spawn something or destroy a row.
-		this.startListening();
-
-		// Now what we have to do is move down the tetromino with a set Interval.
-		this.update();
-	},
-
-	update: function () {
-		// console.log(this.grid.playingField);
-
-		// If no tetromino is dropping at the moment.
-		if (!this.currTetromino || this.currTetromino.landed) {
-			// Spawn new tetromino on grid.
-			// TODO: BEFORE SPAWNING CHECK IF THESE COORDINATES ARE NOT OCCUPIED
-			// IF THEY ARE IT IS GAME OVER.
-			// SO WE DO THIS BY RANDOMING OUR TETROMINO WITH NEW AND IF
-			// FREE COORDINATES THEN EXECUTE THE SPAWN METHOD.
-			// SO SPAWN WILL REPLACE INIT.
-			this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid, this.randomLetter(), this.parent);
-		}
-
-		this.currTetromino.drop(); // Make tetromino continously drop.
-
-		requestAnimationFrame(this.update.bind(this));
-	},
-
-	startListening: function () {
-		document.addEventListener("keydown", this);
-	},
-
-	/*
- * Handle all events we're listening to in "startListening()".
- * @param {Event} event
- */
-	handleEvent: function (event) {
-		switch (event.type) {
-			case "keydown":
-				this.onKeyDown(event.key);
-				break;
-		}
-	},
-
-	/*
- * Handle keydown keyboard events.
- * Note: we do not need smooth movement since we want a keypress to only trigger one move event each it has been pressed.
- * @param {String} key - The keyboard key that has been pressed
- */
-	onKeyDown: function (key) {
-		switch (key) {
-			case "ArrowLeft":
-				this.currTetromino.move("left");
-				break;
-
-			case "ArrowUp":
-				this.currTetromino.rotate();
-				break;
-
-			case "ArrowRight":
-				this.currTetromino.move("right");
-				break;
-
-			case "ArrowDown":
-				this.currTetromino.move("down");
-				break;
-		}
-	},
-
-	randomLetter: function () {
-		// TODO: Make randomize that is less random. For example, favor tetromino shapes that have not spawned as much as others.
-		var keys = Object.keys(this.SPAWN_SHAPES);
-
-		return this.SPAWN_SHAPES[keys[Math.floor(Math.random() * keys.length)]];
+		new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.canvasCtx, colSpan, rowSpan, cellSpan);
 	}
 };
 
@@ -11999,206 +11900,7 @@ Game.prototype = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Grid(colSpan, rowSpan, canvas, canvasWidth, parent) {
-	/*--------------------------------------------------------------------------------------------
- HOW THE GRID WORKS.
- ----------------------------------------------------------------------------------------------
- * On the backend the grid is a multidimensional array (or matrix).
- * 0 means a free space.
- * 1 means occupied space.
- 
- This grid matrix will be updated everytime a tetromino has landed.
- This way we can easily keep track of collision, when to destroy a row and such.
- 
- IMPORTANT: We can use THIS grid in our neural network as state like outlace did.
- 
- This is how a playing field of 10x16 would look like:
- 
-  var grid = [
- 	[0,0,0,0,0,0,0,0,0,0],
- 	[0,0,0,0,0,0,0,0,0,0],
- 	[0,0,0,0,0,0,0,0,0,0],
- 	[0,0,0,0,0,0,0,0,0,0],
- 	[0,0,0,0,0,0,0,0,0,0],
- 	[0,0,0,0,0,0,0,0,0,0],
- 	[0,0,0,0,0,0,0,0,0,0],
- 	[0,0,0,0,0,0,0,0,0,0],
- 	[0,0,0,0,0,0,0,0,0,0],
- 	[0,0,0,0,0,0,0,0,0,0],
- 	[0,0,0,0,0,0,0,0,0,0],
- 	[0,0,0,0,0,0,0,0,0,0],
- 	[0,0,0,0,0,0,0,0,0,0],
- 	[0,0,0,0,0,0,0,0,0,0],
- 	[0,0,0,0,0,0,0,0,0,0],
- 	[0,0,0,0,0,0,0,0,0,0]
- 	]
- 
- 
- --------------------------------------------------------------------------------------------
- --------------------------------------------------------------------------------------------*/
-	this.COL_SPAN = colSpan;
-	this.ROW_SPAN = rowSpan;
-
-	this.CELL_SPAN = canvasWidth / colSpan;
-
-	// Colors used to color the spaces that tetrominoes occupy.
-	this.GRID_COLORS = {
-		1: "cyan",
-		2: "blue",
-		3: "orange",
-		4: "yellow",
-		5: "green",
-		6: "purple",
-		7: "red"
-	};
-
-	this.playingField = [];
-	this.SPAWN_POS = 3; // Default spawn position for tetromino.
-
-	this.canvas = canvas;
-	this.canvasCtx = canvas.getContext("2d");
-	this.parent = parent;
-
-	this.currTetromino; // Holds tetromino we can control.
-
-	// Intializes backend and frontend playing field.
-	this.playingField = this.createBackend(colSpan, rowSpan);
-}
-
-Grid.prototype = {
-	/**
- * Create playing field backend matrix.
- * @param {Number} colSpan - Number of columns.
- * @param {Number} rowSpan - Number of rows.
- * @return {Array}
- */
-	createBackend: function (colSpan, rowSpan) {
-		return Array(rowSpan).fill().map(() => Array(colSpan).fill(0));
-	},
-
-	/**
- * Insert a block of a tetromino at a certain x/y coordinate.
- * @param {Number} x.
- * @param {Number} y.
- * @param {Number} colorValue.
- */
-	insert: function (x, y, colorValue) {
-		this.playingField[y][x] = colorValue;
-	},
-
-	/**
- * Detect full lines on the playing field.
- * @param {Array} rowCoordinates - Optional. Array of y coordinates that specify on which rows to look.
- */
-	detectLines: function (rowsInserted) {
-		// TODO: We should also add this to a "row" counter for the UI.
-		var lines = 0;
-
-		rowsInserted.forEach(y => {
-			var count = 0;
-
-			this.playingField[y].forEach(x => {
-				if (x !== 0) {
-					count++;
-				}
-			});
-
-			if (count === 10) {
-				lines++;
-				this.clearLine(y);
-			}
-		});
-
-		// Update score according to the line count.
-		if (lines !== 0) {
-			var score = 0;
-			switch (lines) {
-				case 1:
-					score = 1 * 40 + 40; // Level times 40 + 40. We should make this level dynamic.
-					break;
-
-				case 2:
-					score = 1 * 100 + 100;
-					break;
-
-				case 3:
-					score = 1 * 300 + 300;
-					break;
-
-				case 4:
-					score = 1 * 1200 + 1200;
-					break;
-			}
-			this.parent.updateScore(score);
-		}
-	},
-
-	/**
- * Clear a certain line.
- * @param {Number} rowCoordinate.
- */
-	clearLine: function (y) {
-		// TODO: Add a small delay for spawning new tetromino until when all rows are cleared.
-		this.playingField[y].forEach((value, x) => {
-			this.playingField[y][x] = 0;
-			this.undraw(x, y);
-		});
-
-		// Will drop all tetrominoes above cleared line.
-		this.dropTetrominoes(y);
-	},
-
-	/**
- * Drop all tetrominoes.
- * @param {Number} rowCoordinate - The row coordinate to determine which rows have to drop after a line clear.
- */
-	dropTetrominoes: function (y) {
-		// Start from cleared row and move up.
-		for (var i = y; i >= 0; i--) {
-			// Special case for top row where we make all the values simply 0 after line clear.
-			if (i === 0) {
-				this.playingField[i].forEach((colorValue, index) => {
-					this.playingField[i][index] = 0;
-				});
-			}
-			// Else make all values the ones from one row above and redraw them.
-			else {
-					this.playingField[i].forEach((colorValue, index) => {
-						// Replace current row with row above it.
-						this.playingField[i][index] = this.playingField[i - 1][index];
-
-						// Also if the block above current row is filled we should undraw and redraw it at the new position.
-						if (this.playingField[i - 1][index] !== 0) {
-							this.undraw(index, i - 1);
-							this.draw(index, i, this.playingField[i - 1][index]);
-						}
-					});
-				}
-		};
-	},
-
-	/**
- * Draw a single set of x, y coordinates and its color.
- * @param {Number} x.
- * @param {Number} y.
- * @param {Number} colorValue.
- */
-	draw: function (x, y, colorValue) {
-		// IMPORTANT: Instead of drawing and undrawing we could smootthly move our rectangles (for example with a liner clear).
-		// The backend area would obviously still immediately update but we can simply smoothly move our rectangles down as much as necessary.
-		this.canvasCtx.fillStyle = this.GRID_COLORS[colorValue];
-		this.canvasCtx.fillRect(x * this.CELL_SPAN, y * this.CELL_SPAN, this.CELL_SPAN, this.CELL_SPAN);
-	},
-
-	/**
- * Undraws/Clears any rectangles at given x/y coordinates.
- * @param {Number} x.
- * @param {Number} y.
- */
-	undraw: function (x, y) {
-		this.canvasCtx.clearRect(x * this.CELL_SPAN, y * this.CELL_SPAN, this.CELL_SPAN, this.CELL_SPAN);
-	}
-};
+function Grid(canvasCtx, colSpan, rowSpan, cellSpan) {}
 
 /* harmony default export */ __webpack_exports__["a"] = (Grid);
 
@@ -12279,27 +11981,6 @@ Tetromino.prototype = {
 	},
 
 	/*
- * Will give coordinates of each FULL block given a certain shape and top left coordinate.
- */
-	eachBlock: function (topLeft, shape, callback) {
-		var currentY = topLeft.y;
-
-		shape.forEach(row => {
-
-			var currentX = topLeft.x;
-
-			row.forEach(colorValue => {
-				if (colorValue !== 0) {
-					//this.grid.draw(currentX, currentY, colorValue);
-					callback(currentX, currentY, colorValue);
-				}
-				currentX++; // Make next x coordinate current x to insert into grid if necessary.
-			});
-			currentY++; // Make next row current Y coordinate
-		});
-	},
-
-	/*
  * Draw tetromino based on the current rotation and top left coordinate.
  */
 	drawShape: function () {
@@ -12322,59 +12003,7 @@ Tetromino.prototype = {
  * Move the current tetromino. Will move ONLY if the direction in which it wants to move is valid.
  * @param {String} direction
  */
-	move: function (direction) {
-		var potentialTopleft = this.getPotentialTopLeft(direction); // Get position we want to go to.
-
-		if (this.testPosition(potentialTopleft, this.shape)) {
-			this.updatePosition(potentialTopleft);
-		} else if (direction === "down") {
-			this.land(this.topLeft); // If move is not valid and direction is down, land at CURRENT position.
-		}
-	},
-
-	getPotentialTopLeft: function (direction) {
-		var potentialTopLeft = {
-			x: this.topLeft.x,
-			y: this.topLeft.y
-		};
-
-		switch (direction) {
-			case "down":
-				potentialTopLeft.y++;
-				break;
-
-			case "left":
-				potentialTopLeft.x--;
-				break;
-
-			case "right":
-				potentialTopLeft.x++;
-				break;
-		}
-
-		return potentialTopLeft;
-	},
-
-	updatePosition: function (potentialTopleft) {
-		this.undrawShape();
-		this.topLeft = potentialTopleft;
-		this.drawShape();
-	},
-
-	land: function () {
-		this.landed = true;
-
-		var linesInserted = []; // Y coordinates of where we placed our blocks.
-
-		this.eachBlock(this.topLeft, this.shape, (x, y, colorValue) => {
-			this.grid.insert(x, y, colorValue);
-			linesInserted.push(y);
-		});
-
-		this.grid.detectLines(linesInserted);
-
-		//this.parent.updateScore();
-	},
+	move: function (direction) {},
 
 	/*
  * Rotate the tetromino. Will ONLY rotate if the rotation is a valid move to make.
@@ -12418,19 +12047,6 @@ Tetromino.prototype = {
 		};
 	},
 
-	// Note: should this method be in the grid class instead of here?
-	testPosition: function (topLeft, shape) {
-		var errors = 0;
-
-		this.eachBlock(topLeft, shape, (x, y, colorValue) => {
-			if (this.grid.playingField[y] === undefined || this.grid.playingField[y][x] === undefined || this.grid.playingField[y][x] !== 0) {
-				errors++;
-			}
-		});
-
-		return errors === 0 ? true : false;
-	},
-
 	/*
  * Drops tetromino at a certain interval rate.
  */
@@ -12446,7 +12062,7 @@ Tetromino.prototype = {
 	}
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (Tetromino);
+/* unused harmony default export */ var _unused_webpack_default_export = (Tetromino);
 
 /***/ }),
 /* 21 */

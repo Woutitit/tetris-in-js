@@ -32,7 +32,7 @@ canvas {
 
 			// Start new game.
 			// TODO: Start game on button click instead of directly.
-			new Game(canvas, parseInt(this.columns), parseInt(this.rows), parseInt(this.size), this);
+			new Game(canvas, parseInt(this.columns), parseInt(this.rows), parseInt(this.size));
 		},
 		// Some methods that will be called from the J files through the "parent argument" to be able to update reactive components.
 		methods: {

@@ -13,7 +13,7 @@ canvas {
 	import Game from "../game.js";
 
 	export default {
-		props: ["id", "size"],
+		props: ["id", "columns", "rows", "size"],
 		data: function() {
 			return {
 				canvas: null,
@@ -22,10 +22,17 @@ canvas {
 				CANVAS_HEIGHT: 0,
 			}
 		},
+		created: function() {
+			this.CANVAS_WIDTH = this.columns * this.size;
+			this.CANVAS_HEIGHT = this.rows * this.size;
+		},
 		mounted: function() {
-			// TODO: Start game on button click.
-			// TODO: Maybe we can GET the width and height of this canvas element so we only need to supply the canvas?
-			new Game(canvas);
+			
+			var canvas = document.getElementById(this.id);
+
+			// Start new game.
+			// TODO: Start game on button click instead of directly.
+			new Game(canvas, parseInt(this.columns), parseInt(this.rows), parseInt(this.size));
 		}
 	}
 

@@ -11359,7 +11359,9 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("v-canvas", { attrs: { id: "gameCanvas", size: "2" } }),
+      _c("v-canvas", {
+        attrs: { id: "gameCanvas", columns: "10", rows: "16", size: "20" }
+      }),
       _vm._v(" "),
       _c("v-score-panel"),
       _vm._v(" "),
@@ -11832,7 +11834,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-	props: ["id", "size"],
+	props: ["id", "columns", "rows", "size"],
 	data: function () {
 		return {
 			canvas: null,
@@ -11841,10 +11843,17 @@ module.exports = function listToStyles (parentId, list) {
 			CANVAS_HEIGHT: 0
 		};
 	},
+	created: function () {
+		this.CANVAS_WIDTH = this.columns * this.size;
+		this.CANVAS_HEIGHT = this.rows * this.size;
+	},
 	mounted: function () {
-		// TODO: Start game on button click.
-		// TODO: Maybe we can GET the width and height of this canvas element so we only need to supply the canvas?
-		new __WEBPACK_IMPORTED_MODULE_0__game_js__["a" /* default */](canvas);
+
+		var canvas = document.getElementById(this.id);
+
+		// Start new game.
+		// TODO: Start game on button click instead of directly.
+		new __WEBPACK_IMPORTED_MODULE_0__game_js__["a" /* default */](canvas, parseInt(this.columns), parseInt(this.rows), parseInt(this.size));
 	}
 });
 
@@ -11858,18 +11867,15 @@ module.exports = function listToStyles (parentId, list) {
 
 
 
-function Game(canvas) {
+function Game(canvas, columns, rows, size) {
 	this.canvas = canvas;
 	this.canvasCtx = canvas.getContext("2d");
 
-	this.COLS = 10;
-	this.ROWS = 16;
+	this.COLS = columns;
+	this.ROWS = rows;
 
-	this.CELL_WIDTH = 0;
-	this.CELL_HEIGHT = 0;
-
-	this.CANVAS_WIDTH = 0;
-	this.CANVAS_HEIGHT = 0;
+	this.CANVAS_WIDTH = columns * size;
+	this.CANVAS_HEIGHT = rows * size;
 
 	/**
  * THE LETTER COLOR CODES:
@@ -11889,7 +11895,10 @@ function Game(canvas) {
 		S: [[0, 5, 5], [5, 5, 0], [0, 0, 0]],
 		T: [[0, 6, 0], [6, 6, 6], [0, 0, 0]],
 		Z: [[7, 7, 0], [0, 7, 7], [0, 0, 0]]
-	}, grid = null, currTetromino = null;
+	};
+
+	this.grid = null;
+	this.currTetromino = null;
 
 	// Initialize game.
 	this.init();
@@ -11897,16 +11906,8 @@ function Game(canvas) {
 
 Game.prototype = {
 	init: function () {
-		// Note: we need to use "created()" to be able to assign values to width and height. Otherwise canvas doesn't pick them up.
-		this.CELL_DIMENSION = this.COLS * this.size; // Cell dimensions are equal to column amount times size.
 
-		this.CANVAS_WIDTH = this.CELL_DIMENSION * this.COLS;
-		this.CANVAS_HEIGHT = this.CELL_DIMENSION * this.ROWS;
-
-		this.canvas = document.getElementById(this.id);
-		this.canvasCtx = this.canvas.getContext("2d");
-
-		this.grid = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.COLS, this.ROWS, this.canvas, this.CELL_DIMENSION);
+		this.grid = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](this.COLS, this.ROWS, this.canvas, this.CANVAS_WIDTH);
 
 		// We have to update the grid everytime we make a succesful move/spawn something or destroy a row.
 		this.startListening();
@@ -11931,7 +11932,7 @@ Game.prototype = {
 
 		this.currTetromino.drop(); // Make tetromino continously drop.
 
-		requestAnimationFrame(this.update);
+		requestAnimationFrame(this.update.bind(this));
 	},
 
 	startListening: function () {
@@ -11990,7 +11991,7 @@ Game.prototype = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Grid(colSpan, rowSpan, canvas, celSpan) {
+function Grid(colSpan, rowSpan, canvas, canvasWidth) {
 	/*--------------------------------------------------------------------------------------------
  HOW THE GRID WORKS.
  ----------------------------------------------------------------------------------------------
@@ -12030,7 +12031,7 @@ function Grid(colSpan, rowSpan, canvas, celSpan) {
 	this.COL_SPAN = colSpan;
 	this.ROW_SPAN = rowSpan;
 
-	this.CELL_SPAN = celSpan;
+	this.CELL_SPAN = canvasWidth / colSpan;
 
 	// Colors used to color the spaces that tetrominoes occupy.
 	this.GRID_COLORS = {

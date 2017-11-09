@@ -1,4 +1,4 @@
-function Grid(colSpan, rowSpan, canvas, celSpan) {
+function Grid(colSpan, rowSpan, canvas, canvasWidth) {
 	/*--------------------------------------------------------------------------------------------
 	HOW THE GRID WORKS.
 	----------------------------------------------------------------------------------------------
@@ -38,7 +38,7 @@ function Grid(colSpan, rowSpan, canvas, celSpan) {
 	this.COL_SPAN = colSpan;
 	this.ROW_SPAN = rowSpan;
 
-	this.CELL_SPAN = celSpan;
+	this.CELL_SPAN = canvasWidth / colSpan;
 
 	// Colors used to color the spaces that tetrominoes occupy.
 	this.GRID_COLORS = {

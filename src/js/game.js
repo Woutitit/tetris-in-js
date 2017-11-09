@@ -1,18 +1,15 @@
 import Grid from "./grid.js";
 import Tetromino from "./tetromino.js";
 
-function Game(canvas) {
+function Game(canvas, columns, rows, size) {
 	this.canvas = canvas;
 	this.canvasCtx = canvas.getContext("2d");
 
-	this.COLS = 10;
-	this.ROWS = 16;
+	this.COLS = columns;
+	this.ROWS = rows;
 
-	this.CELL_WIDTH = 0;
-	this.CELL_HEIGHT = 0;
-
-	this.CANVAS_WIDTH = 0;
-	this.CANVAS_HEIGHT = 0;
+	this.CANVAS_WIDTH = columns * size;
+	this.CANVAS_HEIGHT = rows * size;
 
 	/**
 	* THE LETTER COLOR CODES:
@@ -62,10 +59,10 @@ function Game(canvas) {
 		[0, 7, 7],
 		[0, 0, 0]
 		],
-	},
+	};
 
-	grid = null,
-	currTetromino = null
+	this.grid = null;
+	this.currTetromino = null;
 
 	// Initialize game.
 	this.init();
@@ -73,24 +70,14 @@ function Game(canvas) {
 
 Game.prototype = {
 	init: function() {
-		// Note: we need to use "created()" to be able to assign values to width and height. Otherwise canvas doesn't pick them up.
-		this.CELL_DIMENSION = this.COLS * this.size; // Cell dimensions are equal to column amount times size.
 
-		this.CANVAS_WIDTH = this.CELL_DIMENSION * this.COLS;
-		this.CANVAS_HEIGHT = this.CELL_DIMENSION * this.ROWS;
-
-		this.canvas = document.getElementById(this.id);
-		this.canvasCtx = this.canvas.getContext("2d");
-
-		this.grid = new Grid(this.COLS, this.ROWS, this.canvas, this.CELL_DIMENSION);
-
+		this.grid = new Grid(this.COLS, this.ROWS, this.canvas, this.CANVAS_WIDTH);
 
 		// We have to update the grid everytime we make a succesful move/spawn something or destroy a row.
 		this.startListening();
 
 		// Now what we have to do is move down the tetromino with a set Interval.
 		this.update();
-
 	},
 
 
@@ -98,7 +85,7 @@ Game.prototype = {
 			// console.log(this.grid.playingField);
 
 			// If no tetromino is dropping at the moment.
-			if(!this.currTetromino || this.currTetromino.landed) {
+			if(!this.currTetromino  || this.currTetromino.landed) {
 				// Spawn new tetromino on grid.
 				// TODO: BEFORE SPAWNING CHECK IF THESE COORDINATES ARE NOT OCCUPIED
 				// IF THEY ARE IT IS GAME OVER.
@@ -110,7 +97,7 @@ Game.prototype = {
 
 			this.currTetromino.drop(); // Make tetromino continously drop.
 
-			requestAnimationFrame(this.update);
+			requestAnimationFrame(this.update.bind(this));
 		},
 
 

@@ -1,9 +1,10 @@
 import Grid from "./grid.js";
 import Tetromino from "./tetromino.js";
 
-function Game(canvas, columns, rows, size) {
+function Game(canvas, columns, rows, size, parent) {
 	this.canvas = canvas;
 	this.canvasCtx = canvas.getContext("2d");
+	this.parent = parent;
 
 	this.COLS = columns;
 	this.ROWS = rows;
@@ -92,7 +93,7 @@ Game.prototype = {
 				// SO WE DO THIS BY RANDOMING OUR TETROMINO WITH NEW AND IF
 				// FREE COORDINATES THEN EXECUTE THE SPAWN METHOD.
 				// SO SPAWN WILL REPLACE INIT.
-				this.currTetromino = new Tetromino(this.grid, this.randomLetter());
+				this.currTetromino = new Tetromino(this.grid, this.randomLetter(), this.parent);
 			}
 
 			this.currTetromino.drop(); // Make tetromino continously drop.

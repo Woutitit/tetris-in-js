@@ -1,14 +1,19 @@
 <template>
 	<v-panel>
-		<p>Score: {{ Score }}</p>
+		<p id="score">Score: {{ score }}</p>
 	</v-panel>
 </template>
 <script>
 	export default {
 		data: function() {
 			return {
-				Score: 0
+				score: 0
 			}
+		},
+		mounted: function() {
+			this.$root.$on("updateScore", () => {
+				this.score += 10;
+			})
 		}
 	}
 </script>

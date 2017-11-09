@@ -42,13 +42,13 @@ function Grid(colSpan, rowSpan, canvas, canvasWidth) {
 
 	// Colors used to color the spaces that tetrominoes occupy.
 	this.GRID_COLORS = {
-		1: "#000",
+		1: "cyan",
 		2: "blue",
-		3: "red",
-		4: "purple",
-		5: "blue",
-		6: "green",
-		7: "yellow"
+		3: "orange",
+		4: "yellow",
+		5: "green",
+		6: "purple",
+		7: "red"
 	};
 
 	this.playingField = [];
@@ -56,9 +56,6 @@ function Grid(colSpan, rowSpan, canvas, canvasWidth) {
 
 	this.canvas = canvas;
 	this.canvasCtx = canvas.getContext("2d");
-
-	// Holds coordinates of ALL occupied cells organized by color.
-	// We should generate this array based on all possible color rather than setting it manually.
 
 	this.currTetromino; // Holds tetromino we can control.
 
@@ -124,12 +121,13 @@ Grid.prototype = {
 	dropTetrominoes: function(y) {
 		// Start from cleared row and move up.
 		for (var i = y; i >= 0; i--) {
-			// Special case for top row where we make all the values simply 0.
+			// Special case for top row where we make all the values simply 0 after line clear.
 			if(i === 0) {
 				this.playingField[i].forEach((colorValue, index) => {
 					this.playingField[i][index] = 0;
 				});
 			}
+			// Else make all values the ones from one row above and redraw them.
 			else {
 				this.playingField[i].forEach((colorValue, index) => {
 					// Replace current row with row above it.
@@ -138,7 +136,6 @@ Grid.prototype = {
 					// Also if the block above current row is filled we should undraw and redraw it at the new position.
 					if(this.playingField[i - 1][index] !== 0) {
 						this.undraw(index, i - 1);
-						// Problem the row goes down but the color does not change.
 						this.draw(index, i, this.playingField[i - 1][index]);
 					}	
 				});

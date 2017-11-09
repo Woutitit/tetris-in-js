@@ -1,4 +1,4 @@
-function Tetromino(grid, shape) {
+function Tetromino(grid, shape, parent) {
 	/*--------------------------------------------------------------------------------------------
 	HOW SHAPES WORK
 	----------------------------------------------------------------------------------------------
@@ -44,6 +44,7 @@ function Tetromino(grid, shape) {
 	--------------------------------------------------------------------------------------------*/
 	this.shape = shape;
 	this.grid = grid;
+	this.parent = parent
 
 	this.topLeft = {
 		x: 3,
@@ -70,7 +71,7 @@ Tetromino.prototype = {
 	},
 
 	/*
-	* Will give coordinates of each FULL block given a certain top left coordinate.
+	* Will give coordinates of each FULL block given a certain shape and top left coordinate.
 	*/
 	eachBlock: function(topLeft, shape, callback) {
 		var currentY = topLeft.y;
@@ -164,6 +165,8 @@ Tetromino.prototype = {
 		this.eachBlock(this.topLeft, this.shape, (x, y, colorValue) => {
 			this.grid.insert(x, y, colorValue);
 		});
+
+		this.parent.updateScore();
 	},
 
 

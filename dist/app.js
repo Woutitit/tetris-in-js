@@ -11853,7 +11853,13 @@ module.exports = function listToStyles (parentId, list) {
 
 		// Start new game.
 		// TODO: Start game on button click instead of directly.
-		new __WEBPACK_IMPORTED_MODULE_0__game_js__["a" /* default */](canvas, parseInt(this.columns), parseInt(this.rows), parseInt(this.size));
+		new __WEBPACK_IMPORTED_MODULE_0__game_js__["a" /* default */](canvas, parseInt(this.columns), parseInt(this.rows), parseInt(this.size), this);
+	},
+	// Some methods that will be called from the J files through the "parent argument" to be able to update reactive components.
+	methods: {
+		updateScore: function () {
+			this.$root.$emit("updateScore");
+		}
 	}
 });
 
@@ -11867,9 +11873,10 @@ module.exports = function listToStyles (parentId, list) {
 
 
 
-function Game(canvas, columns, rows, size) {
+function Game(canvas, columns, rows, size, parent) {
 	this.canvas = canvas;
 	this.canvasCtx = canvas.getContext("2d");
+	this.parent = parent;
 
 	this.COLS = columns;
 	this.ROWS = rows;
@@ -11927,7 +11934,7 @@ Game.prototype = {
 			// SO WE DO THIS BY RANDOMING OUR TETROMINO WITH NEW AND IF
 			// FREE COORDINATES THEN EXECUTE THE SPAWN METHOD.
 			// SO SPAWN WILL REPLACE INIT.
-			this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid, this.randomLetter());
+			this.currTetromino = new __WEBPACK_IMPORTED_MODULE_1__tetromino_js__["a" /* default */](this.grid, this.randomLetter(), this.parent);
 		}
 
 		this.currTetromino.drop(); // Make tetromino continously drop.
@@ -12035,13 +12042,13 @@ function Grid(colSpan, rowSpan, canvas, canvasWidth) {
 
 	// Colors used to color the spaces that tetrominoes occupy.
 	this.GRID_COLORS = {
-		1: "#000",
+		1: "cyan",
 		2: "blue",
-		3: "red",
-		4: "purple",
-		5: "blue",
-		6: "green",
-		7: "yellow"
+		3: "orange",
+		4: "yellow",
+		5: "green",
+		6: "purple",
+		7: "red"
 	};
 
 	this.playingField = [];
@@ -12049,9 +12056,6 @@ function Grid(colSpan, rowSpan, canvas, canvasWidth) {
 
 	this.canvas = canvas;
 	this.canvasCtx = canvas.getContext("2d");
-
-	// Holds coordinates of ALL occupied cells organized by color.
-	// We should generate this array based on all possible color rather than setting it manually.
 
 	this.currTetromino; // Holds tetromino we can control.
 
@@ -12113,24 +12117,25 @@ Grid.prototype = {
 	dropTetrominoes: function (y) {
 		// Start from cleared row and move up.
 		for (var i = y; i >= 0; i--) {
-			// Special case for top row where we make all the values simply 0.
+			// Special case for top row where we make all the values simply 0 after line clear.
 			if (i === 0) {
 				this.playingField[i].forEach((colorValue, index) => {
 					this.playingField[i][index] = 0;
 				});
-			} else {
-				this.playingField[i].forEach((colorValue, index) => {
-					// Replace current row with row above it.
-					this.playingField[i][index] = this.playingField[i - 1][index];
-
-					// Also if the block above current row is filled we should undraw and redraw it at the new position.
-					if (this.playingField[i - 1][index] !== 0) {
-						this.undraw(index, i - 1);
-						// Problem the row goes down but the color does not change.
-						this.draw(index, i, this.playingField[i - 1][index]);
-					}
-				});
 			}
+			// Else make all values the ones from one row above and redraw them.
+			else {
+					this.playingField[i].forEach((colorValue, index) => {
+						// Replace current row with row above it.
+						this.playingField[i][index] = this.playingField[i - 1][index];
+
+						// Also if the block above current row is filled we should undraw and redraw it at the new position.
+						if (this.playingField[i - 1][index] !== 0) {
+							this.undraw(index, i - 1);
+							this.draw(index, i, this.playingField[i - 1][index]);
+						}
+					});
+				}
 		};
 	},
 
@@ -12159,7 +12164,7 @@ Grid.prototype = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Tetromino(grid, shape) {
+function Tetromino(grid, shape, parent) {
 	/*--------------------------------------------------------------------------------------------
  HOW SHAPES WORK
  ----------------------------------------------------------------------------------------------
@@ -12205,6 +12210,7 @@ function Tetromino(grid, shape) {
  --------------------------------------------------------------------------------------------*/
 	this.shape = shape;
 	this.grid = grid;
+	this.parent = parent;
 
 	this.topLeft = {
 		x: 3,
@@ -12230,7 +12236,7 @@ Tetromino.prototype = {
 	},
 
 	/*
- * Will give coordinates of each FULL block given a certain top left coordinate.
+ * Will give coordinates of each FULL block given a certain shape and top left coordinate.
  */
 	eachBlock: function (topLeft, shape, callback) {
 		var currentY = topLeft.y;
@@ -12317,6 +12323,8 @@ Tetromino.prototype = {
 		this.eachBlock(this.topLeft, this.shape, (x, y, colorValue) => {
 			this.grid.insert(x, y, colorValue);
 		});
+
+		this.parent.updateScore();
 	},
 
 	/*
@@ -12481,8 +12489,13 @@ if (false) {(function () {
 /* harmony default export */ __webpack_exports__["a"] = ({
 	data: function () {
 		return {
-			Score: 0
+			score: 0
 		};
+	},
+	mounted: function () {
+		this.$root.$on("updateScore", () => {
+			this.score += 10;
+		});
 	}
 });
 
@@ -12495,7 +12508,9 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("v-panel", [_c("p", [_vm._v("Score: " + _vm._s(_vm.Score))])])
+  return _c("v-panel", [
+    _c("p", { attrs: { id: "score" } }, [_vm._v("Score: " + _vm._s(_vm.score))])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

@@ -5,4 +5,3 @@
 		<v-lines-panel></v-lines-panel>
 	</div>
 </template>
-

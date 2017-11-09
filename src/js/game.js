@@ -129,19 +129,19 @@ Game.prototype = {
 		onKeyDown: function(key) {
 			switch(key) {
 				case "ArrowLeft":
-				this.currTetromino.move("left");
+				this.grid.moveTetromino("left");
 				break;
 
 				case "ArrowUp":
-				this.currTetromino.rotate();
+				this.grid.rotate();
 				break;
 
 				case "ArrowRight":
-				this.currTetromino.move("right");
+				this.grid.moveTetromino("right");
 				break;
 
 				case "ArrowDown":
-				this.currTetromino.move("down");
+				this.grid.moveTetromino("down");;
 				break;
 			}
 		},

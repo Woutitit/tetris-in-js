@@ -11884,7 +11884,7 @@ function Game(canvas, columns, rows, size) {
 
 	this.colSpan = columns;
 	this.rowSpan = rows;
-	this.celSpan = this.canvasWidth / columns;
+	this.cellSpan = this.canvasWidth / columns;
 
 	this.init(); // Initialize game.
 }
@@ -11894,6 +11894,7 @@ Game.prototype = {
 		new __WEBPACK_IMPORTED_MODULE_1__grid_js__["a" /* default */](this.canvasCtx, this.colSpan, this.rowSpan, this.cellSpan);
 
 		var shape = __WEBPACK_IMPORTED_MODULE_0__shapes_js__["a" /* default */].random();
+		new __WEBPACK_IMPORTED_MODULE_2__tetromino_js__["a" /* default */](shape);
 	}
 };
 
@@ -11921,11 +11922,20 @@ Grid.prototype = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Tetromino(shape) {}
+function Tetromino(shape) {
+	this.shape = shape;
 
-Tetromino.prototype = {};
+	this.init();
+}
 
-/* unused harmony default export */ var _unused_webpack_default_export = (Tetromino);
+Tetromino.prototype = {
+	init: function () {
+		console.log(this.shape);
+	}
+
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Tetromino);
 
 /***/ }),
 /* 21 */

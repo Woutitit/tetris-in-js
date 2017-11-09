@@ -11,7 +11,7 @@ function Game(canvas, columns, rows, size) {
 
 	this.colSpan = columns;
 	this.rowSpan = rows;
-	this.celSpan = this.canvasWidth / columns;
+	this.cellSpan = this.canvasWidth / columns;
 
 	this.init(); // Initialize game.
 }
@@ -21,6 +21,7 @@ Game.prototype = {
 		new Grid(this.canvasCtx, this.colSpan, this.rowSpan, this.cellSpan);
 
 		var shape = Shapes.random();
+		new Tetromino(shape);
 	}
 }
 

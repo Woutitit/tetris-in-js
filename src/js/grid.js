@@ -40,26 +40,25 @@ Grid.prototype = {
 
 
 	landShape: function(shape) {
-		var rowCoordinates = [];
 
 		this.eachBlock(this.currTopLeft, shape, (x, y, colorValue) => {
 			this.insert(x, y, colorValue);
-			rowCoordinates.push(y);
-		})
+		});
 
-		this.detectLines(rowCoordinates);
+		this.detectLines();
 	},
 
 
-	detectLines: function(rowCoordinates) {
+	detectLines: function() {
 		var lines = 0;
 		var linesToClear = [];
 
 
-		rowCoordinates.forEach((y) => {
+		this.gridData.forEach((value, index) => {
+			var y = index;
 			var count = 0;
 
-			this.gridData[y].forEach((x) => {
+			value.forEach((x) => {
 				if(x !== 0) { count++; }
 			});
 
@@ -68,12 +67,14 @@ Grid.prototype = {
 				linesToClear.push(y);
 			}
 		});
-		console.log(linesToClear);
+
 		if(linesToClear.length > 0) this.clearLines(linesToClear);
 	},
 
 
 	clearLines: function(lines) {
+		// Again we can make the visual appear like all the lines blink and then get destroyed.
+		// However for optimization of our backend we will immediatly also drop tetrominoes per line clear.
 		lines.forEach((line) => {
 			this.gridData[line].forEach((value, index) => {
 				var x = index;
@@ -82,7 +83,35 @@ Grid.prototype = {
 				this.gridData[y][x] = 0;
 				this.undraw(x, y);
 			});
+
+			this.dropTetrominoes(line);
 		});
+	},
+
+
+	dropTetrominoes: function(lineTreshold) {
+		// Start from cleared row and move up.
+		for (var i = lineTreshold; i >= 0; i--) {
+			// Special case for top row where we make all the values simply 0 after line clear.
+			if(i === 0) {
+				this.gridData[i].forEach((colorValue, index) => {
+					this.gridData[i][index] = 0;
+				});
+			}
+			// Else make all values the ones from one row above and redraw them.
+			else {
+				this.gridData[i].forEach((colorValue, index) => {
+					// Replace current row with row above it.
+					this.gridData[i][index] = this.gridData[i - 1][index];
+
+					// Also if the block above current row is filled we should undraw and redraw it at the new position.
+					if(this.gridData[i - 1][index] !== 0) {
+						this.undraw(index, i - 1);
+						this.draw(index, i, this.gridData[i - 1][index]);
+					}	
+				});
+			}
+		};
 	},
 
 

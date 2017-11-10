@@ -40,9 +40,39 @@ Grid.prototype = {
 
 
 	landShape: function(shape) {
+		var rowCoordinates = [];
+
 		this.eachBlock(this.currTopLeft, shape, (x, y, colorValue) => {
 			this.insert(x, y, colorValue);
+			rowCoordinates.push(y);
 		})
+
+		this.detectLines(rowCoordinates);
+	},
+
+
+	detectLines: function(rowCoordinates) {
+		var lines = 0;
+		var linesToClear = [];
+
+		rowCoordinates.forEach((y) => {
+			var count = 0;
+
+			this.gridData[y].forEach((x) => {
+				if(x !== 0) { count++; }
+			});
+
+			if (count === 10) {
+				lines++;
+				this.linesToClear.push(y);
+			}
+		});
+
+		if(lines > 0) this.clearLines(linesToClear);
+	},
+
+	clearLines: function() {
+		console.log("lol")
 	},
 
 

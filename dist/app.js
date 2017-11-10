@@ -215,8 +215,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component("v-panel", __webpack_requi
 // Smart components
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component("v-game", __webpack_require__(9).default);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component("v-canvas", __webpack_require__(11).default);
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component("v-score-panel", __webpack_require__(22).default);
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component("v-lines-panel", __webpack_require__(25).default);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component("v-score-panel", __webpack_require__(20).default);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component("v-lines-panel", __webpack_require__(23).default);
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
 	el: "#app"
@@ -11388,7 +11388,7 @@ if (false) {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_Canvas_vue__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1ede9e78_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Canvas_vue__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1ede9e78_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_Canvas_vue__ = __webpack_require__(19);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
@@ -11868,9 +11868,9 @@ module.exports = function listToStyles (parentId, list) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shapes_js__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__grid_js__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tetromino_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shapes_js__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__grid_js__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tetromino_js__ = __webpack_require__(28);
 
 
 
@@ -11891,10 +11891,14 @@ function Game(canvas, columns, rows, size) {
 
 Game.prototype = {
 	init: function () {
-		new __WEBPACK_IMPORTED_MODULE_1__grid_js__["a" /* default */](this.canvasCtx, this.colSpan, this.rowSpan, this.cellSpan);
+		var grid = new __WEBPACK_IMPORTED_MODULE_1__grid_js__["a" /* default */](this.canvasCtx, this.colSpan, this.rowSpan, this.cellSpan);
 
-		var shape = __WEBPACK_IMPORTED_MODULE_0__shapes_js__["a" /* default */].random();
-		new __WEBPACK_IMPORTED_MODULE_2__tetromino_js__["a" /* default */](shape);
+		var randomShape = __WEBPACK_IMPORTED_MODULE_0__shapes_js__["a" /* default */].random();
+		var nextTetromino = new __WEBPACK_IMPORTED_MODULE_2__tetromino_js__["a" /* default */](randomShape);
+
+		// If no current tetromino...
+		var currTetromino = nextTetromino;
+		currTetromino.spawn(grid);
 	}
 };
 
@@ -11902,43 +11906,6 @@ Game.prototype = {
 
 /***/ }),
 /* 19 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function Grid(canvasCtx, colSpan, rowSpan, cellSpan) {
-	this.init(rowSpan, colSpan);
-}
-
-Grid.prototype = {
-	init: function (rowSpan, colSpan) {
-		var gridData = Array(rowSpan).fill().map(() => Array(colSpan).fill(0));
-	}
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (Grid);
-
-/***/ }),
-/* 20 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function Tetromino(shape) {
-	this.shape = shape;
-
-	this.init();
-}
-
-Tetromino.prototype = {
-	init: function () {
-		console.log(this.shape);
-	}
-
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (Tetromino);
-
-/***/ }),
-/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11962,13 +11929,13 @@ if (false) {
 }
 
 /***/ }),
-/* 22 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_ScorePanel_vue__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_639c9eb2_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_ScorePanel_vue__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_ScorePanel_vue__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_639c9eb2_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_ScorePanel_vue__ = __webpack_require__(22);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -12014,7 +11981,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 23 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12038,7 +12005,7 @@ if (false) {(function () {
 });
 
 /***/ }),
-/* 24 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12062,13 +12029,13 @@ if (false) {
 }
 
 /***/ }),
-/* 25 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_LinesPanel_vue__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_db588e36_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_LinesPanel_vue__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bustCache_LinesPanel_vue__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_db588e36_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bustCache_LinesPanel_vue__ = __webpack_require__(25);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -12114,7 +12081,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 26 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12133,7 +12100,7 @@ if (false) {(function () {
 });
 
 /***/ }),
-/* 27 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12155,8 +12122,7 @@ if (false) {
 }
 
 /***/ }),
-/* 28 */,
-/* 29 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12176,11 +12142,83 @@ if (false) {
  * Return random tetromino shape.
  */
 	random: function () {
+		// TODO: Keep track of spawned shapes and favor shapes that have not been spawned much.
 		var keys = Object.keys(this.spawnShapes);
 
 		return this.spawnShapes[keys[Math.floor(Math.random() * keys.length)]];
 	}
 });
+
+/***/ }),
+/* 27 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function Grid(canvasCtx, colSpan, rowSpan, cellSpan) {
+	this.defaultConfig = {
+		SPAWN_TOP_LEFT: { x: 3, y: 0 // Top left spawn coordinates on the grid for tetrominoes.
+		} };
+
+	this.canvasCtx = canvasCtx;
+
+	this.cellSpan = cellSpan;
+
+	this.currTopLeft = this.defaultConfig.SPAWN_TOP_LEFT; // Current tetromino top left coordinates.
+
+	this.init(rowSpan, colSpan);
+}
+
+Grid.prototype = {
+	init: function (rowSpan, colSpan) {
+		var gridData = Array(rowSpan).fill().map(() => Array(colSpan).fill(0));
+	},
+
+	resetTopLeft: function () {
+		this.currTopLeft = this.defaultConfig.SPAWN_TOP_LEFT;
+	},
+
+	drawShape: function (shape) {
+		var currentY = this.currTopLeft.y;
+
+		shape.forEach(row => {
+
+			var currentX = this.currTopLeft.x;
+
+			row.forEach(colorValue => {
+				if (colorValue !== 0) {
+					this.draw(currentX, currentY, colorValue);
+				}
+				currentX++; // Make next x coordinate current x to insert into grid if necessary.
+			});
+			currentY++; // Make next row current Y coordinate
+		});
+	},
+
+	draw: function (x, y, colorValue) {
+		this.canvasCtx.fillStyle = "#000";
+		this.canvasCtx.fillRect(x * this.cellSpan, y * this.cellSpan, this.cellSpan, this.cellSpan);
+	}
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Grid);
+
+/***/ }),
+/* 28 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function Tetromino(shape) {
+	this.shape = shape;
+}
+
+Tetromino.prototype = {
+	spawn: function (grid) {
+		grid.resetTopLeft();
+		grid.drawShape(this.shape);
+	}
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Tetromino);
 
 /***/ })
 /******/ ]);

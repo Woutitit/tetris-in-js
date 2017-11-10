@@ -18,10 +18,14 @@ function Game(canvas, columns, rows, size) {
 
 Game.prototype = {
 	init: function() {
-		new Grid(this.canvasCtx, this.colSpan, this.rowSpan, this.cellSpan);
+		var grid = new Grid(this.canvasCtx, this.colSpan, this.rowSpan, this.cellSpan);
 
-		var shape = Shapes.random();
-		new Tetromino(shape);
+		var randomShape = Shapes.random();
+		var nextTetromino = new Tetromino(randomShape);
+		
+		// If no current tetromino...
+		var currTetromino = nextTetromino;
+		currTetromino.spawn(grid);
 	}
 }
 

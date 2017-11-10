@@ -1,15 +1,13 @@
 function Tetromino(shape) {
 	this.shape = shape;
-
-	this.init();
 }
 
 
 Tetromino.prototype = {
-	init: function() {
-		console.log(this.shape);
+	spawn: function(grid) {
+		grid.resetTopLeft();
+		grid.drawShape(this.shape);
 	}
-
 }
 
 export default Tetromino;

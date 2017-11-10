@@ -14,6 +14,7 @@ export default {
 	* Return random tetromino shape.
 	*/
 	random: function() {
+		// TODO: Keep track of spawned shapes and favor shapes that have not been spawned much.
 		var keys = Object.keys(this.spawnShapes);
 
 		return this.spawnShapes[keys[Math.floor(Math.random() * keys.length)]];

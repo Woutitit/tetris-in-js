@@ -12260,15 +12260,23 @@ Grid.prototype = {
 
 			if (count === 10) {
 				lines++;
-				this.linesToClear.push(y);
+				linesToClear.push(y);
 			}
 		});
-
-		if (linesToClear > 0) this.clearLines(linesToClear);
+		console.log(linesToClear);
+		if (linesToClear.length > 0) this.clearLines(linesToClear);
 	},
 
-	clearLines: function () {
-		console.log("lol");
+	clearLines: function (lines) {
+		lines.forEach(line => {
+			this.gridData[line].forEach((value, index) => {
+				var x = index;
+				var y = line;
+
+				this.gridData[y][x] = 0;
+				this.undraw(x, y);
+			});
+		});
 	},
 
 	insert: function (x, y, colorValue) {

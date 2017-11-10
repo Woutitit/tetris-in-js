@@ -1,6 +1,15 @@
 function Grid(canvasCtx, colSpan, rowSpan, cellSpan) {
 	this.defaultConfig = {
-		SPAWN_TOP_LEFT: { x: 3, y: 0 } // Top left spawn coordinates on the grid for tetrominoes.
+		SPAWN_TOP_LEFT: { x: 3, y: 0 }, // Top left spawn coordinates on the grid for tetrominoes.
+		GRID_COLORS: {
+			1: "cyan",
+			2: "blue",
+			3: "orange",
+			4: "yellow",
+			5: "green",
+			6: "purple",
+			7: "red"
+		}
 	};
 
 	this.canvasCtx = canvasCtx;
@@ -121,7 +130,7 @@ Grid.prototype = {
 
 
 	draw: function(x, y, colorValue) {
-		this.canvasCtx.fillStyle = "#000";
+		this.canvasCtx.fillStyle = this.defaultConfig.GRID_COLORS[colorValue];
 		this.canvasCtx.fillRect(x * this.cellSpan, y * this.cellSpan, this.cellSpan, this.cellSpan);
 	},
 
@@ -191,7 +200,7 @@ Grid.prototype = {
 	},
 
 
-	eachBlock: function(topLeft, shape, callback) {
+	eachBlock: function(topLeft=this.currTopLeft, shape, callback) {
 		var currentY = topLeft.y;
 
 		shape.forEach((row) => {

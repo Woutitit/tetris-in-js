@@ -4,11 +4,9 @@ function Tetromino(shape, grid) {
 	};
 
 	this.shape = shape;
-
+	this.COLOR_VALUE = 0;
 	this.grid = grid;
-
 	this.dropStart = 0; // To time when another drop can occur.
-
 	this.landed = false;
 
 	this.spawn();
@@ -17,6 +15,15 @@ function Tetromino(shape, grid) {
 
 Tetromino.prototype = {
 	spawn: function(grid) {
+		// Hack to get color value. Need to improve this.
+		this.shape.forEach((row) => { 
+			row.forEach((value) => {
+				if (value !== 0) {
+					this.COLOR_VALUE = value;
+				}
+			});
+		});
+		
 		this.grid.resetTopLeft();
 		this.grid.drawShape(this.shape);
 	},

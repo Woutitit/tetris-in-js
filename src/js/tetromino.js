@@ -23,8 +23,8 @@ Tetromino.prototype = {
 
 
 	move: function(direction) {
-		if(!this.grid.updatePosition(direction, this.shape)) {
-			this.landed = true;
+		if(!this.grid.testMove(direction, this.shape)) {
+			if (direction === "down") this.landed = true;
 		};
 	},
 

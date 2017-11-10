@@ -68,7 +68,7 @@ Grid.prototype = {
 			}
 		});
 
-		if(lines > 0) this.clearLines(linesToClear);
+		if(linesToClear > 0) this.clearLines(linesToClear);
 	},
 
 	clearLines: function() {
@@ -117,34 +117,32 @@ Grid.prototype = {
 
 
 	testRotation: function(shape) {
-		return this.testPosition(this.currTopLeft, shape) ? true : false;
+		return this.testBlocks(this.currTopLeft, shape) ? true : false;
 	},
 
 
-	updatePosition: function(direction, shape) {
+	testMove: function(direction, shape) {
 		var potentialTopLeft = this.getPotentialTopLeft(direction);
 
-		var positionIsLegal = this.testPosition(potentialTopLeft, shape);
-
-		if(positionIsLegal) {
-			this.undrawShape(shape)
+		if(this.testBlocks(this.getPotentialTopLeft(direction), shape)) {
+			this.undrawShape(shape);
 			this.currTopLeft = potentialTopLeft;
 			this.drawShape(shape);
 
 			return true;
-		}
-		else if(direction === "down") {
+		} 
+		else if (direction === "down") {
 			this.landShape(shape);
-		}
 
-		return false;
+			return false;
+		}
 	},
 
 
-	testPosition: function(potentialTopLeft, shape) {
+	testBlocks: function(topLeft, shape) {
 		var errors = 0;
 
-		this.eachBlock(potentialTopLeft, shape, (x, y, colorValue) => {
+		this.eachBlock(topLeft, shape, (x, y, colorValue) => {
 			if(this.gridData[y] === undefined || this.gridData[y][x] === undefined || this.gridData[y][x] !== 0) {
 				errors++;
 			}
@@ -159,7 +157,7 @@ Grid.prototype = {
 
 		shape.forEach((row) => {
 
-			var currentX =  topLeft.x;
+			var currentX = topLeft.x;
 
 			row.forEach((colorValue) => {
 				if(colorValue !== 0) {

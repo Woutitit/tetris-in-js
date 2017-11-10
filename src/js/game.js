@@ -13,19 +13,28 @@ function Game(canvas, columns, rows, size) {
 	this.rowSpan = rows;
 	this.cellSpan = this.canvasWidth / columns;
 
+	this.grid = null;
+	this.currTetromino = null;
+
 	this.init(); // Initialize game.
 }
 
 Game.prototype = {
 	init: function() {
-		var grid = new Grid(this.canvasCtx, this.colSpan, this.rowSpan, this.cellSpan);
+		this.grid = new Grid(this.canvasCtx, this.colSpan, this.rowSpan, this.cellSpan);
 
-		var randomShape = Shapes.random();
-		var nextTetromino = new Tetromino(randomShape);
-		
-		// If no current tetromino...
-		var currTetromino = nextTetromino;
-		currTetromino.spawn(grid);
+		this.update();
+	},
+
+
+	update: function() {
+		if(!this.currTetromino || this.currTetromino.landed) {
+			this.currTetromino = new Tetromino(Shapes.random(), this.grid);
+		};
+
+		this.currTetromino.drop();
+
+		requestAnimationFrame(this.update.bind(this));
 	}
 }
 

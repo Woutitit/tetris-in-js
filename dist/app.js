@@ -11886,19 +11886,27 @@ function Game(canvas, columns, rows, size) {
 	this.rowSpan = rows;
 	this.cellSpan = this.canvasWidth / columns;
 
+	this.grid = null;
+	this.currTetromino = null;
+
 	this.init(); // Initialize game.
 }
 
 Game.prototype = {
 	init: function () {
-		var grid = new __WEBPACK_IMPORTED_MODULE_1__grid_js__["a" /* default */](this.canvasCtx, this.colSpan, this.rowSpan, this.cellSpan);
+		this.grid = new __WEBPACK_IMPORTED_MODULE_1__grid_js__["a" /* default */](this.canvasCtx, this.colSpan, this.rowSpan, this.cellSpan);
 
-		var randomShape = __WEBPACK_IMPORTED_MODULE_0__shapes_js__["a" /* default */].random();
-		var nextTetromino = new __WEBPACK_IMPORTED_MODULE_2__tetromino_js__["a" /* default */](randomShape);
+		this.update();
+	},
 
-		// If no current tetromino...
-		var currTetromino = nextTetromino;
-		currTetromino.spawn(grid);
+	update: function () {
+		if (!this.currTetromino || this.currTetromino.landed) {
+			this.currTetromino = new __WEBPACK_IMPORTED_MODULE_2__tetromino_js__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0__shapes_js__["a" /* default */].random(), this.grid);
+		};
+
+		this.currTetromino.drop();
+
+		requestAnimationFrame(this.update.bind(this));
 	}
 };
 
@@ -12163,6 +12171,8 @@ function Grid(canvasCtx, colSpan, rowSpan, cellSpan) {
 
 	this.cellSpan = cellSpan;
 
+	this.gridData;
+
 	this.currTopLeft = this.defaultConfig.SPAWN_TOP_LEFT; // Current tetromino top left coordinates.
 
 	this.init(rowSpan, colSpan);
@@ -12170,7 +12180,7 @@ function Grid(canvasCtx, colSpan, rowSpan, cellSpan) {
 
 Grid.prototype = {
 	init: function (rowSpan, colSpan) {
-		var gridData = Array(rowSpan).fill().map(() => Array(colSpan).fill(0));
+		this.gridData = Array(rowSpan).fill().map(() => Array(colSpan).fill(0));
 	},
 
 	resetTopLeft: function () {
@@ -12194,9 +12204,109 @@ Grid.prototype = {
 		});
 	},
 
+	undrawShape: function (shape) {
+		var currentY = this.currTopLeft.y;
+
+		shape.forEach(row => {
+
+			var currentX = this.currTopLeft.x;
+
+			row.forEach(colorValue => {
+				if (colorValue !== 0) {
+					this.undraw(currentX, currentY);
+				}
+				currentX++; // Make next x coordinate current x to insert into grid if necessary.
+			});
+			currentY++; // Make next row current Y coordinate
+		});
+	},
+
+	landShape: function (shape) {
+		this.eachBlock(this.currTopLeft, shape, (x, y, colorValue) => {
+			this.insert(x, y, colorValue);
+		});
+	},
+
+	insert: function (x, y, colorValue) {
+		this.gridData[y][x] = colorValue;
+		console.log(this.gridData);
+	},
+
 	draw: function (x, y, colorValue) {
 		this.canvasCtx.fillStyle = "#000";
 		this.canvasCtx.fillRect(x * this.cellSpan, y * this.cellSpan, this.cellSpan, this.cellSpan);
+	},
+
+	undraw: function (x, y) {
+		this.canvasCtx.clearRect(x * this.cellSpan, y * this.cellSpan, this.cellSpan, this.cellSpan);
+	},
+
+	getPotentialTopLeft: function (direction) {
+		var potentialTopLeft = {
+			x: this.currTopLeft.x,
+			y: this.currTopLeft.y
+		};
+
+		switch (direction) {
+			case "down":
+				potentialTopLeft.y++;
+				break;
+
+			case "left":
+				potentialTopLeft.x--;
+				break;
+
+			case "right":
+				potentialTopLeft.x++;
+				break;
+		}
+
+		return potentialTopLeft;
+	},
+
+	updatePosition: function (direction, shape) {
+		var potentialTopLeft = this.getPotentialTopLeft(direction);
+
+		var positionIsLegal = this.testPosition(potentialTopLeft, shape);
+
+		if (positionIsLegal) {
+			this.undrawShape(shape);
+			this.currTopLeft = potentialTopLeft;
+			this.drawShape(shape);
+
+			return true;
+		} else if (direction === "down") {
+			this.landShape(shape);
+		}
+	},
+
+	testPosition: function (potentialTopLeft, shape) {
+		var errors = 0;
+
+		this.eachBlock(potentialTopLeft, shape, (x, y, colorValue) => {
+			if (this.gridData[y] === undefined || this.gridData[y][x] === undefined || this.gridData[y][x] !== 0) {
+				errors++;
+			}
+		});
+
+		return errors === 0 ? true : false;
+	},
+
+	eachBlock: function (topLeft, shape, callback) {
+		var currentY = topLeft.y;
+
+		shape.forEach(row => {
+
+			var currentX = topLeft.x;
+
+			row.forEach(colorValue => {
+				if (colorValue !== 0) {
+					callback(currentX, currentY, colorValue);
+				}
+				currentX++; // Make next x coordinate current x to insert into grid if necessary.
+			});
+			currentY++; // Make next row current Y coordinate
+		});
 	}
 };
 
@@ -12207,14 +12317,41 @@ Grid.prototype = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function Tetromino(shape) {
+function Tetromino(shape, grid) {
+	this.defaultConfig = {
+		DROP_SPEED: 100
+	};
+
 	this.shape = shape;
+
+	this.grid = grid;
+
+	this.dropStart = 0; // To time when another drop can occur.
+
+	this.landed = false;
+
+	this.spawn();
 }
 
 Tetromino.prototype = {
 	spawn: function (grid) {
-		grid.resetTopLeft();
-		grid.drawShape(this.shape);
+		this.grid.resetTopLeft();
+		this.grid.drawShape(this.shape);
+	},
+
+	move: function (direction) {
+		this.grid.updatePosition(direction, this.shape);
+	},
+
+	drop: function () {
+		if (this.dropStart === 0) {
+			this.dropStart = new Date().getTime();
+		}
+
+		if (new Date().getTime() - this.dropStart > this.defaultConfig.DROP_SPEED) {
+			this.move("down");
+			this.dropStart = 0;
+		}
 	}
 };
 

@@ -116,6 +116,11 @@ Grid.prototype = {
 	},
 
 
+	testRotation: function(shape) {
+		return this.testPosition(this.currTopLeft, shape) ? true : false;
+	},
+
+
 	updatePosition: function(direction, shape) {
 		var potentialTopLeft = this.getPotentialTopLeft(direction);
 

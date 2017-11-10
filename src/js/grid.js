@@ -26,37 +26,15 @@ Grid.prototype = {
 
 
 	drawShape: function(shape) {
-		var currentY = this.currTopLeft.y;
-
-		shape.forEach((row) => {
-
-			var currentX =  this.currTopLeft.x;
-
-			row.forEach((colorValue) => {
-				if(colorValue !== 0) {
-					this.draw(currentX, currentY, colorValue);
-				}
-				currentX++; // Make next x coordinate current x to insert into grid if necessary.
-			})
-			currentY++; // Make next row current Y coordinate
+		this.eachBlock(this.currTopLeft, shape, (x, y, colorValue) => {
+			this.draw(x, y, colorValue);
 		});
 	},
 
 
 	undrawShape: function(shape) {
-		var currentY = this.currTopLeft.y;
-
-		shape.forEach((row) => {
-
-			var currentX =  this.currTopLeft.x;
-
-			row.forEach((colorValue) => {
-				if(colorValue !== 0) {
-					this.undraw(currentX, currentY);
-				}
-				currentX++; // Make next x coordinate current x to insert into grid if necessary.
-			})
-			currentY++; // Make next row current Y coordinate
+		this.eachBlock(this.currTopLeft, shape, (x, y, colorValue) => {
+			this.undraw(x, y);
 		});
 	},
 
@@ -70,7 +48,6 @@ Grid.prototype = {
 
 	insert: function(x, y, colorValue) {
 		this.gridData[y][x] = colorValue
-		console.log(this.gridData);
 	},
 
 
@@ -120,10 +97,12 @@ Grid.prototype = {
 			this.drawShape(shape);
 
 			return true;
-		} 
-		else if (direction === "down") {
+		}
+		else if(direction === "down") {
 			this.landShape(shape);
 		}
+
+		return false;
 	},
 
 

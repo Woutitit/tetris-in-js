@@ -22,6 +22,7 @@ function Game(canvas, columns, rows, size) {
 Game.prototype = {
 	init: function() {
 		this.grid = new Grid(this.canvasCtx, this.colSpan, this.rowSpan, this.cellSpan);
+		//this.UI = new UI();
 
 		this.startListening();
 

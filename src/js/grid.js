@@ -13,13 +13,10 @@ function Grid(canvasCtx, colSpan, rowSpan, cellSpan) {
 	};
 
 	this.canvasCtx = canvasCtx;
-
 	this.cellSpan = cellSpan;
-
 	this.gridData;
-
 	this.currTopLeft = this.defaultConfig.SPAWN_TOP_LEFT; // Current tetromino top left coordinates.
-
+	
 	this.init(rowSpan, colSpan);
 }
 

@@ -1,15 +1,12 @@
-import Vue from "vue"; //Webpack alias for vue/dist/vue.js
+(function() {
+	var COLUMNS = 10;
+	var ROWS = 16;
+	var SIZE = 20;
 
-// Dumb components
-Vue.component("v-panel", require("./components/Panel.vue").default);
+	var canvas = document.getElementById("tetris");
+	var canvasCtx = canvas.getContext("2d");
 
-// Smart components
-Vue.component("v-game", require("./components/Game.vue").default);
-Vue.component("v-canvas", require("./components/Canvas.vue").default);
-Vue.component("v-score-panel", require("./components/ScorePanel.vue").default);
-Vue.component("v-lines-panel", require("./components/LinesPanel.vue").default);
-
-var app = new Vue({
-	el: "#app"
-});
+	canvas.width = COLUMNS * SIZE;
+	canvas.height = ROWS * SIZE;
+})();
 

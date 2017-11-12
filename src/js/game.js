@@ -2,16 +2,18 @@ import Shapes from "./shapes.js";
 import Grid from "./grid.js";
 import Tetromino from "./tetromino.js";
 
-function Game(canvas, columns, rows, size) {
-	this.canvas = canvas;
-	this.canvasCtx = canvas.getContext("2d");
+function Game() {
+	this.canvas = document.getElementById("tetris");
+	this.canvasCtx = this.canvas.getContext("2d");
 
-	this.canvasWidth = canvas.width;
-	this.canvasHeight = canvas.height;
+	this.colSpan = 10;
+	this.rowSpan = 16;
+	this.size = 20
 
-	this.colSpan = columns;
-	this.rowSpan = rows;
-	this.cellSpan = this.canvasWidth / columns;
+	this.canvas.width = this.colSpan * this.size;
+	this.canvas.height = this.rowSpan * this.size;
+
+	this.cellSpan = this.canvas.width / this.colSpan;
 
 	this.grid = null;
 	this.currTetromino = null;

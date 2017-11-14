@@ -7,7 +7,7 @@
 
 	/**
 	* Main game loop.
-	* @param {timeStamp} - Holds a timestamp of when this function is called.
+	* @param {Number} timeStamp - Holds a timestamp of when this function is called.
 	*/
 	function main(timeStamp) {
 		requestAnimationFrame(main); // Gets called first to ensure the browser receives the request for the next frame in time.

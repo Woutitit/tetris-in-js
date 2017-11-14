@@ -67,14 +67,7 @@
 /* 0 */
 /***/ (function(module, exports) {
 
-(function () {
-	/*
- * Main game loop.
- */
-	function main() {}
-
-	main();
-})();
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\Users\\woutb\\Documents\\Code projects\\AI\\Machine learning algorithms\\Flappy bird\\src\\js\\app.js'\n    at Error (native)");
 
 /***/ })
 /******/ ]);

@@ -3,8 +3,16 @@
 	var UPDATE_RATE = 1000 / TICK_LENGTH;
 	
 	var lastFrameTimeStamp = performance.now();
-
 	var delta = 0; // Records how much realtime the game's behind since last game logic update. Also known as lag.
+
+
+	/**
+	* Setup basics before main loop runs.
+	*/
+	function init() {
+		startListening();
+	};
+
 
 	/**
 	* Main game loop.
@@ -41,5 +49,20 @@
 		// Render graphics.
 	};
 
+
+	/**
+	* Listen to relevant events.
+	*/
+	function startListening() {
+		document.addEventListener('keydown', () => onKey(event));
+		document.addEventListener('keyup', () => onKey(event));
+	}
+
+
+	function onKey(event) {
+		console.log(event);
+	};
+
+	init();
 	window.requestAnimationFrame(main);
 })();

@@ -65,73 +65,16 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__game_js__ = __webpack_require__(1);
-
+/***/ (function(module, exports) {
 
 (function () {
-  new __WEBPACK_IMPORTED_MODULE_0__game_js__["a" /* default */]();
+	/*
+ * Main game loop.
+ */
+	function main() {}
+
+	main();
 })();
-
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__engine_js__ = __webpack_require__(2);
-
-
-function Game() {
-	this.before = 0;
-	this.tickRate = 50; // Will set the update/refresh rate to run at 20 Hz. So 20 game logic updates per second (1s / 50 = 1000ms / 50 = 20).
-	this.updateRate = 1000 / this.tickRate;
-	this.lag = 0;
-
-	this.gameLoop();
-};
-
-Game.prototype = {
-	gameLoop: function () {
-
-		var now = performance.now();
-		var lastFrameDuration = now - this.before;
-
-		this.lag += lastFrameDuration;
-
-		while (this.lag >= this.updateRate) {
-			__WEBPACK_IMPORTED_MODULE_0__engine_js__["a" /* default */].update(); // Update game logic.
-			this.lag -= this.updateRate;
-		}
-
-		__WEBPACK_IMPORTED_MODULE_0__engine_js__["a" /* default */].render(); // Render as much as we can.
-
-		this.before = now; // Make current time "before" to benchmark this in next frame.
-		requestAnimationFrame(this.gameLoop.bind(this));
-	}
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (Game);
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-// an Engine can be an object literal since each game will only ever use one
-var Engine = {
-	update: function () {
-		// Update physics.
-	},
-
-	render: function () {
-		// Render entities.
-	}
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (Engine);
 
 /***/ })
 /******/ ]);

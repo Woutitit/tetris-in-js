@@ -1,6 +1,10 @@
-import Game from "./game.js";
+(function() {
+	/*
+	* Main game loop.
+	*/
+	function main() {
+		
+	}
 
-(function(){ new Game(); })();
-
-
-
+	main();
+})();

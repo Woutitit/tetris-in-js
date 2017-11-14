@@ -17,6 +17,7 @@ Game.prototype = {
 		
 		this.lag += lastFrameDuration;
 
+		// TODO: Add bail function for when the amount of updates get too much.
 		while(this.lag >= this.updateRate) {
 			Engine.update(); // Update game logic.
 			this.lag -= this.updateRate;

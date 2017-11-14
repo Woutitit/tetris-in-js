@@ -1,9 +1,20 @@
+import Player from "./player.js";
+
 (function() {
 	var TICK_LENGTH = 50; // Will update at a rate of 20Hz (= 20 updates per second).
 	var UPDATE_RATE = 1000 / TICK_LENGTH;
 	
 	var lastFrameTimeStamp = performance.now();
 	var delta = 0; // Records how much realtime the game's behind since last game logic update. Also known as lag.
+
+	var player = new Player();
+
+	var ALLOWED_EVENT_CODES = {
+		"ArrowUp": "up",
+		"ArrowRight": "right",
+		"ArrowDown": "down",
+		"ArrowLeft": "left"
+	}
 
 
 	/**
@@ -59,8 +70,12 @@
 	}
 
 
+	/**
+	* Handle keyboard key events.
+	* @param {Event} event.
+	*/
 	function onKey(event) {
-		console.log(event);
+		player.handleInput(ALLOWED_EVENT_CODES[event.code]);
 	};
 
 	init();

@@ -65,7 +65,12 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__player_js__ = __webpack_require__(3);
+
 
 (function () {
 	var TICK_LENGTH = 50; // Will update at a rate of 20Hz (= 20 updates per second).
@@ -74,11 +79,18 @@
 	var lastFrameTimeStamp = performance.now();
 	var delta = 0; // Records how much realtime the game's behind since last game logic update. Also known as lag.
 
+	var player = new __WEBPACK_IMPORTED_MODULE_0__player_js__["a" /* default */]();
 
-	/**
- * Setup basics before main loop runs.
- */
-	function init() {
+	var ALLOWED_EVENT_CODES = {
+		"ArrowUp": "up",
+		"ArrowRight": "right",
+		"ArrowDown": "down",
+		"ArrowLeft": "left"
+
+		/**
+  * Setup basics before main loop runs.
+  */
+	};function init() {
 		startListening();
 	};
 
@@ -123,13 +135,37 @@
 		document.addEventListener('keyup', () => onKey(event));
 	}
 
+	/**
+ * Handle keyboard key events.
+ * @param {Event} event.
+ */
 	function onKey(event) {
-		console.log(event);
+		player.handleInput(ALLOWED_EVENT_CODES[event.code]);
 	};
 
 	init();
 	window.requestAnimationFrame(main);
 })();
+
+/***/ }),
+/* 1 */,
+/* 2 */,
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function Player() {}
+
+Player.prototype = {
+	handleInput: function (keyPressed) {
+		switch (keyPressed) {
+			case "left":
+				console.log("Go left!");
+		}
+	}
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Player);
 
 /***/ })
 /******/ ]);

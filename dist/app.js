@@ -95,16 +95,19 @@ Game.prototype = {
 
 		this.showFPS(this.previousTime);
 
+		__WEBPACK_IMPORTED_MODULE_0__engine_js__["a" /* default */].update();
+		__WEBPACK_IMPORTED_MODULE_0__engine_js__["a" /* default */].render();
+
 		requestAnimationFrame(this.gameLoop.bind(this));
 	},
 
 	/**
  * Show the frame rate at which our game loop gets called.
- * @param
+ * @param {Number} previousTime
  */
 	showFPS: function (previousTime) {
 		var currentTime = performance.now();
-		var FPS = Math.round(1000 / (currentTime - previousTime));
+		var FPS = Math.round(1000 / (currentTime - previousTime)); // Calculate how many frames can fit in 1 second based on duration of last frame.
 		this.previousTime = currentTime;
 
 		document.getElementById("FPS").innerHTML = FPS;
@@ -133,7 +136,7 @@ var Engine = {
 	}
 };
 
-/* unused harmony default export */ var _unused_webpack_default_export = (Engine);
+/* harmony default export */ __webpack_exports__["a"] = (Engine);
 
 /***/ })
 /******/ ]);

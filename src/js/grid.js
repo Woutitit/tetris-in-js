@@ -1,3 +1,5 @@
+import Scoreboard from "./scoreboard.js";
+
 function Grid(canvasCtx, colSpan, rowSpan, cellSpan) {
 	this.defaultConfig = {
 		SPAWN_TOP_LEFT: { x: 3, y: 0 }, // Top left spawn coordinates on the grid for tetrominoes.
@@ -19,6 +21,8 @@ function Grid(canvasCtx, colSpan, rowSpan, cellSpan) {
 	this.gridData;
 
 	this.currTopLeft = this.defaultConfig.SPAWN_TOP_LEFT; // Current tetromino top left coordinates.
+
+	this.scoreboard = new Scoreboard();
 
 	this.init(rowSpan, colSpan);
 }
@@ -77,7 +81,10 @@ Grid.prototype = {
 			}
 		});
 
-		if(linesToClear.length > 0) this.clearLines(linesToClear);
+		if(linesToClear.length > 0) {
+			this.clearLines(linesToClear);
+			this.scoreboard.updateLineCountAndScore(lines);
+		}
 	},
 
 

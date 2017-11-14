@@ -1,81 +1,31 @@
-import Shapes from "./shapes.js";
-import Grid from "./grid.js";
-import Tetromino from "./tetromino.js";
+import Engine from "./engine.js";
 
 function Game() {
-	this.canvas = document.getElementById("tetris");
-	this.canvasCtx = this.canvas.getContext("2d");
+	var previousTime = performance.now();
 
-	this.colSpan = 10;
-	this.rowSpan = 16;
-	this.size = 20
-
-	this.canvas.width = this.colSpan * this.size;
-	this.canvas.height = this.rowSpan * this.size;
-
-	this.cellSpan = this.canvas.width / this.colSpan;
-
-	this.grid = null;
-	this.currTetromino = null;
-
-	this.init(); // Initialize game.
-}
+	this.gameLoop();
+};
 
 Game.prototype = {
-	init: function() {
-		this.grid = new Grid(this.canvasCtx, this.colSpan, this.rowSpan, this.cellSpan);
+	gameLoop: function() {
 
-		this.startListening();
+		this.showFPS(this.previousTime);
 
-		this.update();
+		requestAnimationFrame(this.gameLoop.bind(this));
 	},
 
 
-	update: function() {
-		if(!this.currTetromino || this.currTetromino.landed) {
-			this.currTetromino = new Tetromino(Shapes.random(), this.grid);
-		};
+	/**
+	* Show the frame rate at which our game loop gets called.
+	* @param
+	*/
+	showFPS: function(previousTime) {
+		var currentTime = performance.now();
+		var FPS = Math.round(1000 / (currentTime - previousTime));
+		this.previousTime = currentTime;
 
-		this.currTetromino.drop();
-
-		requestAnimationFrame(this.update.bind(this));
-	},
-
-
-	startListening: function() {
-		document.addEventListener("keydown", this);
-	},
-
-
-	handleEvent: function(event) {
-		switch(event.type) {
-			case "keydown":
-			this.onKeyDown(event.key);
-			break;
-		}
-	},
-
-
-	onKeyDown: function(key) {
-		switch(key) {
-			case "ArrowLeft":
-			this.currTetromino.move("left");
-			break;
-
-			case "ArrowUp":
-			this.currTetromino.rotate();
-			break;
-
-			case "ArrowRight":
-			this.currTetromino.move("right");
-			break;
-
-			case "ArrowDown":
-			this.currTetromino.move("down");
-			break;
-		}
-	},
-
+		document.getElementById("FPS").innerHTML = FPS;
+	}
 }
 
 export default Game;

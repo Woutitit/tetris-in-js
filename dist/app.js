@@ -81,11 +81,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__engine_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__engine_js__ = __webpack_require__(2);
 
 
 function Game() {
-	var previousTime = performance.now();
+	this.before = 0;
+	this.tickRate = 50; // Will set the update/refresh rate to run at 20 Hz. So 20 game logic updates per second (1s / 50 = 1000ms / 50 = 20).
+	this.updateRate = 1000 / this.tickRate;
+	this.lag = 0;
 
 	this.gameLoop();
 };
@@ -93,35 +96,27 @@ function Game() {
 Game.prototype = {
 	gameLoop: function () {
 
-		this.showFPS(this.previousTime);
+		var now = performance.now();
+		var lastFrameDuration = now - this.before;
 
-		__WEBPACK_IMPORTED_MODULE_0__engine_js__["a" /* default */].update();
-		__WEBPACK_IMPORTED_MODULE_0__engine_js__["a" /* default */].render();
+		this.lag += lastFrameDuration;
 
+		while (this.lag >= this.updateRate) {
+			__WEBPACK_IMPORTED_MODULE_0__engine_js__["a" /* default */].update(); // Update game logic.
+			this.lag -= this.updateRate;
+		}
+
+		__WEBPACK_IMPORTED_MODULE_0__engine_js__["a" /* default */].render(); // Render as much as we can.
+
+		this.before = now; // Make current time "before" to benchmark this in next frame.
 		requestAnimationFrame(this.gameLoop.bind(this));
-	},
-
-	/**
- * Show the frame rate at which our game loop gets called.
- * @param {Number} previousTime
- */
-	showFPS: function (previousTime) {
-		var currentTime = performance.now();
-		var FPS = Math.round(1000 / (currentTime - previousTime)); // Calculate how many frames can fit in 1 second based on duration of last frame.
-		this.previousTime = currentTime;
-
-		document.getElementById("FPS").innerHTML = FPS;
 	}
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Game);
 
 /***/ }),
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

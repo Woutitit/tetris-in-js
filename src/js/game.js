@@ -1,7 +1,10 @@
 import Engine from "./engine.js";
 
 function Game() {
-	var previousTime = performance.now();
+	this.before = 0;
+	this.tickRate = 50; // Will set the update/refresh rate to run at 20 Hz. So 20 game logic updates per second (1s / 50 = 1000ms / 50 = 20).
+	this.updateRate = 1000 / this.tickRate;
+	this.lag = 0;
 
 	this.gameLoop();
 };
@@ -9,25 +12,20 @@ function Game() {
 Game.prototype = {
 	gameLoop: function() {
 
-		this.showFPS(this.previousTime);
+		var now = performance.now();
+		var lastFrameDuration = now - this.before;
+		
+		this.lag += lastFrameDuration;
 
-		Engine.update();
-		Engine.render();
+		while(this.lag >= this.updateRate) {
+			Engine.update(); // Update game logic.
+			this.lag -= this.updateRate;
+		}
 
+		Engine.render(); // Render as much as we can.
+
+		this.before = now; // Make current time "before" to benchmark this in next frame.
 		requestAnimationFrame(this.gameLoop.bind(this));
-	},
-
-
-	/**
-	* Show the frame rate at which our game loop gets called.
-	* @param {Number} previousTime
-	*/
-	showFPS: function(previousTime) {
-		var currentTime = performance.now();
-		var FPS = Math.round(1000 / (currentTime - previousTime)); // Calculate how many frames can fit in 1 second based on duration of last frame.
-		this.previousTime = currentTime;
-
-		document.getElementById("FPS").innerHTML = FPS;
 	}
 }
 

@@ -39,23 +39,28 @@ import Player from "./player.js";
 
 		// TODO: Add bail function for when the amount of updates to process (= workload) gets too much.
 		while(delta >= TICK_RATE) {
-			update(); // Update game logic.
-			// So what we do is process the user inputs and put some controls on true.
-			// So with the events we simply record which keys are presseda and set flags for them.
-			// For example if you hit the left arrow button you might put "leftArrow = true".
-			// In your update loop you would then check if (leftArrow) moveLeft();
-			// Then we call update in which we will call for example updateTetromino() (or tetromino.update()) if we're currently playing.
-			// In this updateTetromino() function we will then check for each possible "Tetromino.input" if they are on true. if so we should move those
-			// positions.
+			fixedUpdate(); // Update game logic.
 			delta -= TICK_RATE;
 		}
+
+		update();
+		render();
 	};
 
 
 	/**
-	* Update game logic.
+	* Update game logic. Should be used with a fixed timestep.
 	*/
-	function update() {
+	function fixedUpdate() {
+		// Update game logic.
+	};
+
+
+	/**
+	* Update game logic. Should be used once per frame.
+	* @param {number} [deltaTime] - Indicates the amount of time to simulate.
+	*/
+	function update(deltaTime = 0) {
 		// Update game logic.
 	};
 

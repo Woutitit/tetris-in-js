@@ -6,7 +6,7 @@ Player.prototype = {
 	handleInput: function(keyPressed) {
 		switch (keyPressed) {
 			case "left":
-			console.log("Go left!");
+			// this.grid.moveTetromino
 		}
 	}
 }

@@ -1,4 +1,4 @@
-# Tetris clone [UNDER CONSTRUCTION]
+# Tetris clone
 Written in JavaScript, Vue.js and HTML 5 canvas. 
 
 Note that from a productivity standpoint one should never built its own core implementation of a game loop, game engine, phsyics engine,... but rather use well-tested software for these purposes. The only reason I have built it this way is because of learning purposes (since the game is rather small).
